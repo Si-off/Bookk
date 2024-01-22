@@ -10,7 +10,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <div className="App">hello</div>;
+        <div className="App">hello</div>;<p>buzz branch test</p>
       </ThemeProvider>
     </QueryClientProvider>
   );
