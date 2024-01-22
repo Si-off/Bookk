@@ -10,7 +10,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <p>buzz branch</p>
+        <p>buzz branch test 1</p>
         <a
           className="App-link"
           href="https://reactjs.org"
