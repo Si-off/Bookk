@@ -1,7 +1,7 @@
-import { StorageKeys } from '@/constant';
 import axios, { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
-import qs from 'qs';
 import secureLocalStorage from 'react-secure-storage';
+import qs from 'qs';
+import { StorageKeys } from '@/constant';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -21,13 +21,31 @@ const getAxiosInstance = (url: string) => {
     } else {
       config.headers['Content-Type'] = 'application/json';
     }
-    const accessToken = secureLocalStorage.getItem(StorageKeys.ACCESS_TOKEN);
 
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-    }
+    // if (accessToken) {
+    //   config.headers['Authorization'] = `Bearer ${accessToken}`;
+    // }
     return config;
   });
+
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const {
+        config,
+        response: { status },
+      } = error;
+
+      // if (status === 401) {
+      //   const originRequest = config;
+
+      //   const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+      // }
+      return Promise.reject(error);
+    }
+  );
 
   const get = async (queries: object = {}) => {
     try {
