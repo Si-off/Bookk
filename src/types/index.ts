@@ -48,6 +48,16 @@ export type PostBookParams = {
   images?: string[];
 };
 
+export type ZustandUserType = {
+  author: {
+    id: number;
+    nickname: string;
+    name: string;
+    email: string;
+    followerCount: number;
+    followeeCount: number;
+  };
+};
 export type GetBookQueries = {
   take: number;
   page: number;
