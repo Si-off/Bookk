@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { ZustandUserType } from "types";
-export const useUserStore = create((set) => ({
+import { UserState } from "types";
+export const useUserStore = create<UserState>((set) => ({
   user: null,
   accessToken: null,
   refreshToken: null,
