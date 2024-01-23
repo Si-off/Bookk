@@ -45,51 +45,20 @@ export type BooklistRes = {
 export type BookReq = {
   title: string;
   content: string;
-  images?: string[] | File[];
+  images?: string[];
 };
 
 export type ZustandUserType = {
-  id: number;
-  name: string;
-  nickname: string;
-  email: string;
-  followerCount: number;
-  followeeCount: number;
-};
-
-export type UserState = {
-  user: ZustandUserType | null;
-  accessToken: string | null;
-  refreshToken: string | null;
-  setAccessToken: (token: string) => void;
-  setRefreshToken: (token: string) => void;
-  setUser: (user: ZustandUserType) => void;
+  author: {
+    id: number;
+    nickname: string;
+    name: string;
+    email: string;
+    followerCount: number;
+    followeeCount: number;
+  };
 };
 export type BooklistParams = {
   take: number;
   page: number;
-};
-
-export type ErrorType = {
-  message: string;
-};
-export type LoginParams = {
-  email: string;
-  password: string;
-};
-export type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  userInfo: ZustandUserType;
-};
-export type SignUpParams = {
-  nickname: string;
-  name: string;
-  password: string;
-  email: string;
-};
-export type SignUpRes = {
-  accessToken: string;
-  refreshToken: string;
-  userInfo: ZustandUserType;
 };

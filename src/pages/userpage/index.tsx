@@ -1,13 +1,13 @@
-import { useCallback, useState } from "react";
-import Slider from "react-slick";
-import { styled } from "styled-components";
-import { Link } from "react-router-dom";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { getStyledColor } from "utils";
-import { useUserStore } from "store/useUserStore";
-import Book from "./component/Book";
-import { useGetBooks } from "queries";
+import { useCallback, useState } from 'react';
+import Slider from 'react-slick';
+import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { getStyledColor } from 'utils';
+import { useUserStore } from 'store/useUserStore';
+import Book from './component/Book';
+import { useGetBooks } from 'queries';
 
 const Dev2 = () => {
   const user = useUserStore();
@@ -31,7 +31,7 @@ const Dev2 = () => {
       e.stopPropagation();
       return;
     }
-    console.log("click");
+    console.log('click');
   };
 
   const SliderSettings = {
@@ -65,7 +65,7 @@ const Dev2 = () => {
       </Header>
       <Main>
         <StyledSlider {...SliderSettings}>
-          {status === "success" &&
+          {status === 'success' &&
             books.data.map((book) => {
               return <Book key={book.id} onClick={handleClickItem} {...book} />;
             })}
@@ -80,14 +80,14 @@ export default Dev2;
 const Wrap = styled.div`
   height: 100vh;
   overflow-y: hidden;
-  background-color: ${getStyledColor("gray", 1100)};
+  background-color: ${getStyledColor('gray', 1100)};
 `;
 
 const Header = styled.header`
   position: absolute;
   width: 100%;
   padding: 30px;
-  background-color: ${getStyledColor("gray", 1200)};
+  background-color: ${getStyledColor('gray', 1200)};
 `;
 const Main = styled.main`
   display: flex;
@@ -103,7 +103,7 @@ const StyledLink = styled(Link)`
   transition: color 0.2s ease;
 
   &:hover {
-    color: ${getStyledColor("red", 900)};
+    color: ${getStyledColor('red', 900)};
   }
 `;
 
