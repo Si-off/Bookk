@@ -10,12 +10,12 @@ import * as S from "../styles/LoginStyled";
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const user = useUserStore((state: UserState) => state.user);
   const setUser = useUserStore((state: UserState) => state.setUser);
   const setAccessToken = useUserStore(
     (state: UserState) => state.setAccessToken
   );
   const navigate = useNavigate();
-  const user = useUserStore((state: UserState) => state.user);
 
   useEffect(() => {
     if (user) {

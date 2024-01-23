@@ -8,8 +8,8 @@ export const getBooks = async (queries: BooklistParams) => {
 };
 
 export const postBooks = async (params: BookReq) => {
-  if (params.images && params.images[0]) {
-    const fileName = await postImage(params.images[0] as File);
+  if (params.images && params.images[0] instanceof File) {
+    const fileName = await postImage(params.images[0]);
     if (fileName) params.images[0] = fileName;
   }
   const res = await Axios('/api2s').post(params);
@@ -24,8 +24,8 @@ export const getBook = async (id: number) => {
 };
 
 export const patchBook = async (params: BookReq & { id: number }) => {
-  if (params.images && params.images[0]) {
-    const fileName = await postImage(params.images[0] as File);
+  if (params.images && params.images[0] instanceof File) {
+    const fileName = await postImage(params.images[0] as unknown as File);
     if (fileName) params.images[0] = fileName;
   }
   const { id, ...rest } = params;
