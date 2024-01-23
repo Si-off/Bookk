@@ -2,6 +2,9 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import MainPage from "./pages/MainPage";
 import Navigation from "./components/layout/Navigation";
+import AdminManage from "./pages/adminpage/AdminManage";
+import AdminCreateItem from "./pages/adminpage/AdminCreateItem";
+import AdminEditItem from "./pages/adminpage/AdminEditItem";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 function App() {
   return (
@@ -12,6 +15,9 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/admin" element={<AdminManage />} />
+          <Route path="/admin/create" element={<AdminCreateItem />} />
+          <Route path="/admin/edit/:productId" element={<AdminEditItem />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
