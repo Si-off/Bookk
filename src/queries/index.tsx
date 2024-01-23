@@ -44,7 +44,7 @@ export const usePostBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    queryKey: [queryKeys.ADMIN, "books"],
+    mutationKey: [queryKeys.ADMIN, "books"],
     mutationFn: postBooks,
     onSuccess: () => {
       queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
@@ -56,7 +56,7 @@ export const usePatchBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    queryKey: [queryKeys.ADMIN, "books"],
+    mutationKey: [queryKeys.ADMIN, "books"],
     mutationFn: patchBook,
     onSuccess: () => {
       queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
@@ -68,7 +68,7 @@ export const useDeleteBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    queryKey: [queryKeys.ADMIN, "books"],
+    mutationKey: [queryKeys.ADMIN, "books"],
     mutationFn: deleteBook,
     onSuccess: () => {
       queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
