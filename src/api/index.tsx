@@ -1,8 +1,8 @@
 import Axios from 'api/axios';
-import { BookReq, BooklistParams } from 'types';
+import { BookReq, BooklistParams, BooklistRes } from 'types';
 
 export const getBooks = async (queries: BooklistParams) => {
-  const res = await Axios('/api2s').get(queries);
+  const res = await Axios('/api2s').get<BooklistRes>(queries);
 
   return res;
 };
@@ -25,7 +25,7 @@ export const getBook = async (id: number) => {
 
 export const patchBook = async (params: BookReq & { id: number }) => {
   if (params.images && params.images[0] instanceof File) {
-    const fileName = await postImage(params.images[0] as unknown as File);
+    const fileName = await postImage(params.images[0]);
     if (fileName) params.images[0] = fileName;
   }
   const { id, ...rest } = params;
@@ -45,10 +45,6 @@ export const postImage = async (imageFile: File): Promise<string | undefined> =>
   const formData = new FormData();
   formData.append('image', imageFile);
 
-  try {
-    const res = await Axios('/common/image').post(formData);
-    return res.fileName;
-  } catch (error) {
-    console.log(error);
-  }
+  const res = await Axios('/common/image').post<{fileName: string}>(formData);
+  return res?.fileName;
 };
