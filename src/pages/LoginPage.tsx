@@ -1,24 +1,26 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { login } from 'api/auth';
-import { useUserStore } from 'store/useUserStore';
-import { UserState, ErrorType, LoginResponse } from 'types';
-import secureLocalStorage from 'react-secure-storage';
-import * as S from '../styles/LoginStyled';
-import { StorageKeys } from 'constant';
+import { useEffect, useState, ChangeEvent } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { login } from "api/auth";
+import { useUserStore } from "store/useUserStore";
+import { UserState, ErrorType, LoginResponse } from "types";
+import secureLocalStorage from "react-secure-storage";
+import * as S from "../styles/LoginStyled";
+import { StorageKeys } from "constant";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const user = useUserStore((state: UserState) => state.user);
   const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
+  const setAccessToken = useUserStore(
+    (state: UserState) => state.setAccessToken
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      navigate('/user');
+      navigate("/user");
     }
   }, [user, navigate]);
 
@@ -30,16 +32,16 @@ const LoginPage = () => {
       setAccessToken(data.accessToken);
       secureLocalStorage.setItem(StorageKeys.ACCESS_TOKEN, data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
-      navigate('/user');
+      navigate("/user");
     },
   });
 
   const handleLogin = () => {
     if (!email || !password) {
-      alert('이메일과 비밀번호를 입력해주세요.');
+      alert("이메일과 비밀번호를 입력해주세요.");
       return;
     }
-    login({ email, password });
+    mutate({ email, password });
   };
 
   if (isLoading) {
@@ -62,7 +64,9 @@ const LoginPage = () => {
               type="email"
               placeholder="Email"
               value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
             />
           </S.InputField>
           <S.InputField>
@@ -72,7 +76,9 @@ const LoginPage = () => {
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
             />
           </S.InputField>
         </S.Wrapper>
