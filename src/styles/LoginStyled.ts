@@ -3,14 +3,13 @@ import { Link } from "react-router-dom";
 import { pixelToRem } from "utils";
 import getStyleColor from "../utils/getStyledColor";
 
-type WrapperProps = {
+interface WrapperProps {
   $gap?: number;
   $marginTop?: number;
-};
-
-type InputFieldProps = {
+}
+interface InputFieldProps {
   $marginTop?: number;
-};
+}
 
 const Body = styled.div`
   display: flex;
@@ -65,12 +64,16 @@ const Input = styled.input`
 
 const LoginButton = styled.button`
   width: 100%;
-  background-color: ${getStyleColor("blue", 300)};
+  background-color: ${getStyleColor("blue", 800)};
   color: ${getStyleColor("gray", 100)};
   border-radius: 8px;
   font-weight: 500;
   padding: 15px;
   border: none;
+
+  &:disabled {
+    background-color: ${getStyleColor("gray", 500)};
+  }
 `;
 
 const KakaoButton = styled.button`

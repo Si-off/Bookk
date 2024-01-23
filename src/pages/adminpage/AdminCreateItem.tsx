@@ -1,7 +1,7 @@
 import React from "react";
 
-const CreateItem = () => {
+const AdminCreateItem = () => {
   return <div>CreateItem</div>;
 };
 
-export default CreateItem;
+export default AdminCreateItem;

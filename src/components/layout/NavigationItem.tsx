@@ -7,7 +7,12 @@ const NavigationItem = () => {
       <LinkStyle to="/">
         <span>홈</span>
       </LinkStyle>
-      <span>대시보드</span>
+      <LinkStyle to="/admin">
+        <span>관리자</span>
+      </LinkStyle>
+      <LinkStyle to="/user">
+        <span>유저</span>
+      </LinkStyle>
       <LinkStyle to="/login">
         {" "}
         <span>로그인</span>
