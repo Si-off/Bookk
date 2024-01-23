@@ -33,11 +33,11 @@ const getAxiosInstance = (url: string) => {
         config.headers['Content-Type'] = 'application/json';
       }
 
-      // const { accessToken } = useUserStore();
+      const accessToken = secureLocalStorage.getItem(StorageKeys.ACCESS_TOKEN);
 
-      // if (accessToken) {
-      //   config.headers['Authorization'] = `Bearer ${accessToken}`;
-      // }
+      if (accessToken) {
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+      }
       return config;
     },
     (error: AxiosError) => {

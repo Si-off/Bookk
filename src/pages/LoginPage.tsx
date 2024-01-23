@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { login } from 'api/auth';
@@ -6,6 +6,7 @@ import { useUserStore } from 'store/useUserStore';
 import { UserState, ErrorType, LoginResponse } from 'types';
 import secureLocalStorage from 'react-secure-storage';
 import * as S from '../styles/LoginStyled';
+import { StorageKeys } from 'constant';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -27,7 +28,8 @@ const LoginPage = () => {
       if (!data) return;
       setUser(data.userInfo);
       setAccessToken(data.accessToken);
-      secureLocalStorage.setItem('refreshToken', data.refreshToken);
+      secureLocalStorage.setItem(StorageKeys.ACCESS_TOKEN, data.accessToken);
+      secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
       navigate('/user');
     },
   });
