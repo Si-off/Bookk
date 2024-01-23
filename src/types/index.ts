@@ -58,3 +58,7 @@ export type ZustandUserType = {
     followeeCount: number;
   };
 };
+export type GetBookQueries = {
+  take: number;
+  page: number;
+};
