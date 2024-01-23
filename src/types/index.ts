@@ -82,7 +82,7 @@ export type LoginResponse = {
   refreshToken: string;
   userInfo: ZustandUserType;
 };
-export type SignUpParams = {
+export type SignUpReq = {
   nickname: string;
   name: string;
   password: string;

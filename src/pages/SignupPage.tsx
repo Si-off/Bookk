@@ -4,11 +4,11 @@ import { useUserStore } from 'store/useUserStore';
 import { signUp } from 'api/auth';
 import * as S from 'styles/LoginStyled';
 import styled from 'styled-components';
-import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getStyledColor } from 'utils';
 import secureLocalStorage from 'react-secure-storage';
-import { SignUpRes, ErrorType, SignUpParams, UserState } from 'types';
+import { UserState } from 'types';
+
 const SignupPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -27,7 +27,8 @@ const SignupPage = () => {
     }
   });
   const { mutate } = useMutation({
-    mutationFn: signUp,
+    mutationFn: () => signUp({ email, password, name, nickname }),
+
     onSuccess: (data) => {
       if (!data) return;
       setUser(data.userInfo);
@@ -46,7 +47,7 @@ const SignupPage = () => {
       alert('모든 항목을 입력해주세요.');
       return;
     }
-    mutate({ email, password, nickname, name });
+    mutate();
   };
   const handleSendToEmail = async () => {
     console.log('이메일인증');

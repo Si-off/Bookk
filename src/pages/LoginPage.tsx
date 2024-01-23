@@ -6,7 +6,7 @@ import { useUserStore } from 'store/useUserStore';
 import { UserState, ErrorType, LoginResponse } from 'types';
 import secureLocalStorage from 'react-secure-storage';
 import * as S from '../styles/LoginStyled';
-import { AxiosError } from 'axios';
+
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -21,7 +21,7 @@ const LoginPage = () => {
     }
   }, [user, navigate]);
 
-  const { mutate: LoginMutation, isLoading } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       if (!data) return;
@@ -37,7 +37,7 @@ const LoginPage = () => {
       alert('이메일과 비밀번호를 입력해주세요.');
       return;
     }
-    LoginMutation({ email, password });
+    login({ email, password });
   };
 
   if (isLoading) {

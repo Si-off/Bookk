@@ -1,9 +1,10 @@
-import { create } from "zustand";
-import { UserState } from "types";
+import { create } from 'zustand';
+import { UserState } from 'types';
+
 export const useUserStore = create<UserState>((set) => ({
   user: null,
-  accessToken: "",
-  refreshToken: "",
+  accessToken: '',
+  refreshToken: '',
   setUser: (user) => set({ user: user }),
   setAccessToken: (token) => set({ accessToken: token }),
   setRefreshToken: (token) => set({ refreshToken: token }),
