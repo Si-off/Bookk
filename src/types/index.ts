@@ -47,3 +47,14 @@ export type PostBookParams = {
   content: string;
   images?: string[];
 };
+
+export type ZustandUserType = {
+  author: {
+    id: number;
+    nickname: string;
+    name: string;
+    email: string;
+    followerCount: number;
+    followeeCount: number;
+  };
+};

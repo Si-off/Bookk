@@ -1,13 +1,20 @@
-import axios, { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
-import secureLocalStorage from 'react-secure-storage';
-import qs from 'qs';
-import { StorageKeys } from '@/constant';
+import { StorageKeys } from "constant";
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  InternalAxiosRequestConfig,
+} from "axios";
+import qs from "qs";
+import secureLocalStorage from "react-secure-storage";
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const getAxiosInstance = (url: string) => {
   const endpoint = url;
-  const instance: AxiosInstance = axios.create({ baseURL: BASE_URL, withCredentials: true });
+  const instance: AxiosInstance = axios.create({
+    baseURL: BASE_URL,
+    withCredentials: true,
+  });
 
   instance.defaults.paramsSerializer = (params) => {
     return qs.stringify(params);
@@ -15,41 +22,24 @@ const getAxiosInstance = (url: string) => {
 
   instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     config.headers = config.headers ?? {};
-
     if (config.data instanceof FormData) {
-      config.headers['Content-Type'] = 'multipart/form-data';
+      config.headers["Content-Type"] = "multipart/form-data";
     } else {
-      config.headers['Content-Type'] = 'application/json';
+      config.headers["Content-Type"] = "application/json";
     }
+    const accessToken = secureLocalStorage.getItem(StorageKeys.ACCESS_TOKEN);
 
-    // if (accessToken) {
-    //   config.headers['Authorization'] = `Bearer ${accessToken}`;
-    // }
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
     return config;
   });
 
-  instance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    async (error) => {
-      const {
-        config,
-        response: { status },
-      } = error;
-
-      // if (status === 401) {
-      //   const originRequest = config;
-
-      //   const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-      // }
-      return Promise.reject(error);
-    }
-  );
-
   const get = async (queries: object = {}) => {
     try {
-      const res = await instance.get(endpoint, { params: queries } as AxiosRequestConfig);
+      const res = await instance.get(endpoint, {
+        params: queries,
+      } as AxiosRequestConfig);
 
       const { data, status } = res;
       return { ...data, status };
