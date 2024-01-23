@@ -1,91 +1,81 @@
-import { useState, useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useUserStore } from "store/useUserStore";
-import { signUp } from "api/auth";
-import * as S from "styles/LoginStyled";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { getStyledColor } from "utils";
-import secureLocalStorage from "react-secure-storage";
-import { SignUpRes, ErrorType, SignUpParams, UserState } from "types";
+import { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useUserStore } from 'store/useUserStore';
+import { signUp } from 'api/auth';
+import * as S from 'styles/LoginStyled';
+import styled from 'styled-components';
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { getStyledColor } from 'utils';
+import secureLocalStorage from 'react-secure-storage';
+import { SignUpRes, ErrorType, SignUpParams, UserState } from 'types';
 const SignupPage = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
-  const [code, setCode] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [code, setCode] = useState<string>('');
 
   const navigate = useNavigate();
   const user = useUserStore((state: UserState) => state.user);
   const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore(
-    (state: UserState) => state.setAccessToken
-  );
+  const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
   useEffect(() => {
     if (user) {
-      navigate("/admin/main");
+      navigate('/admin/main');
     }
   });
-  const { mutate } = useMutation<SignUpRes, ErrorType>({
-    mutationFn: () =>
-      signUp({ email, password, name, nickname } as SignUpParams),
+  const { mutate } = useMutation({
+    mutationFn: signUp,
     onSuccess: (data) => {
+      if (!data) return;
       setUser(data.userInfo);
       setAccessToken(data.accessToken);
-      secureLocalStorage.setItem("refreshToken", data.refreshToken);
-      navigate("/user");
-    },
-    onError: (error) => {
-      alert(error.message);
+      secureLocalStorage.setItem('refreshToken', data.refreshToken);
+      navigate('/user');
     },
   });
 
   const handleSignup = () => {
     if (password !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
+      alert('비밀번호가 일치하지 않습니다.');
       return;
     }
     if (!email || !password || !name || !nickname) {
-      alert("모든 항목을 입력해주세요.");
+      alert('모든 항목을 입력해주세요.');
       return;
     }
-    mutate();
+    mutate({ email, password, nickname, name });
   };
   const handleSendToEmail = async () => {
-    console.log("이메일인증");
+    console.log('이메일인증');
 
-    const res = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/mail/send-code`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      }
-    );
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/send-code`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
     const data = await res.json();
     alert(`${data.message} \n ${data.expirationTime}`);
     // timer 시작 10분
   };
 
   const handleVerifyCode = async () => {
-    console.log("인증번호확인");
+    console.log('인증번호확인');
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/mail/verify-code`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, code }),
-        }
-      );
+      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/verify-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, code }),
+      });
       const data = await res.json();
       console.log(data);
-      alert("인증이 완료되었습니다.");
+      alert('인증이 완료되었습니다.');
     } catch (error) {
       console.log(error);
     }
@@ -170,14 +160,9 @@ const SignupPage = () => {
 
 export default SignupPage;
 
-const EmailField = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
 const AuthButton = styled.button`
-  color: ${getStyledColor("blue", 800)};
-  border: 2px solid ${getStyledColor("blue", 800)};
+  color: ${getStyledColor('blue', 800)};
+  border: 2px solid ${getStyledColor('blue', 800)};
   border-radius: 6px;
   background-color: #fff;
   font-weight: 500;
@@ -185,4 +170,8 @@ const AuthButton = styled.button`
   white-space: nowrap;
   height: 42px;
   align-self: flex-end;
+`;
+const EmailField = styled.div`
+  width: 100%;
+  display: flex;
 `;

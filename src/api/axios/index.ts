@@ -43,7 +43,7 @@ const getAxiosInstance = (url: string) => {
     (error: AxiosError) => {
       console.error(error);
       return Promise.reject(error);
-    }
+    },
   );
 
   // instance.interceptors.response.use(

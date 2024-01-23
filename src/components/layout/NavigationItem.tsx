@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
+import { logout } from "api/auth";
 const NavigationItem = () => {
   return (
     <Wrapper>
@@ -22,7 +22,7 @@ const NavigationItem = () => {
         {" "}
         <span>회원가입</span>
       </LinkStyle>
-      <span>로그아웃</span>
+      <button onClick={logout}>로그아웃</button>
     </Wrapper>
   );
 };
