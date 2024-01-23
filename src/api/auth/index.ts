@@ -14,13 +14,18 @@ interface SignUp {
 
 export const login = async (user: User) => {
   const auth = btoa(`${user.email}:${user.password}`);
-
-  const res = await Axios("/auth/login/email").post(
-    {},
-    { headers: { Authorization: `Basic ${auth}` } }
-  );
-
-  return res;
+  try {
+    const res = await Axios("/auth/login/email").post(
+      {},
+      { headers: { Authorization: `Basic ${auth}` } }
+    );
+    if (!res.ok) {
+      throw new Error("로그인에 실패했습니다.");
+    }
+    return res;
+  } catch (e: any) {
+    throw new Error(e);
+  }
 };
 
 export const signUp = async (params: SignUp) => {

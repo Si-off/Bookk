@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "store/useUserStore";
-
 import { signUp } from "api/auth";
 import * as S from "styles/LoginStyled";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { getStyledColor } from "utils";
-
+import secureLocalStorage from "react-secure-storage";
+import { SignUpRes, ErrorType, SignUpParams, UserState } from "types";
 const SignupPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -15,15 +15,29 @@ const SignupPage = () => {
   const [name, setName] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [code, setCode] = useState<string>("");
-  const setUser = useUserStore((state: any) => state.setUser);
-  const navigate = useNavigate();
 
-  const { mutate } = useMutation({
-    mutationFn: signUp,
-    onSuccess: (data) => {
-      setUser(data);
-      console.log("user", data);
+  const navigate = useNavigate();
+  const user = useUserStore((state: UserState) => state.user);
+  const setUser = useUserStore((state: UserState) => state.setUser);
+  const setAccessToken = useUserStore(
+    (state: UserState) => state.setAccessToken
+  );
+  useEffect(() => {
+    if (user) {
       navigate("/admin/main");
+    }
+  });
+  const { mutate } = useMutation<SignUpRes, ErrorType>({
+    mutationFn: () =>
+      signUp({ email, password, name, nickname } as SignUpParams),
+    onSuccess: (data) => {
+      setUser(data.userInfo);
+      setAccessToken(data.accessToken);
+      secureLocalStorage.setItem("refreshToken", data.refreshToken);
+      navigate("/user");
+    },
+    onError: (error) => {
+      alert(error.message);
     },
   });
 
@@ -32,7 +46,11 @@ const SignupPage = () => {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
-    mutate({ email, password, name, nickname });
+    if (!email || !password || !name || !nickname) {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+    mutate();
   };
   const handleSendToEmail = async () => {
     console.log("이메일인증");

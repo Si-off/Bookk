@@ -3,46 +3,48 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { login } from "api/auth";
 import { useUserStore } from "store/useUserStore";
-
+import { UserState, ErrorType, LoginResponse } from "types";
+import secureLocalStorage from "react-secure-storage";
 import * as S from "../styles/LoginStyled";
-
-interface LoginResponse {
-  // 로그인 응답의 타입 (가정)
-  // ...응답 구조에 맞는 필드 정의
-}
-
-interface LoginError {
-  // 로그인 에러의 타입 (가정)
-  // ...에러 구조에 맞는 필드 정의
-}
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const setUser = useUserStore((state: any) => state.setUser);
+  const user = useUserStore((state: UserState) => state.user);
+  const setUser = useUserStore((state: UserState) => state.setUser);
+  const setAccessToken = useUserStore(
+    (state: UserState) => state.setAccessToken
+  );
   const navigate = useNavigate();
-  const user = useUserStore((state: any) => state.user);
 
   useEffect(() => {
     if (user) {
-      navigate("/admin");
+      navigate("/user");
     }
   }, [user, navigate]);
 
   const { mutate, isLoading } = useMutation<
     LoginResponse,
-    LoginError,
+    ErrorType,
     { email: string; password: string }
-  >(login, {
+  >({
+    mutationFn: login,
     onSuccess: (data) => {
-      setUser(data);
-      console.log("user", user);
-      navigate("/admin/main");
+      setUser(data.userInfo);
+      setAccessToken(data.accessToken);
+      secureLocalStorage.setItem("refreshToken", data.refreshToken);
+      navigate("/user");
+    },
+    onError: (error) => {
+      alert(error.message);
     },
   });
 
   const handleLogin = () => {
-    console.log("login");
+    if (!email || !password) {
+      alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
     mutate({ email, password });
   };
 
