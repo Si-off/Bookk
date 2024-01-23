@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getBooks, postBooks, patchBook, deleteBook } from "../api/axios";
-import { GetBookQueries, GetBooklistRes } from "@/types";
+import { GetBookQueries, GetBooklistRes } from "../types";
 import queryKeys from "./queryKeys";
 
 export const useGetBooks = (queries: GetBookQueries) => {
