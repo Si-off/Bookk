@@ -47,3 +47,8 @@ export type PostBookParams = {
   content: string;
   images?: string[];
 };
+
+export type GetBookQueries = {
+  take: number;
+  page: number;
+};
