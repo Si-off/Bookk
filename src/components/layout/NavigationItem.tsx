@@ -10,6 +10,9 @@ const NavigationItem = () => {
       <LinkStyle to="/admin">
         <span>관리자</span>
       </LinkStyle>
+      <LinkStyle to="/user">
+        <span>유저</span>
+      </LinkStyle>
       <LinkStyle to="/login">
         {" "}
         <span>로그인</span>
