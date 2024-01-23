@@ -26,65 +26,65 @@ const getAxiosInstance = (url: string) => {
 
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      config.headers = config.headers ?? {};
+      if (!config.headers) return config;
       if (config.data instanceof FormData) {
         config.headers['Content-Type'] = 'multipart/form-data';
       } else {
         config.headers['Content-Type'] = 'application/json';
       }
 
-      const { accessToken } = useUserStore();
+      // const { accessToken } = useUserStore();
 
-      if (accessToken) {
-        config.headers['Authorization'] = `Bearer ${accessToken}`;
-      }
-
+      // if (accessToken) {
+      //   config.headers['Authorization'] = `Bearer ${accessToken}`;
+      // }
       return config;
     },
     (error: AxiosError) => {
+      console.error(error);
       return Promise.reject(error);
     }
   );
 
-  instance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    async (error: AxiosError) => {
-      const { config, response } = error;
+  // instance.interceptors.response.use(
+  //   (response) => {
+  //     return response;
+  //   },
+  //   async (error: AxiosError) => {
+  //     const { config, response } = error;
 
-      const originRequest = config;
-      const { setAccessToken } = useUserStore();
+  //     const originRequest = config;
+  //     const { setAccessToken } = useUserStore();
 
-      if (response?.status === 401) {
-        if (!isRefreshing) {
-          isRefreshing = true;
-          try {
-            const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-            const { data } = await axios.post('/auth/token/access', refreshToken);
+  //     if (response?.status === 401) {
+  //       if (!isRefreshing) {
+  //         isRefreshing = true;
+  //         try {
+  //           const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+  //           const { data } = await axios.post('/auth/token/access', refreshToken);
 
-            const newAccessToken = data.accessToken;
-            console.log(newAccessToken);
-            setAccessToken(newAccessToken);
-            isRefreshing = true;
-            return originRequest;
-          } catch (refreshError) {
-            console.error(refreshError);
-            isRefreshing = false;
-            secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
-            window.location.replace('/login');
-            return Promise.reject(refreshError);
-          }
-        }
-      }
+  //           const newAccessToken = data.accessToken;
+  //           console.log(newAccessToken);
+  //           setAccessToken(newAccessToken);
+  //           isRefreshing = true;
+  //           return originRequest;
+  //         } catch (refreshError) {
+  //           console.error(refreshError);
+  //           isRefreshing = false;
+  //           secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
+  //           window.location.replace('/login');
+  //           return Promise.reject(refreshError);
+  //         }
+  //       }
+  //     }
 
-      return Promise.reject(error);
-    }
-  );
+  //     return Promise.reject(error);
+  //   }
+  // );
 
-  const get = async (queries: object = {}) => {
+  const get = async <T>(queries: object = {}) => {
     try {
-      const res = await instance.get(endpoint, {
+      const res = await instance.get<T>(endpoint, {
         params: queries,
       } as AxiosRequestConfig);
 
@@ -95,9 +95,9 @@ const getAxiosInstance = (url: string) => {
     }
   };
 
-  const post = async (params: object = {}, config?: AxiosRequestConfig) => {
+  const post = async <T>(params: object = {}, config?: AxiosRequestConfig) => {
     try {
-      const res = await instance.post(endpoint, params, config);
+      const res = await instance.post<T>(endpoint, params, config);
 
       const { data, status } = res;
       return { ...data, status };
@@ -106,9 +106,9 @@ const getAxiosInstance = (url: string) => {
     }
   };
 
-  const patch = async (params: object = {}, config?: AxiosRequestConfig) => {
+  const patch = async <T>(params: object = {}, config?: AxiosRequestConfig) => {
     try {
-      const res = await instance.post(endpoint, params, config);
+      const res = await instance.patch<T>(endpoint, params, config);
 
       const { data, status } = res;
       return { ...data, status };
@@ -117,9 +117,9 @@ const getAxiosInstance = (url: string) => {
     }
   };
 
-  const remove = async (params: object = {}, config?: AxiosRequestConfig) => {
+  const remove = async <T>(params: object = {}) => {
     try {
-      const res = await instance.post(endpoint, params, config);
+      const res = await instance.delete<T>(endpoint, params);
 
       const { data, status } = res;
       return { ...data, status };
