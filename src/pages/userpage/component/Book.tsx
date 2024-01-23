@@ -6,7 +6,7 @@ import pixelToRem from "utils/pixelToRem";
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 interface Props extends BookInfoType {
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const Book = ({ title, content, images, onClick }: Props) => {
