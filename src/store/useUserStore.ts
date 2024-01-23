@@ -1,10 +1,20 @@
-import { create } from "zustand";
-import { ZustandUserType } from "types";
-export const useUserStore = create((set) => ({
+import { create } from 'zustand';
+import { ZustandUserType } from 'types';
+
+interface UserStore {
+  user: ZustandUserType | null;
+  accessToken: string;
+  refreshToken: string;
+  setUser: (user: ZustandUserType) => void;
+  setAccessToken: (token: string) => void;
+  setRefreshToken: (token: string) => void;
+}
+
+export const useUserStore = create<UserStore>((set) => ({
   user: null,
-  accessToken: null,
-  refreshToken: null,
-  setUser: (user: ZustandUserType) => set({ user: user }),
-  setAccessToken: (token: string) => set({ accessToken: token }),
-  setRefreshToken: (token: string) => set({ refreshToken: token }),
+  accessToken: '',
+  refreshToken: '',
+  setUser: (user) => set({ user: user }),
+  setAccessToken: (token) => set({ accessToken: token }),
+  setRefreshToken: (token) => set({ refreshToken: token }),
 }));
