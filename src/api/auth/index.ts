@@ -28,3 +28,5 @@ export const signUp = async (params: SignUp) => {
 
   return res;
 };
+
+export const logout = async () => {};

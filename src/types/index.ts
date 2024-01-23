@@ -49,10 +49,10 @@ export type BookReq = {
 };
 
 export type ZustandUserType = {
-  author: {
+  userInfo: {
     id: number;
-    nickname: string;
     name: string;
+    nickname: string;
     email: string;
     followerCount: number;
     followeeCount: number;

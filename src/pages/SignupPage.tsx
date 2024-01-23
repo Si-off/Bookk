@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "store/useUserStore";
+
 import { signUp } from "api/auth";
 import * as S from "styles/LoginStyled";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { getStyledColor } from "utils";
+
 const SignupPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -16,14 +18,12 @@ const SignupPage = () => {
   const setUser = useUserStore((state: any) => state.setUser);
   const navigate = useNavigate();
 
-  const { mutate } = useMutation(signUp, {
-    onSuccess: async (data) => {
-      console.log("success");
-      await setUser(data);
-      navigate("/somewhere"); // Replace with your desired route
-    },
-    onError: (error: any) => {
-      console.error("signup failed", error);
+  const { mutate } = useMutation({
+    mutationFn: signUp,
+    onSuccess: (data) => {
+      setUser(data);
+      console.log("user", data);
+      navigate("/admin/main");
     },
   });
 
@@ -159,7 +159,7 @@ const EmailField = styled.div`
 
 const AuthButton = styled.button`
   color: ${getStyledColor("blue", 800)};
-  border: 2px solid ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${getStyledColor("blue", 800)};
   border-radius: 6px;
   background-color: #fff;
   font-weight: 500;

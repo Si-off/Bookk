@@ -1,9 +1,9 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-// import { login, kakaoLogin } from 'api/auth';
-// import { useUserStore } from 'store/useUserStore';
-// import Kakao from 'images/icons/Kakao'; // 가정된 경로
+import { login } from "api/auth";
+import { useUserStore } from "store/useUserStore";
+
 import * as S from "../styles/LoginStyled";
 
 interface LoginResponse {
@@ -19,49 +19,40 @@ interface LoginError {
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  //   const setUser = useUserStore((state) => state.setUser);
+  const setUser = useUserStore((state: any) => state.setUser);
   const navigate = useNavigate();
-  //   const user = useUserStore((state) => state.user);
+  const user = useUserStore((state: any) => state.user);
 
-  //   useEffect(() => {
-  //     if (user) {
-  //       navigate('/admin/main');
-  //     }
-  //   }, [user, navigate]);
+  useEffect(() => {
+    if (user) {
+      navigate("/admin");
+    }
+  }, [user, navigate]);
 
-  //   const { mutate, isLoading } = useMutation<LoginResponse, LoginError, { email: string; password: string }>(login, {
-  //     onSuccess: (data) => {
-  //       setUser(data);
-  //       console.log('user', user);
-  //       navigate('/admin/main');
-  //     },
-  //   });
-
-  //   const { mutate: kakao } = useMutation<LoginResponse, LoginError, void>(kakaoLogin, {
-  //     onSuccess: async (data) => {
-  //       console.log('success kakao', data);
-  //       await setUser(data);
-  //     },
-  //     onError: (error) => {
-  //       console.error('Kakao login failed', error);
-  //     },
-  //   });
-
-  //   const handleKakaoLogin = () => {
-  //     kakao();
-  //   };
+  const { mutate, isLoading } = useMutation<
+    LoginResponse,
+    LoginError,
+    { email: string; password: string }
+  >(login, {
+    onSuccess: (data) => {
+      setUser(data);
+      console.log("user", user);
+      navigate("/admin/main");
+    },
+  });
 
   const handleLogin = () => {
     console.log("login");
+    mutate({ email, password });
   };
 
-  //   if (isLoading) {
-  //     return (
-  //       <S.Body>
-  //         <S.StyledLoader />
-  //       </S.Body>
-  //     );
-  //   }
+  if (isLoading) {
+    return (
+      <S.Body>
+        <S.StyledLoader />
+      </S.Body>
+    );
+  }
 
   return (
     <S.Body>
@@ -98,10 +89,7 @@ const LoginPage = () => {
           <S.Divider>
             <div>OR</div>
           </S.Divider>
-          {/* <S.KakaoButton onClick={handleKakaoLogin}>
-            <img src={Kakao} width={16} />
-            카카오로 시작하기
-          </S.KakaoButton> */}
+
           <div>
             <S.RegistText>아직 회원이 아니신가요?</S.RegistText>
             <S.StyledLink to="/signup">회원가입</S.StyledLink>
