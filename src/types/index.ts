@@ -45,7 +45,7 @@ export type BooklistRes = {
 export type BookReq = {
   title: string;
   content: string;
-  images?: string[];
+  images?: string[] | File[];
 };
 
 export type ZustandUserType = {
