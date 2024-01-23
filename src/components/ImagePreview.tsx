@@ -1,13 +1,13 @@
-import { styled } from 'styled-components';
-import { pixelToRem, getStyledColor } from '@/utils';
+import { styled } from "styled-components";
+import { pixelToRem, getStyledColor } from "utils";
 
 interface Props {
   children?: React.ReactNode;
   src: string;
 }
 
-const ImagePreview = ({ children, src = '', ...rest }: Props) => {
-  if (src === '' || src === null)
+const ImagePreview = ({ children, src = "", ...rest }: Props) => {
+  if (src === "" || src === null)
     return (
       <Container>
         <Skeleton />
@@ -17,7 +17,7 @@ const ImagePreview = ({ children, src = '', ...rest }: Props) => {
 
   return (
     <Container>
-      <Image src={src} {...rest} alt='preview' />
+      <Image src={src} {...rest} alt="preview" />
       <Wrapper>{children}</Wrapper>
     </Container>
   );
@@ -31,18 +31,18 @@ const Container = styled.div`
   border-radius: 4px;
   max-width: ${pixelToRem(300)};
   overflow: hidden;
-  box-shadow: 0px 1px 4px 0px ${getStyledColor('cool_gray', 300)};
+  box-shadow: 0px 1px 4px 0px ${getStyledColor("cool_gray", 300)};
 `;
 
 const Image = styled.img`
   height: ${pixelToRem(165)};
-  background-color: ${getStyledColor('cool_gray', 400)};
+  background-color: ${getStyledColor("cool_gray", 400)};
   object-fit: scale-down;
 `;
 
 const Skeleton = styled.div`
   height: ${pixelToRem(165)};
-  background-color: ${getStyledColor('cool_gray', 400)};
+  background-color: ${getStyledColor("cool_gray", 400)};
 `;
 
 const Wrapper = styled.div`

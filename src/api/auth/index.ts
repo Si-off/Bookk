@@ -1,4 +1,4 @@
-import Axios from '../axios';
+import Axios from "../axios";
 
 interface User {
   email: string;
@@ -15,7 +15,7 @@ interface SignUp {
 export const login = async (user: User) => {
   const auth = btoa(`${user.email}:${user.password}`);
 
-  const res = await Axios('/auth/login/email').post(
+  const res = await Axios("/auth/login/email").post(
     {},
     { headers: { Authorization: `Basic ${auth}` } }
   );
@@ -24,7 +24,7 @@ export const login = async (user: User) => {
 };
 
 export const signUp = async (params: SignUp) => {
-  const res = await Axios('/auth/register/email').post({ ...params });
+  const res = await Axios("/auth/register/email").post({ ...params });
 
   return res;
 };
