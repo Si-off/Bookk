@@ -49,14 +49,12 @@ export type BookReq = {
 };
 
 export type ZustandUserType = {
-  userInfo: {
-    id: number;
-    name: string;
-    nickname: string;
-    email: string;
-    followerCount: number;
-    followeeCount: number;
-  };
+  id: number;
+  name: string;
+  nickname: string;
+  email: string;
+  followerCount: number;
+  followeeCount: number;
 };
 export type BooklistParams = {
   take: number;
