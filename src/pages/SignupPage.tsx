@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { getStyledColor } from 'utils';
 import secureLocalStorage from 'react-secure-storage';
-import { SignUpRes, ErrorType, SignUpParams, UserState } from 'types';
+import { UserState } from 'types';
 const SignupPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -19,25 +19,20 @@ const SignupPage = () => {
   const navigate = useNavigate();
   const user = useUserStore((state: UserState) => state.user);
   const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore(
-    (state: UserState) => state.setAccessToken
-  );
+  const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
   useEffect(() => {
     if (user) {
       navigate('/admin/main');
     }
   });
-  const { mutate } = useMutation<SignUpRes, ErrorType>({
-    mutationFn: () =>
-      signUp({ email, password, name, nickname } as SignUpParams),
+  const { mutate } = useMutation({
+    mutationFn: () => signUp({ email, password, name, nickname }),
     onSuccess: (data) => {
+      if (!data) return;
       setUser(data.userInfo);
       setAccessToken(data.accessToken);
       secureLocalStorage.setItem('refreshToken', data.refreshToken);
       navigate('/user');
-    },
-    onError: (error) => {
-      alert(error.message);
     },
   });
 
@@ -55,16 +50,13 @@ const SignupPage = () => {
   const handleSendToEmail = async () => {
     console.log('이메일인증');
 
-    const res = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/mail/send-code`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      }
-    );
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/send-code`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
     const data = await res.json();
     alert(`${data.message} \n ${data.expirationTime}`);
     // timer 시작 10분
@@ -73,16 +65,13 @@ const SignupPage = () => {
   const handleVerifyCode = async () => {
     console.log('인증번호확인');
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/mail/verify-code`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, code }),
-        }
-      );
+      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/verify-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, code }),
+      });
       const data = await res.json();
       console.log(data);
       alert('인증이 완료되었습니다.');

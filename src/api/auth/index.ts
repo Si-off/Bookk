@@ -1,35 +1,17 @@
-import Axios from "../axios";
+import { LoginResponse, SignUpRes, SignUpReq, LoginParams } from 'types';
+import Axios from '../axios';
 
-interface User {
-  email: string;
-  password: string;
-}
-
-interface SignUp {
-  nickname: string;
-  name: string;
-  password: string;
-  email: string;
-}
-
-export const login = async (user: User) => {
+export const login = async (user: LoginParams) => {
   const auth = btoa(`${user.email}:${user.password}`);
-  try {
-    const res = await Axios("/auth/login/email").post(
-      {},
-      { headers: { Authorization: `Basic ${auth}` } }
-    );
-    if (!res.ok) {
-      throw new Error("로그인에 실패했습니다.");
-    }
-    return res;
-  } catch (e: any) {
-    throw new Error(e);
-  }
+  const res = await Axios('/auth/login/email').post<LoginResponse>(
+    {},
+    { headers: { Authorization: `Basic ${auth}` } }
+  );
+  return res;
 };
 
-export const signUp = async (params: SignUp) => {
-  const res = await Axios("/auth/register/email").post({ ...params });
+export const signUp = async (params: SignUpReq) => {
+  const res = await Axios('/auth/register/email').post<SignUpRes>({ ...params });
 
   return res;
 };
