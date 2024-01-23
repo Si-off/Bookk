@@ -1,17 +1,21 @@
-import { ThemeProvider } from 'styled-components';
-import { QueryClientProvider } from '@tanstack/react-query';
-import theme from './styles/theme';
-import getQueryClient from './queries/queryClient';
-
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import MainPage from "./pages/MainPage";
+import Navigation from "./components/layout/Navigation";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 function App() {
-  const queryClient = getQueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <div className='App'>hello</div>;<p>buzz branch test</p>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <>
+      <BrowserRouter>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
