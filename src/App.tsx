@@ -1,27 +1,20 @@
 import React from "react";
-import logo from "./logo.svg";
+
+import { ThemeProvider } from "styled-components";
 import "./App.css";
+import { QueryClientProvider } from "@tanstack/react-query";
+import theme from "./styles/theme";
+import getQueryClient from "./queries/queryClient";
 
 function App() {
   const queryClient = getQueryClient();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <div className="App">hello</div>;<p>buzz branch test</p>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
