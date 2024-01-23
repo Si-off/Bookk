@@ -1,7 +1,6 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { pixelToRem } from "utils";
-import getStyleColor from "../utils/getStyledColor";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { pixelToRem, getStyledColor } from 'utils';
 
 interface WrapperProps {
   $gap?: number;
@@ -23,8 +22,8 @@ const Wrapper = styled.div<WrapperProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${({ $gap }) => ($gap ? $gap + "px" : "")};
-  margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop + "px" : "")};
+  gap: ${({ $gap }) => ($gap ? $gap + 'px' : '')};
+  margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop + 'px' : '')};
 `;
 
 const Layout = styled.div`
@@ -42,7 +41,7 @@ const Label = styled.label`
 
 const InputField = styled.div<InputFieldProps>`
   width: 100%;
-  margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop + "px" : "")};
+  margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop + 'px' : '')};
 
   input {
     margin-top: 10px;
@@ -52,27 +51,27 @@ const InputField = styled.div<InputFieldProps>`
 const Input = styled.input`
   width: 100%;
   padding: 15px 20px;
-  background-color: ${getStyleColor("gray", 300)};
-  color: ${getStyleColor("gray", 800)};
+  background-color: ${getStyledColor('gray', 300)};
+  color: ${getStyledColor('gray', 800)};
   border: none;
   border-radius: 8px;
 
   &:focus {
-    outline: 1px solid ${getStyleColor("blue", 500)};
+    outline: 1px solid ${getStyledColor('blue', 500)};
   }
 `;
 
 const LoginButton = styled.button`
   width: 100%;
-  background-color: ${getStyleColor("blue", 800)};
-  color: ${getStyleColor("gray", 100)};
+  background-color: ${getStyledColor('blue', 800)};
+  color: ${getStyledColor('gray', 100)};
   border-radius: 8px;
   font-weight: 500;
   padding: 15px;
   border: none;
 
   &:disabled {
-    background-color: ${getStyleColor("gray", 500)};
+    background-color: ${getStyledColor('gray', 500)};
   }
 `;
 
@@ -98,14 +97,14 @@ const Divider = styled.div`
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     flex: 1;
-    border-bottom: 1px solid ${getStyleColor("gray", 500)};
+    border-bottom: 1px solid ${getStyledColor('gray', 500)};
   }
 
   & div {
     padding: 0 10px;
-    color: ${getStyleColor("gray", 500)};
+    color: ${getStyledColor('gray', 500)};
     font-weight: 300;
     user-select: none;
   }
@@ -118,7 +117,7 @@ const RegistText = styled.span`
 
 const StyledLink = styled(Link)`
   font-size: 14px;
-  color: ${getStyleColor("blue", 300)};
+  color: ${getStyledColor('blue', 300)};
 `;
 
 export {
