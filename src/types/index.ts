@@ -32,7 +32,7 @@ export type BookInfoType = {
   api2cate: string;
 };
 
-export type GetBooklistRes = {
+export type BooklistRes = {
   data: BookInfoType[];
   cursor: {
     after: number;
@@ -42,7 +42,7 @@ export type GetBooklistRes = {
   total: number;
 };
 
-export type PostBookParams = {
+export type BookReq = {
   title: string;
   content: string;
   images?: string[];
@@ -58,7 +58,7 @@ export type ZustandUserType = {
     followeeCount: number;
   };
 };
-export type GetBookQueries = {
+export type BooklistParams = {
   take: number;
   page: number;
 };
