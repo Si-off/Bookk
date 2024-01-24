@@ -93,3 +93,14 @@ export type SignUpRes = {
   refreshToken: string;
   userInfo: ZustandUserType;
 };
+
+export type SelectedBookState = {
+  selectedBook: SelectedBook;
+  setSelectedBook: (newBookInfo: SelectedBook) => void;
+};
+
+export type SelectedBook = {
+  title: string;
+  content: string;
+  images: ImagesType[];
+};
