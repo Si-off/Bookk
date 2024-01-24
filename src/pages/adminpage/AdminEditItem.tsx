@@ -79,7 +79,10 @@ const AdminEditItem = () => {
           <S.Label>이미지</S.Label>
           {bookInfo.images && (
             <ImageUploader
-              src={book.images[0]?.path[0] || book?.images[0]?.fbPath[0]}
+              src={
+                `${process.env.REACT_APP_SERVER_URL + book.images[0]?.path}` ||
+                book?.images[0]?.fbPath[0]
+              }
               onChange={(fileData) =>
                 setBookInfo((prev) => ({
                   ...prev,
