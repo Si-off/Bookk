@@ -1,7 +1,6 @@
-import React, { ChangeEvent as ReactChangeEvent } from "react";
+import React, { useEffect, ChangeEvent as ReactChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useBookInfo from "../hooks/useBookInfo";
-import { useSelectedBook } from "store/useSelectedBooks";
 import { styled } from "styled-components";
 import * as $ from "styles/AdminStyled";
 import * as S from "styles/LoginStyled";
@@ -17,6 +16,7 @@ const AdminEditItem = () => {
   if (numericId === null || isNaN(numericId)) {
     return <div>유효하지 않은 ID입니다.</div>;
   }
+
   const navigate = useNavigate();
   const { data: book, isLoading } = useGetBook(numericId);
   const { mutate, status: patchStatus } = usePatchBook();
@@ -29,7 +29,17 @@ const AdminEditItem = () => {
   if (!book) {
     return <div>책 정보를 찾을 수 없습니다.</div>;
   }
-
+  useEffect(() => {
+    if (book) {
+      setBookInfo({
+        title: book.title,
+        content: book.content,
+        images: [
+          `${process.env.REACT_APP_SERVER_URL + book.images[0]?.path}`,
+        ] || [book.images[0].fbPath[0]],
+      });
+    }
+  }, [book, setBookInfo]);
   const handleChange = (e: ReactChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -61,16 +71,18 @@ const AdminEditItem = () => {
           <S.InputField>
             <S.Label>도서명</S.Label>
             <S.Input
+              name="title"
               placeholder="Title"
-              value={book.title}
+              value={bookInfo.title}
               onChange={handleChange}
             />
           </S.InputField>
           <S.InputField $marginTop={20}>
             <S.Label>설명</S.Label>
             <S.Input
+              name="content"
               placeholder="content"
-              value={book.content}
+              value={bookInfo.content}
               onChange={handleChange}
             />
           </S.InputField>
