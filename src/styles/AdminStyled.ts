@@ -1,3 +1,4 @@
+import { get } from "http";
 import { styled } from "styled-components";
 import { getStyledColor, pixelToRem } from "utils";
 interface InputFieldProps {
@@ -78,12 +79,12 @@ export const InputField = styled.div<InputFieldProps>`
 export const Input = styled.input`
   width: ${pixelToRem(300)};
   padding: 15px 20px;
-  background-color: ${({ theme }) => theme.colors.G_300};
-  color: ${({ theme }) => theme.colors.G_800};
+  background-color: ${getStyledColor("gray", 300)};
+  color: ${getStyledColor("gray", 800)};
   border: none;
   border-radius: 8px;
 
   &:focus {
-    outline: 1px solid ${({ theme }) => theme.colors.blue_hover};
+    outline: 1px solid ${getStyledColor("blue", 500)};
   }
 `;
