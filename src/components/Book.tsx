@@ -1,4 +1,5 @@
-import { styled } from 'styled-components';
+import { useEffect, useState } from 'react';
+import { keyframes, styled } from 'styled-components';
 import { BookInfoType } from 'types';
 import { getStyledColor } from 'utils';
 import pixelToRem from 'utils/pixelToRem';
@@ -10,7 +11,12 @@ interface Props extends BookInfoType {
 }
 
 const Book = ({ title, content, images, onClick }: Props) => {
+  const [isShow, setIsShow] = useState(false);
   const imageUrl = images[0]?.path;
+
+  useEffect(() => {
+    setIsShow(true);
+  }, []);
 
   return (
     <Container onClick={onClick}>
@@ -25,25 +31,36 @@ const Book = ({ title, content, images, onClick }: Props) => {
 
 export default Book;
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const Title = styled.p`
   font-size: ${pixelToRem(16)};
-  font-weight: 700;
-
+  font-weight: 500;
   transition: font-size 1s;
 
   &::after {
     content: '';
     display: block;
-    width: 30%;
-    border-bottom: 2px solid rgba(0, 0, 0, 0);
+    width: 40%;
+    border-bottom: 2px solid ${getStyledColor('indigo', 1000)};
     transition: border 1s ease;
-    margin: 10px 0px;
+    margin: 30px 0px;
   }
 `;
 
 const Content = styled.p`
   width: 60%;
   font-size: ${pixelToRem(14)};
+  font-weight: 300;
 `;
 
 const Inner = styled.div`
@@ -73,11 +90,11 @@ const Container = styled.div`
   justify-content: space-between;
   z-index: 1;
   color: ${getStyledColor('gray', 900)};
-
   flex: 1;
 
   transition: flex 1s ease, color 1s ease;
   cursor: pointer;
+  animation: ${fadeIn} 0.3s ease forwards;
 
   &:before {
     content: '';
@@ -99,7 +116,7 @@ const Container = styled.div`
     ${Image} {
       opacity: 1;
       filter: saturate(1);
-      transform: scale(1.1);
+      transform: scale(1.2);
     }
 
     ${Title} {
@@ -107,12 +124,12 @@ const Container = styled.div`
     }
 
     ${Title}::after {
-      border-bottom: 2px solid red;
+      border-bottom: 2px solid ${getStyledColor('indigo', 600)};
     }
 
     &:before {
       transform: translate(50px, 0px);
-      opacity: 1;
+      opacity: 0.7;
     }
   }
 `;

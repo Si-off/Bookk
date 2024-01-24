@@ -3,17 +3,12 @@ import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
 import Book from '../../components/Book';
 import { useGetBooks } from 'queries';
-import { BooklistParams } from 'types';
-import { getBook } from 'api';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 
 const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const {
-    data: books,
-    status,
-    isSuccess,
-  } = useGetBooks({ take: 4, page: currentPage });
+  const { data: books, status, isSuccess } = useGetBooks({ take: 4, page: currentPage });
 
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
@@ -26,26 +21,25 @@ const UserPage = () => {
   };
 
   return (
-    <Layout>
-      <ArrowButton>
-        <IoIosArrowBack
-          size={60}
-          onClick={() => handlePageClick(currentPage - 1)}
-        />
-      </ArrowButton>
-      <BookWrapper $isSuccess={isSuccess}>
-        {status === 'success' &&
-          books.data.map((book) => {
-            return <Book key={book.id} {...book} />;
-          })}
-      </BookWrapper>
-      <ArrowButton>
-        <IoIosArrowForward
-          size={60}
-          onClick={() => handlePageClick(currentPage + 1)}
-        />
-      </ArrowButton>
-    </Layout>
+    <>
+      <Stars />
+      <Stars2 />
+      <Stars3 />
+      <Layout>
+        <ArrowButton>
+          <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
+        </ArrowButton>
+        <BookWrapper $isSuccess={isSuccess}>
+          {status === 'success' &&
+            books.data.map((book) => {
+              return <Book key={book.id} {...book} />;
+            })}
+        </BookWrapper>
+        <ArrowButton>
+          <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
+        </ArrowButton>
+      </Layout>
+    </>
   );
 };
 
@@ -71,7 +65,13 @@ const ArrowButton = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
+  color: rgba(100, 100, 100, 0.7);
   cursor: pointer;
   margin: 0 50px;
+
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: rgba(255, 255, 255, 1);
+  }
 `;
