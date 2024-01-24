@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import secureLocalStorage from 'react-secure-storage';
 import { useUserStore } from 'store/useUserStore';
 import { signUp } from 'api/auth';
 import * as S from 'styles/LoginStyled';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import { getStyledColor } from 'utils';
-import secureLocalStorage from 'react-secure-storage';
 import { UserState } from 'types';
 
 const SignupPage = () => {
@@ -17,10 +17,13 @@ const SignupPage = () => {
   const [nickname, setNickname] = useState<string>('');
   const [code, setCode] = useState<string>('');
 
+  const [isVerify, setIsVerify] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const user = useUserStore((state: UserState) => state.user);
   const setUser = useUserStore((state: UserState) => state.setUser);
   const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
+
   useEffect(() => {
     if (user) {
       navigate('/admin/main');
@@ -49,9 +52,8 @@ const SignupPage = () => {
     }
     mutate();
   };
-  const handleSendToEmail = async () => {
-    console.log('이메일인증');
 
+  const handleSendToEmail = async () => {
     const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/send-code`, {
       method: 'POST',
       headers: {
@@ -61,11 +63,12 @@ const SignupPage = () => {
     });
     const data = await res.json();
     alert(`${data.message} \n ${data.expirationTime}`);
-    // timer 시작 10분
+
+    // TODO: 요청 성공 시 true로 변경
+    setIsVerify(true);
   };
 
   const handleVerifyCode = async () => {
-    console.log('인증번호확인');
     try {
       const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/verify-code`, {
         method: 'POST',
@@ -76,6 +79,7 @@ const SignupPage = () => {
       });
       const data = await res.json();
       console.log(data);
+      setIsVerify(false);
       alert('인증이 완료되었습니다.');
     } catch (error) {
       console.log(error);
@@ -91,29 +95,34 @@ const SignupPage = () => {
             <S.InputField>
               <S.Label>이메일 </S.Label>
               <S.Input
-                type="email"
-                placeholder="Email"
+                type='email'
+                placeholder='Email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </S.InputField>
             <AuthButton onClick={handleSendToEmail}>인증하기</AuthButton>
           </EmailField>
-          <div>
-            <span>10:00</span>
-            <input
-              type="text"
-              placeholder="인증번호를 입력해주세요."
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-            <button onClick={handleVerifyCode}>확인</button>
-          </div>
+          {isVerify && (
+            <EmailField>
+              <S.InputField>
+                <S.Label>인증번호</S.Label>
+                <S.Input
+                  type='text'
+                  placeholder='인증번호를 입력해주세요.'
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+              </S.InputField>
+              <AuthButton onClick={handleVerifyCode}>확인</AuthButton>
+            </EmailField>
+          )}
+
           <S.InputField>
             <S.Label>비밀번호 </S.Label>
             <S.Input
-              type="password"
-              placeholder="Password"
+              type='password'
+              placeholder='Password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -121,8 +130,8 @@ const SignupPage = () => {
           <S.InputField>
             <S.Label>비밀번호 확인 </S.Label>
             <S.Input
-              type="password"
-              placeholder="Password Confirm"
+              type='password'
+              placeholder='Password Confirm'
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
             />
@@ -131,8 +140,8 @@ const SignupPage = () => {
           <S.InputField>
             <S.Label>이름 </S.Label>
             <S.Input
-              type="text"
-              placeholder="Name"
+              type='text'
+              placeholder='Name'
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -140,8 +149,8 @@ const SignupPage = () => {
           <S.InputField>
             <S.Label>닉네임 </S.Label>
             <S.Input
-              type="text"
-              placeholder="Nick Name"
+              type='text'
+              placeholder='Nick Name'
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
             />
@@ -151,7 +160,7 @@ const SignupPage = () => {
           <S.LoginButton onClick={handleSignup}>회원가입</S.LoginButton>
           <div>
             <S.RegistText>이미 회원이신가요?</S.RegistText>
-            <S.StyledLink to="/login">로그인</S.StyledLink>
+            <S.StyledLink to='/login'>로그인</S.StyledLink>
           </div>
         </S.Wrapper>
       </S.Layout>
@@ -171,6 +180,20 @@ const AuthButton = styled.button`
   white-space: nowrap;
   height: 42px;
   align-self: flex-end;
+  padding: 6px 12px;
+
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${getStyledColor('blue', 800)};
+    color: #fff;
+  }
+
+  &:active {
+    background-color: ${getStyledColor('blue', 900)};
+    color: #fff;
+    border-color: ${getStyledColor('blue', 900)};
+  }
 `;
 const EmailField = styled.div`
   width: 100%;

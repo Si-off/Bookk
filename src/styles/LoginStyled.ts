@@ -70,6 +70,16 @@ const LoginButton = styled.button`
   padding: 15px;
   border: none;
 
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${getStyledColor('blue', 900)};
+  }
+
+  &:active {
+    background-color: ${getStyledColor('blue', 1000)};
+  }
+
   &:disabled {
     background-color: ${getStyledColor('gray', 500)};
   }
