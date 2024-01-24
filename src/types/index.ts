@@ -47,6 +47,36 @@ export type BookReq = {
   content: string;
   images?: string[] | File[];
 };
+export type BookRes = {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  title: string;
+  content: string;
+  clicks: number;
+  likeCount: number;
+  reply2Count: number;
+  isSecret: boolean;
+  author: {
+    id: number;
+    nickname: string;
+    name: string;
+    email: string;
+    followerCount: number;
+    followeeCount: number;
+  };
+  images: Array<{
+    id: number;
+    updatedAt: string;
+    createdAt: string;
+    order: number;
+    type: number;
+    path: string;
+    fbPath: Array<string>;
+  }>;
+  api2cate: null | any; // 여기서 any는 api2cate의 실제 타입에 따라 달라질 수 있습니다.
+  reply2s: Array<any>; // reply2s의 구체적인 타입이 명시되지 않았으므로 any를 사용하거나, 해당 타입을 정의해야 합니다.
+};
 
 export type ZustandUserType = {
   id: number;
@@ -102,5 +132,5 @@ export type SelectedBookState = {
 export type SelectedBook = {
   title: string;
   content: string;
-  images: ImagesType[];
+  images?: ImagesType[];
 };
