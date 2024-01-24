@@ -6,7 +6,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { getStyledColor } from 'utils';
 import { useUserStore } from 'store/useUserStore';
-import Book from './component/Book';
+import Book from '../../components/Book';
 import { useGetBooks } from 'queries';
 
 const UserPage = () => {
