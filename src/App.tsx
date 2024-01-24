@@ -1,12 +1,11 @@
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import MainPage from './pages/MainPage';
 import Navigation from './components/layout/Navigation';
 import AdminManage from './pages/adminpage/AdminManage';
 import AdminCreateItem from './pages/adminpage/AdminCreateItem';
 import AdminEditItem from './pages/adminpage/AdminEditItem';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import UserPage from './pages/userpage/UserPage';
+import { LoginPage, MainPage, SignupPage } from 'pages';
+
 function App() {
   return (
     <>
