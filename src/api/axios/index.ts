@@ -7,16 +7,12 @@ import axios, {
 } from 'axios';
 import qs from 'qs';
 import secureLocalStorage from 'react-secure-storage';
-import { useUserStore } from 'store/useUserStore';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const getAxiosInstance = (url: string) => {
   const endpoint = url;
-  const instance: AxiosInstance = axios.create({
-    baseURL: BASE_URL,
-    withCredentials: true,
-  });
+  const instance: AxiosInstance = axios.create({ baseURL: BASE_URL, withCredentials: true });
 
   let isRefreshing = false;
 
@@ -26,13 +22,13 @@ const getAxiosInstance = (url: string) => {
 
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      if (!config.headers) return config;
       if (config.data instanceof FormData) {
         config.headers['Content-Type'] = 'multipart/form-data';
       } else {
         config.headers['Content-Type'] = 'application/json';
       }
 
+      if (config.headers.Authorization) return config;
       const accessToken = secureLocalStorage.getItem(StorageKeys.ACCESS_TOKEN);
 
       if (accessToken) {
@@ -43,7 +39,7 @@ const getAxiosInstance = (url: string) => {
     (error: AxiosError) => {
       console.error(error);
       return Promise.reject(error);
-    },
+    }
   );
 
   // instance.interceptors.response.use(
