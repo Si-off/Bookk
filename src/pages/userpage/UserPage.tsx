@@ -3,10 +3,15 @@ import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
 import Book from '../../components/Book';
 import { useGetBooks } from 'queries';
+import { BooklistParams } from 'types';
 
 const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: books, status, isSuccess } = useGetBooks({ take: 4, page: currentPage });
+  const {
+    data: books,
+    status,
+    isSuccess,
+  } = useGetBooks({ take: 4, page: currentPage });
 
   return (
     <Layout>
