@@ -41,6 +41,11 @@ const Title = styled.p`
   }
 `;
 
+const Content = styled.p`
+  width: 60%;
+  font-size: ${pixelToRem(14)};
+`;
+
 const Inner = styled.div`
   display: flex;
   flex-direction: column;
@@ -70,8 +75,6 @@ const Container = styled.div`
   color: ${getStyledColor('gray', 900)};
 
   flex: 1;
-
-  padding: 30px 50px;
 
   transition: flex 1s ease, color 1s ease;
   cursor: pointer;
@@ -112,9 +115,4 @@ const Container = styled.div`
       opacity: 1;
     }
   }
-`;
-
-const Content = styled.p`
-  font-size: ${pixelToRem(14)};
-  text-overflow: nowrap;
 `;

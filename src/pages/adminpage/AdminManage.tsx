@@ -1,19 +1,15 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useUserStore } from "store/useUserStore";
-import { useNavigate } from "react-router-dom";
-import {
-  FaPenToSquare,
-  FaRegTrashCan,
-  FaAngleLeft,
-  FaAngleRight,
-} from "react-icons/fa6";
-import * as S from "styles/AdminStyled";
-import { useGetBooks, useDeleteBook } from "queries";
-import { getStyledColor } from "utils";
-import { useSelectedBook } from "store/useSelectedBooks";
-import { getDateStr } from "utils";
-import { BookInfoType } from "types";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useUserStore } from 'store/useUserStore';
+import { useNavigate } from 'react-router-dom';
+import { FaPenToSquare, FaRegTrashCan, FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
+import * as S from 'styles/AdminStyled';
+import { useGetBooks, useDeleteBook } from 'queries';
+import { getStyledColor } from 'utils';
+import { useSelectedBook } from 'store/useSelectedBooks';
+import { getDateStr } from 'utils';
+import { BookInfoType } from 'types';
+
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { data: books, status } = useGetBooks({ take: 10, page: currentPage });
@@ -22,7 +18,7 @@ const AdminManage = () => {
   const navigate = useNavigate();
 
   const user = useUserStore((state: any) => state.user);
-  console.log("user", user);
+  console.log('user', user);
 
   const handleEdit = (id: any) => {
     if (!books) return;
@@ -40,7 +36,7 @@ const AdminManage = () => {
     remove(id);
   };
   const handlePageClick = (pageNum: number) => {
-    if (status !== "success") return;
+    if (status !== 'success') return;
 
     const totalPages = Math.ceil(books.total / 10);
 
@@ -69,7 +65,7 @@ const AdminManage = () => {
                 </S.Trow>
               </S.Theader>
               <S.Tbody>
-                {status === "success" &&
+                {status === 'success' &&
                   books.data.map((book) => {
                     const {
                       id,
@@ -98,25 +94,19 @@ const AdminManage = () => {
                   })}
               </S.Tbody>
             </S.Table>
-            <div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
               <Pagination>
-                <button>
-                  <PLeft onClick={() => handlePageClick(currentPage - 1)} />
-                </button>
-                {Array.from(
-                  { length: Math.ceil(books?.total / 10) },
-                  (_, index) => (
-                    <PNumber
-                      key={index}
-                      onClick={() => handlePageClick(index + 1)}
-                    >
-                      {index + 1}
-                    </PNumber>
-                  )
-                )}
-                <button>
-                  <PRight onClick={() => handlePageClick(currentPage + 1)} />
-                </button>
+                <PButton>
+                  <FaAngleLeft onClick={() => handlePageClick(currentPage - 1)} />
+                </PButton>
+                {Array.from({ length: Math.ceil(books?.total / 10) }, (_, index) => (
+                  <PNumber key={index} onClick={() => handlePageClick(index + 1)}>
+                    {index + 1}
+                  </PNumber>
+                ))}
+                <PButton>
+                  <FaAngleRight onClick={() => handlePageClick(currentPage + 1)} />
+                </PButton>
               </Pagination>
             </div>
           </>
@@ -130,12 +120,12 @@ export default AdminManage;
 const EditIcon = styled(FaPenToSquare)`
   font-size: 20px;
   transition: color 0.15s ease;
-  color: ${getStyledColor("cool_gray", 700)};
+  color: ${getStyledColor('cool_gray', 700)};
   &:hover {
-    color: ${getStyledColor("blue", 900)};
+    color: ${getStyledColor('blue', 900)};
   }
   &:active {
-    color: ${getStyledColor("blue", 1000)};
+    color: ${getStyledColor('blue', 1000)};
   }
   margin-right: 20px;
   cursor: pointer;
@@ -144,12 +134,12 @@ const EditIcon = styled(FaPenToSquare)`
 const TrashIcon = styled(FaRegTrashCan)`
   font-size: 20px;
   transition: color 0.15s ease;
-  color: ${getStyledColor("cool_gray", 700)};
+  color: ${getStyledColor('cool_gray', 700)};
   &:hover {
-    color: ${getStyledColor("red", 900)};
+    color: ${getStyledColor('red', 900)};
   }
   &:active {
-    color: ${getStyledColor("red", 1000)};
+    color: ${getStyledColor('red', 1000)};
   }
   cursor: pointer;
 `;
@@ -158,21 +148,29 @@ const Pagination = styled.nav`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
 `;
 
 const PNumber = styled.button`
   padding: 8px;
+  background-color: #fff;
+  border: 1px solid ${getStyledColor('blue', 400)};
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${getStyledColor('blue', 400)};
+  }
+
+  &:active {
+    background-color: ${getStyledColor('blue', 500)};
+  }
 `;
 
-const PLeft = styled(FaAngleLeft)`
+const PButton = styled.button`
   display: inline-flex;
   align-items: center;
-`;
-const PRight = styled(FaAngleRight)`
-  display: inline-flex;
-  justify-content: flex-end;
-  align-items: center;
+  background-color: #fff;
 `;
 
 const Layout = styled.div`
