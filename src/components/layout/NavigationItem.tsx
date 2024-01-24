@@ -4,6 +4,10 @@ import { logout } from "api/auth";
 const NavigationItem = () => {
   return (
     <Wrapper>
+      <LinkStyle to="/admin/create">
+        <span>create</span>
+      </LinkStyle>
+
       <LinkStyle to="/">
         <span>홈</span>
       </LinkStyle>

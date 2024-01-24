@@ -33,7 +33,7 @@ const AdminManage = () => {
     const { images, title, content } = selectedBook;
 
     setSelectedBook({ title, content, images });
-    navigate(`/admin/edit/${currentPage}/${id}`);
+    navigate(`/admin/edit/${id}`);
   };
 
   const handleRemove = (id: any) => {
