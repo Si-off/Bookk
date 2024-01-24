@@ -1,5 +1,5 @@
 import Axios from "api/axios";
-import { BookReq, BooklistParams, BooklistRes } from "types";
+import { BookReq, BooklistParams, BooklistRes, BookRes } from "types";
 
 export const getBooks = async (queries: BooklistParams) => {
   const res = await Axios("/api2s").get<BooklistRes>(queries);
@@ -18,7 +18,7 @@ export const postBooks = async (params: BookReq) => {
 };
 
 export const getBook = async (id: number) => {
-  const res = await Axios(`/api2s/${id}`).get();
+  const res = await Axios(`/api2s/${id}`).get<BookRes>();
 
   return res;
 };
