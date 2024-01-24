@@ -12,7 +12,11 @@ const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const getAxiosInstance = (url: string) => {
   const endpoint = url;
-  const instance: AxiosInstance = axios.create({ baseURL: BASE_URL, withCredentials: true });
+  console.log('baseURL', BASE_URL);
+  const instance: AxiosInstance = axios.create({
+    baseURL: BASE_URL,
+    withCredentials: true,
+  });
 
   let isRefreshing = false;
 

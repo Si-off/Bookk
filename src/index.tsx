@@ -1,23 +1,25 @@
-import { ThemeProvider } from "styled-components";
-import { QueryClientProvider } from "@tanstack/react-query";
-import getQueryClient from "./queries/queryClient";
-import theme from "./styles/theme";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./normalize.css";
-import "./common.css";
-import reportWebVitals from "./reportWebVitals";
+import { ThemeProvider } from 'styled-components';
+import { QueryClientProvider } from '@tanstack/react-query';
+import getQueryClient from './queries/queryClient';
+import theme from './styles/theme';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './normalize.css';
+import './common.css';
+import reportWebVitals from './reportWebVitals';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = getQueryClient();
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement
 );
 root.render(
   <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>
+    <ReactQueryDevtools initialIsOpen={true} />
   </QueryClientProvider>
 );
 
