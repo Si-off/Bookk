@@ -7,6 +7,8 @@ import { useGetBooks, useGetNextBooks } from 'queries';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getNextBooks } from 'api';
+import queryKeys from 'queries/queryKeys';
 
 const TAKE = 4;
 
@@ -23,16 +25,15 @@ const UserPage = () => {
   } = useGetBooks({ take: TAKE, page: currentPage });
 
   const queryClient = useQueryClient();
-
+  const key = [queryKeys.USER, 'books', nextPage.toString()];
   React.useEffect(() => {
-    console.log('nextPage', nextPage);
-    if (nextPage && books) {
+    if (nextPage) {
       queryClient.prefetchQuery({
-        queryKey: ['projects', nextPage],
-        queryFn: () => useGetNextBooks({ take: 4, page: nextPage }),
+        queryKey: key,
+        queryFn: () => useGetNextBooks({ take: TAKE, page: nextPage }),
       });
     }
-  }, [books, isPreviousData, nextPage, queryClient]);
+  }, [nextPage]);
 
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;

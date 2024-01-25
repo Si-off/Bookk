@@ -1,5 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getBooks, postBooks, patchBook, deleteBook, getBook } from 'api';
+import {
+  getBooks,
+  postBooks,
+  patchBook,
+  deleteBook,
+  getBook,
+  getNextBooks,
+} from 'api';
 import { BooklistParams, BooklistRes, UserState } from 'types';
 import queryKeys from './queryKeys';
 import { login, getUser } from 'api/auth';
@@ -24,12 +31,12 @@ export const useGetBooks = (queries: BooklistParams) => {
       const totalPages = Math.ceil(res.total / queries.take);
       if (totalPages < queries.page + 1) return;
 
-      await queryClient.prefetchQuery({
-        queryKey: [queryKeys.USER, 'books', (queries.page + 1).toString()],
-        queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
-        staleTime: 1000 * 60 * 3,
-        cacheTime: 1000 * 60 * 5,
-      });
+      // await queryClient.prefetchQuery({
+      //   queryKey: [queryKeys.USER, 'books', (queries.page + 1).toString()],
+      //   queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
+      //   staleTime: 1000 * 60 * 3,
+      //   cacheTime: 1000 * 60 * 5,
+      // });
     },
     keepPreviousData: true,
     staleTime: 1000 * 60 * 3,
@@ -38,25 +45,18 @@ export const useGetBooks = (queries: BooklistParams) => {
 };
 
 export const useGetNextBooks = (queries: BooklistParams) => {
-  const queryClient = useQueryClient();
-  const key = [queryKeys.USER, 'nextbooks'];
+  const key = [queryKeys.USER, 'books'];
   if (queries) key.push(queries.page.toString());
 
   console.log('queries', queries);
 
   return useQuery({
     queryKey: key,
-    queryFn: () => getBooks(queries),
+    queryFn: () => getNextBooks(queries),
     onSuccess: async (res: BooklistRes) => {
-      if (!queries) return;
-      if (res.total < queries.take * queries.page) return;
-
-      await queryClient.prefetchQuery({
-        queryKey: [queryKeys.USER, 'nextbooks', (queries.page + 1).toString()],
-        queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
-        staleTime: 1000 * 60 * 3,
-        cacheTime: 1000 * 60 * 5,
-      });
+      if (!queries) return console.log('!queries');
+      if (res.total < queries.take * queries.page)
+        return console.log('res.total 이 더 작음');
     },
     keepPreviousData: true,
     staleTime: 1000 * 60 * 3,
@@ -141,7 +141,9 @@ export const useLogin = () => {
 
   // TODO 추후 제거
   const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
+  const setAccessToken = useUserStore(
+    (state: UserState) => state.setAccessToken
+  );
 
   return useMutation({
     mutationKey: [queryKeys.USER],
@@ -164,5 +166,9 @@ export const useLogin = () => {
 };
 
 export const useGetUser = (token: string) => {
-  return useQuery({ queryKey: [queryKeys.USER], queryFn: getUser, enabled: !!token });
+  return useQuery({
+    queryKey: [queryKeys.USER],
+    queryFn: getUser,
+    enabled: !!token,
+  });
 };
