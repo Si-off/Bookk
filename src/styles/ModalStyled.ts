@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-
+import { pixelToRem, getStyledColor } from "utils";
 export const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -46,7 +46,7 @@ export const ModalClose = styled.div`
 
 export const Modal = styled.div`
   position: relative;
-  max-width: 800px;
+  min-width: 800px;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
     0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
   background: #111;
@@ -65,10 +65,17 @@ export const Modal = styled.div`
     overflow-y: scroll !important;
   }
 `;
-
+export const ModalPosterContainer = styled.div`
+  background-color: rgb(0 0 0 / 71%);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: ${pixelToRem(500)};
+`;
 export const ModalPosterImg = styled.img`
-  width: 100%;
-  height: auto;
+  height: ${pixelToRem(500)};
+  background-color: ${getStyledColor("cool_gray", 400)};
+  object-fit: cover;
 `;
 
 export const ModalContent = styled.div`

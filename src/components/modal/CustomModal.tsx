@@ -35,7 +35,13 @@ export const CustomModal = ({
             X
           </S.ModalClose>
           {book?.images[0]?.fbPath[0] && (
-            <S.ModalPosterImg src={book?.images[0].fbPath[0]} alt="modal-img" />
+            <S.ModalPosterContainer>
+              {" "}
+              <S.ModalPosterImg
+                src={book?.images[0].fbPath[0]}
+                alt="modal-img"
+              />
+            </S.ModalPosterContainer>
           )}
           <S.ModalContent>
             <S.ModalDetails>등록날짜:{book?.createdAt}</S.ModalDetails>
