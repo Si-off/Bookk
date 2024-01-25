@@ -67,6 +67,7 @@ export const usePostBook = () => {
     mutationFn: postBooks,
     onSuccess: () => {
       queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.USER, "books"]);
     },
   });
 };
@@ -79,6 +80,7 @@ export const usePatchBook = () => {
     mutationFn: patchBook,
     onSuccess: () => {
       queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.USER, "books"]);
     },
   });
 };
@@ -91,6 +93,7 @@ export const useDeleteBook = () => {
     mutationFn: deleteBook,
     onSuccess: () => {
       queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.USER, "books"]);
     },
   });
 };
