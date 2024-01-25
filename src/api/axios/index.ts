@@ -36,9 +36,8 @@ class CustomAxiosInstance {
         if (config.headers.Authorization) return config;
 
         if (this.accessToken) {
-          console.log(this.accessToken);
           config.headers['Authorization'] = `Bearer ${this.accessToken}`;
-        } else console.log('fail:' + this.accessToken);
+        }
         return config;
       },
       (error: AxiosError) => {
@@ -46,6 +45,41 @@ class CustomAxiosInstance {
         return Promise.reject(error);
       }
     );
+
+    // this.instance.interceptors.response.use(
+    //   (response) => {
+    //     return response;
+    //   },
+    //   async (error: AxiosError) => {
+    //     const { config, response } = error;
+
+    //     const originRequest = config;
+
+    //     if (response?.status === 401) {
+    //       if (!this.isRefreshing) {
+    //         isRefreshing = true;
+    //         try {
+    //           const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+    //           const { data } = await axios.post('/auth/token/access', refreshToken);
+
+    //           const newAccessToken = data.accessToken;
+    //           console.log(newAccessToken);
+    //           setAccessToken(newAccessToken);
+    //           isRefreshing = true;
+    //           return originRequest;
+    //         } catch (refreshError) {
+    //           console.error(refreshError);
+    //           isRefreshing = false;
+    //           secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
+    //           window.location.replace('/login');
+    //           return Promise.reject(refreshError);
+    //         }
+    //       }
+    //     }
+
+    //     return Promise.reject(error);
+    //   }
+    // );
   }
 
   static setAccessToken(token: string) {
@@ -97,39 +131,3 @@ class CustomAxiosInstance {
 }
 
 export default CustomAxiosInstance;
-
-// instance.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   async (error: AxiosError) => {
-//     const { config, response } = error;
-
-//     const originRequest = config;
-//     const { setAccessToken } = useUserStore();
-
-//     if (response?.status === 401) {
-//       if (!isRefreshing) {
-//         isRefreshing = true;
-//         try {
-//           const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-//           const { data } = await axios.post('/auth/token/access', refreshToken);
-
-//           const newAccessToken = data.accessToken;
-//           console.log(newAccessToken);
-//           setAccessToken(newAccessToken);
-//           isRefreshing = true;
-//           return originRequest;
-//         } catch (refreshError) {
-//           console.error(refreshError);
-//           isRefreshing = false;
-//           secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
-//           window.location.replace('/login');
-//           return Promise.reject(refreshError);
-//         }
-//       }
-//     }
-
-//     return Promise.reject(error);
-//   }
-// );
