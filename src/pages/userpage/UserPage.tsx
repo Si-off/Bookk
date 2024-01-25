@@ -8,6 +8,8 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 // import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+const TAKE = 4;
+
 const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const {
@@ -16,7 +18,7 @@ const UserPage = () => {
     isSuccess,
     isFetching,
     isPreviousData,
-  } = useGetBooks({ take: 4, page: currentPage });
+  } = useGetBooks({ take: TAKE, page: currentPage });
 
   // const queryClient = useQueryClient();
 
@@ -33,7 +35,7 @@ const UserPage = () => {
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
 
-    const totalPages = Math.ceil(books.total / 4);
+    const totalPages = Math.ceil(books.total / TAKE);
 
     if (pageNum < 1 || pageNum > totalPages) return;
 
