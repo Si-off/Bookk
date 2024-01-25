@@ -23,3 +23,9 @@ export const logout = async () => {
   secureLocalStorage.removeItem('refreshToken');
   useUserStore.setState({ accessToken: null, user: null });
 };
+
+export const reLogin = async () => {
+  const res = await new Axios('/users/me').get<LoginResponse>();
+
+  return res;
+};
