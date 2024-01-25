@@ -12,6 +12,7 @@ import ImageUploader from "components/ImageUploader";
 import Button from "components/Button";
 import { ImagePatchReq } from "types";
 import { postImage, deleteImage, addImage } from "api";
+import { StyledLoader } from "styles/LoginStyled";
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const AdminEditItem = () => {
@@ -44,8 +45,8 @@ const AdminEditItem = () => {
     console.log(title, content, images, "bookinfo");
   }, [book]);
   // id를 숫자로 변환
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || patchStatus === "loading" || removeStatus === "loading") {
+    return <StyledLoader />;
   }
   console.log(book);
   if (!book) {

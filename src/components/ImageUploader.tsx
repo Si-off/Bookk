@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import { FaFileExcel, FaFileCirclePlus } from "react-icons/fa6";
 import ImagePreview from "./ImagePreview";
 import { pixelToRem, getStyledColor } from "utils";
-import { deleteImage } from "api";
 interface Props {
   src: string;
   onChange: (file: File | null) => void;
@@ -47,11 +46,6 @@ const ImageUploader = ({ onChange, src = "" }: Props) => {
     if (ref.current) {
       ref.current.value = "";
     }
-    // const originalImageId = localStorage.getItem("originalImageId");
-    // // if (originalImageId) {
-    // //   await deleteImage(numericId, parseInt(originalImageId));
-    // //   // 기존 상태로 되돌리기 (예: 이미지 목록을 초기 상태로 설정)
-    // // }
     setPreviewUrl("");
     setFileData(null);
     onChange(null);

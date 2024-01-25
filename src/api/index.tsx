@@ -44,7 +44,6 @@ export const patchBook = async (params: BookPatchReq & { id: number }) => {
 
 export const deleteBook = async (id: number) => {
   const res = await new Axios(`/api2s/${id}`).delete();
-
   return res;
 };
 
