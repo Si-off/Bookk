@@ -55,13 +55,6 @@ export const useGetBooksAdmin = (queries: BooklistParams) => {
     onSuccess: async (res: BooklistRes) => {
       if (!queries) return;
       if (res.total < queries.take * queries.page) return;
-
-      await queryClient.prefetchQuery({
-        queryKey: [queryKeys.ADMIN, 'books', (queries.page + 1).toString()],
-        queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
-        staleTime: 1000 * 60 * 3,
-        cacheTime: 1000 * 60 * 5,
-      });
     },
   });
 };
