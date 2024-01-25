@@ -1,15 +1,15 @@
-import React from "react";
-import { useState } from "react";
-import { styled } from "styled-components";
-import { getStyledColor } from "utils";
-import Book from "../../components/Book";
-import { useGetBooks } from "queries";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { Stars, Stars2, Stars3 } from "styles/StarParticles";
-import { useQueryClient } from "@tanstack/react-query";
-import queryKeys from "queries/queryKeys";
-import { getNextBooks } from "api";
-import { CustomModal } from "components/modal/CustomModal";
+import React from 'react';
+import { useState } from 'react';
+import { styled } from 'styled-components';
+import { getStyledColor } from 'utils';
+import Book from '../../components/Book';
+import { useGetBooks } from 'queries';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
+import { useQueryClient } from '@tanstack/react-query';
+import queryKeys from 'queries/queryKeys';
+import { getNextBooks } from 'api';
+import { CustomModal } from 'components/modal/CustomModal';
 const TAKE = 4;
 
 const UserPage = () => {
@@ -26,7 +26,7 @@ const UserPage = () => {
   } = useGetBooks({ take: TAKE, page: currentPage });
 
   const queryClient = useQueryClient();
-  const key = [queryKeys.USER, "books", nextPage.toString()];
+  const key = [queryKeys.USER, 'books', nextPage.toString()];
   React.useEffect(() => {
     if (nextPage) {
       queryClient.prefetchQuery({
@@ -37,7 +37,7 @@ const UserPage = () => {
   }, [nextPage]);
 
   const handlePageClick = (pageNum: number) => {
-    if (status !== "success") return;
+    if (status !== 'success') return;
 
     const totalPages = Math.ceil(books.total / TAKE);
 
@@ -48,10 +48,10 @@ const UserPage = () => {
   };
 
   const unshowScroll = () => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
   };
   const showScroll = () => {
-    document.body.style.overflow = "unset";
+    document.body.style.overflow = 'unset';
   };
   const handleClick = (id: number) => {
     setModalOpen(true);
@@ -64,36 +64,23 @@ const UserPage = () => {
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
-          showScroll={showScroll}
-        ></CustomModal>
+          showScroll={showScroll}></CustomModal>
       )}
       <Stars />
       <Stars2 />
       <Stars3 />
       <Layout>
         <ArrowButton>
-          <IoIosArrowBack
-            size={60}
-            onClick={() => handlePageClick(currentPage - 1)}
-          />
+          <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
         </ArrowButton>
         <BookWrapper $isSuccess={isSuccess}>
-          {status === "success" &&
+          {status === 'success' &&
             books.data.map((book) => {
-              return (
-                <Book
-                  key={book.id}
-                  {...book}
-                  onClick={() => handleClick(book.id)}
-                />
-              );
+              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
             })}
         </BookWrapper>
         <ArrowButton>
-          <IoIosArrowForward
-            size={60}
-            onClick={() => handlePageClick(currentPage + 1)}
-          />
+          <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
         </ArrowButton>
       </Layout>
     </>
@@ -104,7 +91,7 @@ export default UserPage;
 
 const Layout = styled.div`
   height: 100vh;
-  background-color: ${getStyledColor("cool_gray", 1200)};
+  background-color: ${getStyledColor('cool_gray', 1200)};
   display: flex;
   justify-content: center;
   align-items: center;

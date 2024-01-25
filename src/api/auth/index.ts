@@ -21,7 +21,8 @@ export const signUp = async (params: SignUpReq) => {
 
 export const logout = async () => {
   secureLocalStorage.removeItem('refreshToken');
-  useUserStore.setState({ accessToken: null, user: null });
+  const { setIsLogin } = useUserStore();
+  setIsLogin(false);
 };
 
 export const getUser = async () => {

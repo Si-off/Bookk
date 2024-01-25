@@ -16,7 +16,6 @@ function App() {
   if (refreshToken && typeof refreshToken === 'string') {
     useGetUser(refreshToken);
   }
-
   useEffect(() => {
     CustomAxiosInstance.init();
   }, []);

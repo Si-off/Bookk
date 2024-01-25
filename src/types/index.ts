@@ -100,7 +100,7 @@ export type BookAddImageRes = {
     fbPath: Array<string>;
   }>;
 };
-export type ZustandUserType = {
+export type UserType = {
   id: number;
   name: string;
   nickname: string;
@@ -109,14 +109,6 @@ export type ZustandUserType = {
   followeeCount: number;
 };
 
-export type UserState = {
-  user: ZustandUserType | null;
-  accessToken: string | null;
-  refreshToken: string | null;
-  setAccessToken: (token: string) => void;
-  setRefreshToken: (token: string) => void;
-  setUser: (user: ZustandUserType) => void;
-};
 export type BooklistParams = {
   take: number;
   page: number;
@@ -132,7 +124,7 @@ export type LoginParams = {
 export type LoginResponse = {
   accessToken: string;
   refreshToken: string;
-  userInfo: ZustandUserType;
+  userInfo: UserType;
 };
 export type SignUpReq = {
   nickname: string;
@@ -143,7 +135,7 @@ export type SignUpReq = {
 export type SignUpRes = {
   accessToken: string;
   refreshToken: string;
-  userInfo: ZustandUserType;
+  userInfo: UserType;
 };
 
 export type SelectedBookState = {

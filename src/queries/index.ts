@@ -1,13 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  getBooks,
-  postBooks,
-  patchBook,
-  deleteBook,
-  getBook,
-  getNextBooks,
-} from 'api';
-import { BooklistParams, BooklistRes, UserState } from 'types';
+import { getBooks, postBooks, patchBook, deleteBook, getBook, getNextBooks } from 'api';
+import { BooklistParams, BooklistRes } from 'types';
 import queryKeys from './queryKeys';
 import { login, getUser } from 'api/auth';
 import CustomAxiosInstance from 'api/axios';
@@ -111,25 +104,14 @@ export const useDeleteBook = () => {
 export const useLogin = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  // TODO 추후 제거
-  const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore(
-    (state: UserState) => state.setAccessToken
-  );
+  const { setIsLogin } = useUserStore();
 
   return useMutation({
     mutationKey: [queryKeys.USER],
     mutationFn: login,
     onSuccess: (data) => {
       if (!data) return;
-
-      // TODO 추후 제거
-      setUser(data.userInfo);
-      setAccessToken(data.accessToken);
-
-      console.log(data);
-
+      setIsLogin(true);
       queryClient.setQueryData([queryKeys.USER], data.userInfo);
       CustomAxiosInstance.setAccessToken(data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);

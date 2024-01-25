@@ -1,27 +1,21 @@
 import { useEffect, useState, ChangeEvent } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { login } from 'api/auth';
 import { useUserStore } from 'store/useUserStore';
-import { UserState, ErrorType, LoginResponse } from 'types';
-import secureLocalStorage from 'react-secure-storage';
 import * as S from '../styles/LoginStyled';
-import { StorageKeys } from 'constant';
-import CustomAxiosInstance from 'api/axios';
 import { useLogin } from 'queries';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const user = useUserStore((state: UserState) => state.user);
+  const { isLogin } = useUserStore();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (isLogin) {
       navigate('/user');
     }
-  }, [user, navigate]);
+  }, [isLogin, navigate]);
 
   const { mutate, isLoading } = useLogin();
 

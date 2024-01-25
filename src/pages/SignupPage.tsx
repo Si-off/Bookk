@@ -7,7 +7,6 @@ import { useUserStore } from 'store/useUserStore';
 import { signUp } from 'api/auth';
 import * as S from 'styles/LoginStyled';
 import { getStyledColor } from 'utils';
-import { UserState } from 'types';
 
 const SignupPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -20,12 +19,11 @@ const SignupPage = () => {
   const [isVerify, setIsVerify] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const user = useUserStore((state: UserState) => state.user);
-  const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
+
+  const { isLogin, setIsLogin } = useUserStore((state) => state);
 
   useEffect(() => {
-    if (user) {
+    if (isLogin) {
       navigate('/admin/main');
     }
   });
@@ -34,8 +32,7 @@ const SignupPage = () => {
 
     onSuccess: (data) => {
       if (!data) return;
-      setUser(data.userInfo);
-      setAccessToken(data.accessToken);
+      setIsLogin(true);
       secureLocalStorage.setItem('refreshToken', data.refreshToken);
       navigate('/user');
     },
