@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import NavigationItem from "./NavigationItem";
+import React from 'react';
+import styled from 'styled-components';
+import NavigationItem from './NavigationItem';
 const Navigation = () => {
   return (
     <NavigationWrapper>
       <Logo>
-        <span>Logo</span>
+        <img src='img/bookk.png' />
       </Logo>
       <NavigationItem />
     </NavigationWrapper>
@@ -27,4 +27,10 @@ const Logo = styled.div`
   font-size: 24px;
   font-weight: bold;
   color: #212529;
+
+  img {
+    height: 48px;
+    object-fit: contain;
+    margin-top: 5px;
+  }
 `;
