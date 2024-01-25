@@ -56,13 +56,13 @@ class CustomAxiosInstance {
         const { config, response } = error;
         let isRefreshing = false;
 
-        if (response?.status === 401) {
+        if (response?.status === 401 || response?.status === 404) {
           if (!isRefreshing) {
             isRefreshing = true;
             const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
             try {
               const { data } = await axios.post(
-                '/auth/token/access',
+                `${BASE_URL}/auth/token/access`,
                 {},
                 { headers: { Authorization: `Bearer ${refreshToken}` } }
               );
