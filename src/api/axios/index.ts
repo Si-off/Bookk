@@ -3,8 +3,10 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   InternalAxiosRequestConfig,
-} from "axios";
-import qs from "qs";
+} from 'axios';
+import { StorageKeys } from 'constant';
+import qs from 'qs';
+import secureLocalStorage from 'react-secure-storage';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -28,15 +30,15 @@ class CustomAxiosInstance {
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         if (config.data instanceof FormData) {
-          config.headers["Content-Type"] = "multipart/form-data";
+          config.headers['Content-Type'] = 'multipart/form-data';
         } else {
-          config.headers["Content-Type"] = "application/json";
+          config.headers['Content-Type'] = 'application/json';
         }
 
         if (config.headers.Authorization) return config;
 
         if (this.accessToken) {
-          config.headers["Authorization"] = `Bearer ${this.accessToken}`;
+          config.headers['Authorization'] = `Bearer ${this.accessToken}`;
         }
         return config;
       },
@@ -46,40 +48,44 @@ class CustomAxiosInstance {
       }
     );
 
-    // this.instance.interceptors.response.use(
-    //   (response) => {
-    //     return response;
-    //   },
-    //   async (error: AxiosError) => {
-    //     const { config, response } = error;
+    this.instance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      async (error) => {
+        const { config, response } = error;
+        let isRefreshing = false;
 
-    //     const originRequest = config;
+        if (response?.status === 401) {
+          if (!isRefreshing) {
+            isRefreshing = true;
+            const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+            try {
+              const { data } = await axios.post(
+                '/auth/token/access',
+                {},
+                { headers: { Authorization: `Bearer ${refreshToken}` } }
+              );
+              const newAccessToken = data.accessToken;
+              this.setAccessToken(newAccessToken);
 
-    //     if (response?.status === 401) {
-    //       if (!this.isRefreshing) {
-    //         isRefreshing = true;
-    //         try {
-    //           const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-    //           const { data } = await axios.post('/auth/token/access', refreshToken);
+              config!.headers['Authorization'] = `Bearer ${this.accessToken}`;
+              isRefreshing = true;
+              return this.instance.request(config);
+            } catch (refreshError) {
+              console.error(refreshError);
+              isRefreshing = false;
+              alert('다시 로그인 해주세요.');
+              secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
+              window.location.replace('/user');
+              return Promise.reject(refreshError);
+            }
+          }
+        }
 
-    //           const newAccessToken = data.accessToken;
-    //           console.log(newAccessToken);
-    //           setAccessToken(newAccessToken);
-    //           isRefreshing = true;
-    //           return originRequest;
-    //         } catch (refreshError) {
-    //           console.error(refreshError);
-    //           isRefreshing = false;
-    //           secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
-    //           window.location.replace('/login');
-    //           return Promise.reject(refreshError);
-    //         }
-    //       }
-    //     }
-
-    //     return Promise.reject(error);
-    //   }
-    // );
+        return Promise.reject(error);
+      }
+    );
   }
 
   static setAccessToken(token: string) {
@@ -100,11 +106,7 @@ class CustomAxiosInstance {
   }
   async post<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
-      const res = await CustomAxiosInstance.instance.post<T>(
-        this.endpoint,
-        params,
-        config
-      );
+      const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params, config);
 
       const { data, status } = res;
       return { ...data, status };
@@ -114,11 +116,7 @@ class CustomAxiosInstance {
   }
   async patch<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
-      const res = await CustomAxiosInstance.instance.patch<T>(
-        this.endpoint,
-        params,
-        config
-      );
+      const res = await CustomAxiosInstance.instance.patch<T>(this.endpoint, params, config);
 
       const { data, status } = res;
       return { ...data, status };
@@ -128,10 +126,7 @@ class CustomAxiosInstance {
   }
   async delete<T>(params: object = {}) {
     try {
-      const res = await CustomAxiosInstance.instance.delete<T>(
-        this.endpoint,
-        params
-      );
+      const res = await CustomAxiosInstance.instance.delete<T>(this.endpoint, params);
 
       const { data, status } = res;
       return { ...data, status };
