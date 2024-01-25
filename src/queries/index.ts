@@ -44,26 +44,6 @@ export const useGetBooks = (queries: BooklistParams) => {
   });
 };
 
-export const useGetNextBooks = (queries: BooklistParams) => {
-  const key = [queryKeys.USER, 'books'];
-  if (queries) key.push(queries.page.toString());
-
-  console.log('queries', queries);
-
-  return useQuery({
-    queryKey: key,
-    queryFn: () => getNextBooks(queries),
-    onSuccess: async (res: BooklistRes) => {
-      if (!queries) return console.log('!queries');
-      if (res.total < queries.take * queries.page)
-        return console.log('res.total 이 더 작음');
-    },
-    keepPreviousData: true,
-    staleTime: 1000 * 60 * 3,
-    cacheTime: 1000 * 60 * 5,
-  });
-};
-
 export const useGetBooksAdmin = (queries: BooklistParams) => {
   const queryClient = useQueryClient();
   const key = [queryKeys.ADMIN, 'books'];

@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
 import Book from '../../components/Book';
-import { useGetBooks, useGetNextBooks } from 'queries';
+import { useGetBooks } from 'queries';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getNextBooks } from 'api';
+import { useQueryClient } from '@tanstack/react-query';
 import queryKeys from 'queries/queryKeys';
+import { getNextBooks } from 'api';
 
 const TAKE = 4;
 
@@ -30,7 +30,7 @@ const UserPage = () => {
     if (nextPage) {
       queryClient.prefetchQuery({
         queryKey: key,
-        queryFn: () => useGetNextBooks({ take: TAKE, page: nextPage }),
+        queryFn: () => getNextBooks({ take: TAKE, page: nextPage }),
       });
     }
   }, [nextPage]);
