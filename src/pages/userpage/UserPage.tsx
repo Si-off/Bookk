@@ -6,38 +6,44 @@ import Book from '../../components/Book';
 import { useGetBooks } from 'queries';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
-// import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import queryKeys from 'queries/queryKeys';
+import { getNextBooks } from 'api';
+
+const TAKE = 4;
 
 const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(2);
+
   const {
     data: books,
     status,
     isSuccess,
     isFetching,
     isPreviousData,
-  } = useGetBooks({ take: 4, page: currentPage });
+  } = useGetBooks({ take: TAKE, page: currentPage });
 
-  // const queryClient = useQueryClient();
-
-  // React.useEffect(() => {
-  //   if (!isPreviousData && books) {
-  //     console.log('books hasmore?', books);
-  //     queryClient.prefetchQuery({
-  //       queryKey: ['projects', currentPage + 1],
-  //       queryFn: () => useGetBooks({ take: 4, page: currentPage + 1 }),
-  //     });
-  //   }
-  // }, [books, isPreviousData, currentPage, queryClient]);
+  const queryClient = useQueryClient();
+  const key = [queryKeys.USER, 'books', nextPage.toString()];
+  React.useEffect(() => {
+    if (nextPage) {
+      queryClient.prefetchQuery({
+        queryKey: key,
+        queryFn: () => getNextBooks({ take: TAKE, page: nextPage }),
+      });
+    }
+  }, [nextPage]);
 
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
 
-    const totalPages = Math.ceil(books.total / 4);
+    const totalPages = Math.ceil(books.total / TAKE);
 
     if (pageNum < 1 || pageNum > totalPages) return;
 
     setCurrentPage(pageNum);
+    setNextPage(pageNum + 1);
   };
 
   return (

@@ -8,13 +8,13 @@ import secureLocalStorage from 'react-secure-storage';
 import * as S from '../styles/LoginStyled';
 import { StorageKeys } from 'constant';
 import CustomAxiosInstance from 'api/axios';
+import { useLogin } from 'queries';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const user = useUserStore((state: UserState) => state.user);
-  const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,17 +23,7 @@ const LoginPage = () => {
     }
   }, [user, navigate]);
 
-  const { mutate, isLoading } = useMutation({
-    mutationFn: login,
-    onSuccess: (data) => {
-      if (!data) return;
-      setUser(data.userInfo);
-      setAccessToken(data.accessToken);
-      CustomAxiosInstance.setAccessToken(data.accessToken);
-      secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
-      navigate('/user');
-    },
-  });
+  const { mutate, isLoading } = useLogin();
 
   const handleLogin = () => {
     if (!email || !password) {

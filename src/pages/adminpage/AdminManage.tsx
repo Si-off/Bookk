@@ -15,7 +15,11 @@ import { getStyledColor } from "utils";
 import { useSelectedBook } from "store/useSelectedBooks";
 import { getDateStr } from "utils";
 import { BookInfoType } from "types";
+import { useQueryClient } from "@tanstack/react-query";
+import { getNextBooks } from "api";
+import queryKeys from "queries/queryKeys";
 import { CustomModal } from "components/modal/CustomModal";
+
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,13 +34,24 @@ const AdminManage = () => {
     page: currentPage,
   });
 
+  const queryClient = useQueryClient();
+  const key = [queryKeys.ADMIN, "books", (currentPage + 1).toString()];
+  React.useEffect(() => {
+    if (currentPage) {
+      queryClient.prefetchQuery({
+        queryKey: key,
+        queryFn: () => getNextBooks({ take: 10, page: currentPage + 1 }),
+      });
+    }
+  }, [currentPage]);
+
   const { setSelectedBook } = useSelectedBook();
   const { mutate: remove, isLoading } = useDeleteBook();
 
   const navigate = useNavigate();
 
   const user = useUserStore((state: any) => state.user);
-  console.log("user", user);
+
   const unshowScroll = () => {
     document.body.style.overflow = "hidden";
   };

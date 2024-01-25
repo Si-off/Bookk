@@ -1,4 +1,4 @@
-import Axios from "api/axios";
+import Axios from 'api/axios';
 import {
   BookReq,
   BooklistParams,
@@ -6,10 +6,17 @@ import {
   BookRes,
   BookPatchReq,
   BookAddImageRes,
-} from "types";
+} from 'types';
 
 export const getBooks = async (queries: BooklistParams) => {
-  const res = await new Axios("/api2s").get<BooklistRes>(queries);
+  const res = await new Axios('/api2s').get<BooklistRes>(queries);
+
+  return res;
+};
+
+export const getNextBooks = async (queries: BooklistParams) => {
+  const res = await new Axios('/api2s').get<BooklistRes>(queries);
+  console.log('res', res);
 
   return res;
 };
@@ -19,7 +26,7 @@ export const postBooks = async (params: BookReq) => {
     const fileName = await postImage(params.images[0]);
     if (fileName) params.images[0] = fileName;
   }
-  const res = await new Axios("/api2s").post(params);
+  const res = await new Axios('/api2s').post(params);
 
   return res;
 };
@@ -51,9 +58,9 @@ export const postImage = async (
   imageFile: File
 ): Promise<string | undefined> => {
   const formData = new FormData();
-  formData.append("image", imageFile);
+  formData.append('image', imageFile);
 
-  const res = await new Axios("/fb/image/temp").post<{
+  const res = await new Axios('/fb/image/temp').post<{
     tempFilePath: string[];
   }>(formData);
   return res?.tempFilePath[0];
