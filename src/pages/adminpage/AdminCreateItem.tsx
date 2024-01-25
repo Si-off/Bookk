@@ -30,6 +30,8 @@ const AdminCreateItem = () => {
 
   // TODO: 유효성 검사
   const onClick = async () => {
+    if (!bookInfo.title || !bookInfo.content)
+      return alert("모든 내용을 채워주세요!");
     resetBookInfo();
     mutate({ ...bookInfo });
   };

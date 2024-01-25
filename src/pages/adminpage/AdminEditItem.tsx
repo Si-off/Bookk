@@ -24,10 +24,10 @@ const AdminEditItem = () => {
 
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
+  const [patchLoading, setPatchLoading] = useState(false);
   const [content, setContent] = useState("");
   const [images, setImages] = useState<ImagePatchReq[]>([]);
   const [newImagePath, setNewImagePath] = useState<string | null>(null);
-  const [newImageId, setNewImageId] = useState<number | null>(null);
   const [originalImageId, setOriginalImageId] = useState<number | null>(null);
   const { data: book, isLoading } = useGetBook(numericId);
   const { mutate, status: patchStatus } = usePatchBook();
@@ -45,7 +45,7 @@ const AdminEditItem = () => {
     console.log(title, content, images, "bookinfo");
   }, [book]);
   // id를 숫자로 변환
-  if (isLoading || patchStatus === "loading" || removeStatus === "loading") {
+  if (isLoading || patchLoading) {
     return <StyledLoader />;
   }
   console.log(book);
@@ -65,34 +65,45 @@ const AdminEditItem = () => {
       if (uploadedImagePath) {
         // 새 이미지 경로를 상태에 저장
         setNewImagePath(uploadedImagePath);
-        // 새 이미지 추가 및 ID 반환
       }
     } else {
       console.log("이미지 업로드가 취소되었거나 이미지가 선택되지 않았습니다.");
     }
   };
   const handleFinalUpdate = async () => {
-    if (originalImageId) {
-      await deleteImage(numericId, originalImageId);
-    }
-    let updatedImages = [...images];
-    if (newImagePath) {
-      const addImageResponse = await addImage(numericId, [newImagePath]);
-      if (
-        addImageResponse &&
-        addImageResponse.images &&
-        addImageResponse.images.length > 0
-      ) {
-        const newId = addImageResponse.images[0].id;
-        // 새 이미지 정보로 업데이트된 배열 생성
-        updatedImages = [{ id: newId, newOrder: 0 }];
+    try {
+      setPatchLoading(true);
+
+      if (originalImageId) {
+        await deleteImage(numericId, originalImageId);
       }
+
+      let updatedImages = [...images];
+      if (newImagePath) {
+        const addImageResponse = await addImage(numericId, [newImagePath]);
+        if (
+          addImageResponse &&
+          addImageResponse.images &&
+          addImageResponse.images.length > 0
+        ) {
+          const newId = addImageResponse.images[0].id;
+          updatedImages = [{ id: newId, newOrder: 0 }];
+        }
+      }
+
+      // 업데이트된 images 배열로 책 정보 업데이트
+      await mutate({ id: numericId, title, content, images: updatedImages });
+    } catch (error) {
+      console.error("Error during the update process:", error);
+      // 에러 발생 시 처리할 로직 추가 가능
+    } finally {
+      // 성공적으로 완료되었거나 에러가 발생했을 때 모두 실행
+      setPatchLoading(false);
     }
 
-    // 업데이트된 images 배열로 책 정보 업데이트
-    mutate({ id: numericId, title, content, images: updatedImages });
     navigate(`/admin`);
   };
+
   const handleRemove = () => {
     remove(numericId);
     navigate(`/admin`);

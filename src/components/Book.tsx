@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { keyframes, styled } from 'styled-components';
-import { BookInfoType } from 'types';
-import { getStyledColor } from 'utils';
-import pixelToRem from 'utils/pixelToRem';
+import { useEffect, useState } from "react";
+import { keyframes, styled } from "styled-components";
+import { BookInfoType } from "types";
+import { getStyledColor } from "utils";
+import pixelToRem from "utils/pixelToRem";
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -48,10 +48,10 @@ const Title = styled.p`
   transition: font-size 1s;
 
   &::after {
-    content: '';
+    content: "";
     display: block;
     width: 40%;
-    border-bottom: 2px solid ${getStyledColor('indigo', 1000)};
+    border-bottom: 2px solid ${getStyledColor("indigo", 1000)};
     transition: border 1s ease;
     margin: 30px 0px;
   }
@@ -89,7 +89,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   z-index: 1;
-  color: ${getStyledColor('gray', 900)};
+  color: ${getStyledColor("gray", 900)};
   flex: 1;
 
   transition: flex 1s ease, color 1s ease;
@@ -97,12 +97,12 @@ const Container = styled.div`
   animation: ${fadeIn} 0.3s ease forwards;
 
   &:before {
-    content: '';
+    content: "";
     display: block;
     width: 80%;
     height: 95%;
     position: absolute;
-    background: ${getStyledColor('cool_gray', 1100)};
+    background: ${getStyledColor("cool_gray", 1100)};
     top: 0px;
     left: -50px;
     opacity: 0;
@@ -110,7 +110,7 @@ const Container = styled.div`
     border-radius: 4px;
   }
   &:hover {
-    color: ${getStyledColor('gray', 400)};
+    color: ${getStyledColor("gray", 400)};
     flex: 1.5;
 
     ${Image} {
@@ -124,7 +124,7 @@ const Container = styled.div`
     }
 
     ${Title}::after {
-      border-bottom: 2px solid ${getStyledColor('indigo', 600)};
+      border-bottom: 2px solid ${getStyledColor("indigo", 600)};
     }
 
     &:before {
