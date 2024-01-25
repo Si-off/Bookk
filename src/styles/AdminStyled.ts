@@ -1,6 +1,6 @@
-import { get } from "http";
-import { styled } from "styled-components";
-import { getStyledColor, pixelToRem } from "utils";
+import { get } from 'http';
+import { styled } from 'styled-components';
+import { getStyledColor, pixelToRem } from 'utils';
 interface InputFieldProps {
   $marginTop?: number;
 }
@@ -20,7 +20,11 @@ export const Container = styled.div`
   background-color: #fff;
   border-radius: 4px;
   padding: 24px 35px;
-  box-shadow: 0px 1px 4px 0px ${getStyledColor("cool_gray", 300)};
+  box-shadow: 0px 1px 4px 0px ${getStyledColor('cool_gray', 300)};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Header = styled.header`
@@ -35,7 +39,7 @@ export const Table = styled.table`
 `;
 export const Theader = styled.thead`
   font-weight: 700;
-  background-color: ${getStyledColor("blue", 500)};
+  background-color: ${getStyledColor('blue', 500)};
 `;
 export const Tbody = styled.tbody``;
 export const Tcolumn = styled.th`
@@ -45,10 +49,10 @@ export const Tcolumn = styled.th`
 `;
 export const Trow = styled.tr`
   td {
-    background-color: ${getStyledColor("gray", 100)};
+    background-color: ${getStyledColor('gray', 100)};
   }
   &:nth-child(2n + 1) td {
-    background-color: ${getStyledColor("gray", 300)};
+    background-color: ${getStyledColor('gray', 300)};
   }
 `;
 export const Tcell = styled.td`
@@ -67,7 +71,7 @@ export const Label = styled.label`
 
 export const InputField = styled.div<InputFieldProps>`
   width: 100%;
-  margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop + "px" : "")};
+  margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop + 'px' : '')};
   display: flex;
   flex-direction: column;
 
@@ -79,12 +83,12 @@ export const InputField = styled.div<InputFieldProps>`
 export const Input = styled.input`
   width: ${pixelToRem(300)};
   padding: 15px 20px;
-  background-color: ${getStyledColor("gray", 300)};
-  color: ${getStyledColor("gray", 800)};
+  background-color: ${getStyledColor('gray', 300)};
+  color: ${getStyledColor('gray', 800)};
   border: none;
   border-radius: 8px;
 
   &:focus {
-    outline: 1px solid ${getStyledColor("blue", 500)};
+    outline: 1px solid ${getStyledColor('blue', 500)};
   }
 `;
