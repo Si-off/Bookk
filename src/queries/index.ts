@@ -19,7 +19,8 @@ export const useGetBooks = (queries: BooklistParams) => {
     queryFn: () => getBooks(queries),
     onSuccess: async (res: BooklistRes) => {
       if (!queries) return;
-      if (res.total < queries.take * queries.page) return;
+      const totalPages = Math.ceil(res.total / queries.take);
+      if (totalPages < queries.page + 1) return;
 
       await queryClient.prefetchQuery({
         queryKey: [queryKeys.USER, 'books', (queries.page + 1).toString()],
@@ -35,7 +36,7 @@ export const useGetBooks = (queries: BooklistParams) => {
 };
 export const useGetBooksAdmin = (queries: BooklistParams) => {
   const queryClient = useQueryClient();
-  const key = [queryKeys.USER, 'books'];
+  const key = [queryKeys.ADMIN, 'books'];
   if (queries) key.push(queries.page.toString());
 
   return useQuery({
@@ -46,7 +47,7 @@ export const useGetBooksAdmin = (queries: BooklistParams) => {
       if (res.total < queries.take * queries.page) return;
 
       await queryClient.prefetchQuery({
-        queryKey: [queryKeys.USER, 'books', (queries.page + 1).toString()],
+        queryKey: [queryKeys.ADMIN, 'books', (queries.page + 1).toString()],
         queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
         staleTime: 1000 * 60 * 3,
         cacheTime: 1000 * 60 * 5,
