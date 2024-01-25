@@ -1,9 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getBooks, postBooks, patchBook, deleteBook, getBook } from 'api';
-<<<<<<< HEAD
-import { BooklistParams, BooklistRes } from 'types';
-import queryKeys from './queryKeys';
-=======
 import { BooklistParams, BooklistRes, UserState } from 'types';
 import queryKeys from './queryKeys';
 import { login, getUser } from 'api/auth';
