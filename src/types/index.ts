@@ -42,11 +42,23 @@ export type BooklistRes = {
   total: number;
 };
 
+export type ImagePatchReq = {
+  id: number;
+  newOrder: number;
+};
+
+export type BookPatchReq = {
+  title: string;
+  content: string;
+  images: ImagePatchReq[];
+};
+
 export type BookReq = {
   title: string;
   content: string;
   images?: string[] | File[];
 };
+
 export type BookRes = {
   id: number;
   updatedAt: string;
@@ -77,7 +89,17 @@ export type BookRes = {
   api2cate: null | any; // 여기서 any는 api2cate의 실제 타입에 따라 달라질 수 있습니다.
   reply2s: Array<any>; // reply2s의 구체적인 타입이 명시되지 않았으므로 any를 사용하거나, 해당 타입을 정의해야 합니다.
 };
-
+export type BookAddImageRes = {
+  images: Array<{
+    id: number;
+    updatedAt: string;
+    createdAt: string;
+    order: number;
+    type: number;
+    path: string;
+    fbPath: Array<string>;
+  }>;
+};
 export type ZustandUserType = {
   id: number;
   name: string;
