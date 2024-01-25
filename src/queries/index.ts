@@ -12,7 +12,6 @@ import { StorageKeys } from 'constant';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
->>>>>>> 342af5ec87fbe3bca13025728ccfc1268388cb0c
 
 export const useGetBooks = (queries: BooklistParams) => {
   const queryClient = useQueryClient();
