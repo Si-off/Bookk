@@ -7,8 +7,16 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import UserPage from './pages/userpage/UserPage';
 import { LoginPage, MainPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
+import secureLocalStorage from 'react-secure-storage';
+import { StorageKeys } from 'constant';
+import { useReLogin } from 'queries';
 
 function App() {
+  const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+  if (refreshToken && typeof refreshToken === 'string') {
+    useReLogin(refreshToken);
+  }
+
   useEffect(() => {
     CustomAxiosInstance.init();
   }, []);
