@@ -34,7 +34,9 @@ export const CustomModal = ({
           >
             X
           </S.ModalClose>
-          <S.ModalPosterImg src={book?.images[0].fbPath[0]} alt="modal-img" />
+          {book?.images[0]?.fbPath[0] && (
+            <S.ModalPosterImg src={book?.images[0].fbPath[0]} alt="modal-img" />
+          )}
           <S.ModalContent>
             <S.ModalDetails>등록날짜:{book?.createdAt}</S.ModalDetails>
             <S.ModalTitle>{book?.title}</S.ModalTitle>
