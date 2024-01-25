@@ -61,12 +61,16 @@ export const postImage = async (
 };
 
 export const deleteImage = async (bookId: number, imageId: number) => {
-  const res = await Axios(`/api2s/${bookId}/delete-image/${imageId}`).remove();
+  const res = await new Axios(
+    `/api2s/${bookId}/delete-image/${imageId}`
+  ).delete();
   return res;
 };
 
 export const addImage = async (bookId: number, images: string[]) => {
-  const res = await Axios(`/api2s/${bookId}/add-image`).post<BookAddImageRes>({
+  const res = await new Axios(
+    `/api2s/${bookId}/add-image`
+  ).post<BookAddImageRes>({
     images: images,
   });
   return res;
