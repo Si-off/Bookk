@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import * as S from "styles/ModalStyled";
-import { BookRes } from "types";
+import styled from "styled-components";
 import { useGetBook } from "queries";
 import useOnclickOutside from "pages/hooks/useOnclickOutside";
+import { StyledLoader } from "styles/LoginStyled";
 export const CustomModal = ({
   bookId,
   setModalOpen,
@@ -19,7 +20,12 @@ export const CustomModal = ({
   });
   const { data: book, status } = useGetBook(bookId || 0);
 
-  if (status === "loading") return <div>loading...</div>;
+  if (status === "loading")
+    return (
+      <LoaderContainer>
+        <StyledLoader />
+      </LoaderContainer>
+    );
   if (status === "error") return <div>error...</div>;
 
   return (
@@ -58,3 +64,10 @@ export const CustomModal = ({
 };
 
 export default CustomModal;
+
+const LoaderContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+`;
