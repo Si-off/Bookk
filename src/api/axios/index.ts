@@ -3,8 +3,8 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   InternalAxiosRequestConfig,
-} from 'axios';
-import qs from 'qs';
+} from "axios";
+import qs from "qs";
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -28,15 +28,15 @@ class CustomAxiosInstance {
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         if (config.data instanceof FormData) {
-          config.headers['Content-Type'] = 'multipart/form-data';
+          config.headers["Content-Type"] = "multipart/form-data";
         } else {
-          config.headers['Content-Type'] = 'application/json';
+          config.headers["Content-Type"] = "application/json";
         }
 
         if (config.headers.Authorization) return config;
 
         if (this.accessToken) {
-          config.headers['Authorization'] = `Bearer ${this.accessToken}`;
+          config.headers["Authorization"] = `Bearer ${this.accessToken}`;
         }
         return config;
       },
@@ -100,7 +100,11 @@ class CustomAxiosInstance {
   }
   async post<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
-      const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params, config);
+      const res = await CustomAxiosInstance.instance.post<T>(
+        this.endpoint,
+        params,
+        config
+      );
 
       const { data, status } = res;
       return { ...data, status };
@@ -110,7 +114,11 @@ class CustomAxiosInstance {
   }
   async patch<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
-      const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params, config);
+      const res = await CustomAxiosInstance.instance.patch<T>(
+        this.endpoint,
+        params,
+        config
+      );
 
       const { data, status } = res;
       return { ...data, status };
@@ -120,7 +128,10 @@ class CustomAxiosInstance {
   }
   async delete<T>(params: object = {}) {
     try {
-      const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params);
+      const res = await CustomAxiosInstance.instance.delete<T>(
+        this.endpoint,
+        params
+      );
 
       const { data, status } = res;
       return { ...data, status };

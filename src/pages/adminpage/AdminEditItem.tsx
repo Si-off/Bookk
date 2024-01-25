@@ -27,6 +27,7 @@ const AdminEditItem = () => {
   const [images, setImages] = useState<ImagePatchReq[]>([]);
   const [newImagePath, setNewImagePath] = useState<string | null>(null);
   const [newImageId, setNewImageId] = useState<number | null>(null);
+  const [originalImageId, setOriginalImageId] = useState<number | null>(null);
   const { data: book, isLoading } = useGetBook(numericId);
   const { mutate, status: patchStatus } = usePatchBook();
   const { mutate: remove, status: removeStatus } = useDeleteBook();
@@ -39,6 +40,7 @@ const AdminEditItem = () => {
         newOrder: image.order,
       })) || []
     );
+    setOriginalImageId(book?.images[0]?.id || null);
     console.log(title, content, images, "bookinfo");
   }, [book]);
   // id를 숫자로 변환
@@ -63,43 +65,31 @@ const AdminEditItem = () => {
         // 새 이미지 경로를 상태에 저장
         setNewImagePath(uploadedImagePath);
         // 새 이미지 추가 및 ID 반환
-        const addImageResponse = await addImage(numericId, [uploadedImagePath]);
-        if (
-          addImageResponse &&
-          addImageResponse.images &&
-          addImageResponse.images.length > 0
-        ) {
-          const newId = addImageResponse.images[0].id;
-          // 새 이미지 ID 저장
-          setNewImageId(newId);
-          // 기존 이미지 ID를 로컬 스토리지에 저장
-          if (book && book.images && book.images.length > 0) {
-            localStorage.setItem(
-              "originalImageId",
-              book.images[0].id.toString()
-            );
-          }
-          // 새 이미지 정보로 업데이트
-          setImages([{ id: newId, newOrder: 0 }]);
-        }
       }
     } else {
       console.log("이미지 업로드가 취소되었거나 이미지가 선택되지 않았습니다.");
     }
   };
   const handleFinalUpdate = async () => {
-    const originalImageId = localStorage.getItem("originalImageId");
     if (originalImageId) {
-      await deleteImage(numericId, parseInt(originalImageId));
+      await deleteImage(numericId, originalImageId);
     }
-
-    // 새 이미지 ID를 사용하여 images 배열 업데이트
-    if (newImageId !== null) {
-      setImages([{ id: newImageId, newOrder: 0 }]);
+    let updatedImages = [...images];
+    if (newImagePath) {
+      const addImageResponse = await addImage(numericId, [newImagePath]);
+      if (
+        addImageResponse &&
+        addImageResponse.images &&
+        addImageResponse.images.length > 0
+      ) {
+        const newId = addImageResponse.images[0].id;
+        // 새 이미지 정보로 업데이트된 배열 생성
+        updatedImages = [{ id: newId, newOrder: 0 }];
+      }
     }
 
     // 업데이트된 images 배열로 책 정보 업데이트
-    mutate({ id: numericId, title, content, images });
+    mutate({ id: numericId, title, content, images: updatedImages });
     navigate(`/admin`);
   };
   const handleRemove = () => {
