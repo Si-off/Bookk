@@ -1,11 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getBooks, postBooks, patchBook, deleteBook, getBook } from "api";
-import { BooklistParams, BooklistRes } from "types";
-import queryKeys from "./queryKeys";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getBooks, postBooks, patchBook, deleteBook, getBook } from 'api';
+import { BooklistParams, BooklistRes } from 'types';
+import queryKeys from './queryKeys';
 
 export const useGetBooks = (queries: BooklistParams) => {
   const queryClient = useQueryClient();
-  const key = [queryKeys.ADMIN, "books"];
+  const key = [queryKeys.ADMIN, 'books'];
   if (queries) key.push(queries.page.toString());
 
   return useQuery({
@@ -16,7 +16,7 @@ export const useGetBooks = (queries: BooklistParams) => {
       if (res.total < queries.take * queries.page) return;
 
       await queryClient.prefetchQuery({
-        queryKey: [queryKeys.ADMIN, "books", (queries.page + 1).toString()],
+        queryKey: [queryKeys.ADMIN, 'books', (queries.page + 1).toString()],
         queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
         staleTime: 1000 * 60 * 3,
         cacheTime: 1000 * 60 * 5,
@@ -30,7 +30,7 @@ export const useGetBooks = (queries: BooklistParams) => {
 
 export const useGetBook = (id: number) => {
   const queryClient = useQueryClient();
-  const key = [queryKeys.ADMIN, "books", id.toString()];
+  const key = [queryKeys.ADMIN, 'books', id.toString()];
   return useQuery({
     queryKey: key,
     queryFn: () => getBook(id),
@@ -49,10 +49,10 @@ export const usePostBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [queryKeys.ADMIN, "books"],
+    mutationKey: [queryKeys.ADMIN, 'books'],
     mutationFn: postBooks,
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.ADMIN, 'books']);
     },
   });
 };
@@ -61,10 +61,10 @@ export const usePatchBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [queryKeys.ADMIN, "books"],
+    mutationKey: [queryKeys.ADMIN, 'books'],
     mutationFn: patchBook,
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.ADMIN, 'books']);
     },
   });
 };
@@ -73,10 +73,10 @@ export const useDeleteBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [queryKeys.ADMIN, "books"],
+    mutationKey: [queryKeys.ADMIN, 'books'],
     mutationFn: deleteBook,
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.ADMIN, 'books']);
     },
   });
 };

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
@@ -5,10 +6,29 @@ import Book from '../../components/Book';
 import { useGetBooks } from 'queries';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
+// import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: books, status, isSuccess } = useGetBooks({ take: 4, page: currentPage });
+  const {
+    data: books,
+    status,
+    isSuccess,
+    isFetching,
+    isPreviousData,
+  } = useGetBooks({ take: 4, page: currentPage });
+
+  // const queryClient = useQueryClient();
+
+  // React.useEffect(() => {
+  //   if (!isPreviousData && books) {
+  //     console.log('books hasmore?', books);
+  //     queryClient.prefetchQuery({
+  //       queryKey: ['projects', currentPage + 1],
+  //       queryFn: () => useGetBooks({ take: 4, page: currentPage + 1 }),
+  //     });
+  //   }
+  // }, [books, isPreviousData, currentPage, queryClient]);
 
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
@@ -27,7 +47,10 @@ const UserPage = () => {
       <Stars3 />
       <Layout>
         <ArrowButton>
-          <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
+          <IoIosArrowBack
+            size={60}
+            onClick={() => handlePageClick(currentPage - 1)}
+          />
         </ArrowButton>
         <BookWrapper $isSuccess={isSuccess}>
           {status === 'success' &&
@@ -36,7 +59,10 @@ const UserPage = () => {
             })}
         </BookWrapper>
         <ArrowButton>
-          <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
+          <IoIosArrowForward
+            size={60}
+            onClick={() => handlePageClick(currentPage + 1)}
+          />
         </ArrowButton>
       </Layout>
     </>
