@@ -1,11 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import NavigationItem from './NavigationItem';
+import { useNavigate } from 'react-router-dom';
+
 const Navigation = () => {
+  const navigate = useNavigate();
+
   return (
     <NavigationWrapper>
       <Logo>
-        <img src='img/bookk.png' />
+        <img
+          onClick={() => {
+            navigate('/user');
+          }}
+          src='img/bookk.png'
+        />
       </Logo>
       <NavigationItem />
     </NavigationWrapper>
@@ -32,5 +41,6 @@ const Logo = styled.div`
     height: 48px;
     object-fit: contain;
     margin-top: 5px;
+    cursor: pointer;
   }
 `;
