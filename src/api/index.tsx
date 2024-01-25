@@ -1,5 +1,12 @@
 import Axios from "api/axios";
-import { BookReq, BooklistParams, BooklistRes, BookRes } from "types";
+import {
+  BookReq,
+  BooklistParams,
+  BooklistRes,
+  BookRes,
+  BookPatchReq,
+  BookAddImageRes,
+} from "types";
 
 export const getBooks = async (queries: BooklistParams) => {
   const res = await Axios("/api2s").get<BooklistRes>(queries);
@@ -23,11 +30,11 @@ export const getBook = async (id: number) => {
   return res;
 };
 
-export const patchBook = async (params: BookReq & { id: number }) => {
-  if (params.images && params.images[0] instanceof File) {
-    const fileName = await postImage(params.images[0]);
-    if (fileName) params.images[0] = fileName;
-  }
+export const patchBook = async (params: BookPatchReq & { id: number }) => {
+  // if (params.images && params.images[0] instanceof File) {
+  //   const fileName = await postImage(params.images[0]);
+  //   if (fileName) params.images[0] = fileName;
+  // }
   const { id, ...rest } = params;
 
   const res = await Axios(`/api2s/${id}`).patch(rest);
@@ -51,4 +58,16 @@ export const postImage = async (
     formData
   );
   return res?.tempFilePath[0];
+};
+
+export const deleteImage = async (bookId: number, imageId: number) => {
+  const res = await Axios(`/api2s/${bookId}/delete-image/${imageId}`).remove();
+  return res;
+};
+
+export const addImage = async (bookId: number, images: string[]) => {
+  const res = await Axios(`/api2s/${bookId}/add-image`).post<BookAddImageRes>({
+    images: images,
+  });
+  return res;
 };
