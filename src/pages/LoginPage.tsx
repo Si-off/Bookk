@@ -1,26 +1,24 @@
-import { useEffect, useState, ChangeEvent } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { login } from "api/auth";
-import { useUserStore } from "store/useUserStore";
-import { UserState, ErrorType, LoginResponse } from "types";
-import secureLocalStorage from "react-secure-storage";
-import * as S from "../styles/LoginStyled";
-import { StorageKeys } from "constant";
+import { useEffect, useState, ChangeEvent } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { login } from 'api/auth';
+import { useUserStore } from 'store/useUserStore';
+import { UserState, ErrorType, LoginResponse } from 'types';
+import secureLocalStorage from 'react-secure-storage';
+import * as S from '../styles/LoginStyled';
+import { StorageKeys } from 'constant';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const user = useUserStore((state: UserState) => state.user);
   const setUser = useUserStore((state: UserState) => state.setUser);
-  const setAccessToken = useUserStore(
-    (state: UserState) => state.setAccessToken
-  );
+  const setAccessToken = useUserStore((state: UserState) => state.setAccessToken);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      navigate("/user");
+      navigate('/user');
     }
   }, [user, navigate]);
 
@@ -30,15 +28,14 @@ const LoginPage = () => {
       if (!data) return;
       setUser(data.userInfo);
       setAccessToken(data.accessToken);
-      secureLocalStorage.setItem(StorageKeys.ACCESS_TOKEN, data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
-      navigate("/user");
+      navigate('/user');
     },
   });
 
   const handleLogin = () => {
     if (!email || !password) {
-      alert("이메일과 비밀번호를 입력해주세요.");
+      alert('이메일과 비밀번호를 입력해주세요.');
       return;
     }
     mutate({ email, password });
@@ -58,27 +55,23 @@ const LoginPage = () => {
         <h2>로그인</h2>
         <S.Wrapper $gap={25}>
           <S.InputField>
-            <S.Label htmlFor="email">Email</S.Label>
+            <S.Label htmlFor='email'>Email</S.Label>
             <S.Input
-              id="email"
-              type="email"
-              placeholder="Email"
+              id='email'
+              type='email'
+              placeholder='Email'
               value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             />
           </S.InputField>
           <S.InputField>
-            <S.Label htmlFor="password">Password</S.Label>
+            <S.Label htmlFor='password'>Password</S.Label>
             <S.Input
-              id="password"
-              type="password"
-              placeholder="Password"
+              id='password'
+              type='password'
+              placeholder='Password'
               value={password}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             />
           </S.InputField>
         </S.Wrapper>
@@ -90,7 +83,7 @@ const LoginPage = () => {
 
           <div>
             <S.RegistText>아직 회원이 아니신가요?</S.RegistText>
-            <S.StyledLink to="/signup">회원가입</S.StyledLink>
+            <S.StyledLink to='/signup'>회원가입</S.StyledLink>
           </div>
         </S.Wrapper>
       </S.Layout>
