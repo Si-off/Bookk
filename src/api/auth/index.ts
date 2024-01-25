@@ -24,7 +24,7 @@ export const logout = async () => {
   useUserStore.setState({ accessToken: null, user: null });
 };
 
-export const reLogin = async () => {
+export const getUser = async () => {
   const res = await new Axios('/users/me').get<LoginResponse>();
 
   return res;

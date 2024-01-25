@@ -9,12 +9,12 @@ import { LoginPage, MainPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { StorageKeys } from 'constant';
-import { useReLogin } from 'queries';
+import { useGetUser } from 'queries';
 
 function App() {
   const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
   if (refreshToken && typeof refreshToken === 'string') {
-    useReLogin(refreshToken);
+    useGetUser(refreshToken);
   }
 
   useEffect(() => {

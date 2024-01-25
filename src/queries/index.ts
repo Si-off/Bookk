@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getBooks, postBooks, patchBook, deleteBook, getBook } from 'api';
 import { BooklistParams, BooklistRes, UserState } from 'types';
 import queryKeys from './queryKeys';
-import { login, reLogin } from 'api/auth';
+import { login, getUser } from 'api/auth';
 import CustomAxiosInstance from 'api/axios';
 import { StorageKeys } from 'constant';
 import secureLocalStorage from 'react-secure-storage';
@@ -132,6 +132,6 @@ export const useLogin = () => {
   });
 };
 
-export const useReLogin = (token: string) => {
-  return useQuery({ queryKey: [queryKeys.USER], queryFn: reLogin, enabled: !!token });
+export const useGetUser = (token: string) => {
+  return useQuery({ queryKey: [queryKeys.USER], queryFn: getUser, enabled: !!token });
 };
