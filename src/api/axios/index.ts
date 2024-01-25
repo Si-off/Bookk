@@ -1,4 +1,3 @@
-import { StorageKeys } from 'constant';
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -6,7 +5,6 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import qs from 'qs';
-import secureLocalStorage from 'react-secure-storage';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -23,15 +21,12 @@ class CustomAxiosInstance {
   }
 
   static init() {
-    console.log('Init!!!');
     this.instance.defaults.paramsSerializer = (params) => {
-      console.log('paramsSerializer');
       return qs.stringify(params);
     };
 
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        console.log('interceptors request');
         if (config.data instanceof FormData) {
           config.headers['Content-Type'] = 'multipart/form-data';
         } else {
@@ -39,11 +34,11 @@ class CustomAxiosInstance {
         }
 
         if (config.headers.Authorization) return config;
-        const accessToken = secureLocalStorage.getItem(StorageKeys.ACCESS_TOKEN);
 
-        if (accessToken) {
-          config.headers['Authorization'] = `Bearer ${accessToken}`;
-        }
+        if (this.accessToken) {
+          console.log(this.accessToken);
+          config.headers['Authorization'] = `Bearer ${this.accessToken}`;
+        } else console.log('fail:' + this.accessToken);
         return config;
       },
       (error: AxiosError) => {

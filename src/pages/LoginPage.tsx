@@ -7,6 +7,7 @@ import { UserState, ErrorType, LoginResponse } from 'types';
 import secureLocalStorage from 'react-secure-storage';
 import * as S from '../styles/LoginStyled';
 import { StorageKeys } from 'constant';
+import CustomAxiosInstance from 'api/axios';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -28,6 +29,7 @@ const LoginPage = () => {
       if (!data) return;
       setUser(data.userInfo);
       setAccessToken(data.accessToken);
+      CustomAxiosInstance.setAccessToken(data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
       navigate('/user');
     },
