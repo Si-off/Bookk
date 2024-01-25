@@ -1,4 +1,3 @@
-import { StorageKeys } from 'constant';
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -6,84 +5,90 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import qs from 'qs';
-import secureLocalStorage from 'react-secure-storage';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
-const getAxiosInstance = (url: string) => {
-  const endpoint = url;
-  const instance: AxiosInstance = axios.create({
+class CustomAxiosInstance {
+  private static readonly instance: AxiosInstance = axios.create({
     baseURL: BASE_URL,
     withCredentials: true,
   });
+  private static accessToken: string | null = null;
+  private readonly endpoint: string;
 
-  let isRefreshing = false;
+  constructor(url: string) {
+    this.endpoint = url;
+  }
 
-  instance.defaults.paramsSerializer = (params) => {
-    return qs.stringify(params);
-  };
+  static init() {
+    this.instance.defaults.paramsSerializer = (params) => {
+      return qs.stringify(params);
+    };
 
-  instance.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-      if (config.data instanceof FormData) {
-        config.headers['Content-Type'] = 'multipart/form-data';
-      } else {
-        config.headers['Content-Type'] = 'application/json';
+    this.instance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        if (config.data instanceof FormData) {
+          config.headers['Content-Type'] = 'multipart/form-data';
+        } else {
+          config.headers['Content-Type'] = 'application/json';
+        }
+
+        if (config.headers.Authorization) return config;
+
+        if (this.accessToken) {
+          config.headers['Authorization'] = `Bearer ${this.accessToken}`;
+        }
+        return config;
+      },
+      (error: AxiosError) => {
+        console.error(error);
+        return Promise.reject(error);
       }
+    );
 
-      if (config.headers.Authorization) return config;
-      const accessToken = secureLocalStorage.getItem(StorageKeys.ACCESS_TOKEN);
+    // this.instance.interceptors.response.use(
+    //   (response) => {
+    //     return response;
+    //   },
+    //   async (error: AxiosError) => {
+    //     const { config, response } = error;
 
-      if (accessToken) {
-        config.headers['Authorization'] = `Bearer ${accessToken}`;
-      }
-      return config;
-    },
-    (error: AxiosError) => {
-      console.error(error);
-      return Promise.reject(error);
-    }
-  );
+    //     const originRequest = config;
 
-  // instance.interceptors.response.use(
-  //   (response) => {
-  //     return response;
-  //   },
-  //   async (error: AxiosError) => {
-  //     const { config, response } = error;
+    //     if (response?.status === 401) {
+    //       if (!this.isRefreshing) {
+    //         isRefreshing = true;
+    //         try {
+    //           const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+    //           const { data } = await axios.post('/auth/token/access', refreshToken);
 
-  //     const originRequest = config;
-  //     const { setAccessToken } = useUserStore();
+    //           const newAccessToken = data.accessToken;
+    //           console.log(newAccessToken);
+    //           setAccessToken(newAccessToken);
+    //           isRefreshing = true;
+    //           return originRequest;
+    //         } catch (refreshError) {
+    //           console.error(refreshError);
+    //           isRefreshing = false;
+    //           secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
+    //           window.location.replace('/login');
+    //           return Promise.reject(refreshError);
+    //         }
+    //       }
+    //     }
 
-  //     if (response?.status === 401) {
-  //       if (!isRefreshing) {
-  //         isRefreshing = true;
-  //         try {
-  //           const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-  //           const { data } = await axios.post('/auth/token/access', refreshToken);
+    //     return Promise.reject(error);
+    //   }
+    // );
+  }
 
-  //           const newAccessToken = data.accessToken;
-  //           console.log(newAccessToken);
-  //           setAccessToken(newAccessToken);
-  //           isRefreshing = true;
-  //           return originRequest;
-  //         } catch (refreshError) {
-  //           console.error(refreshError);
-  //           isRefreshing = false;
-  //           secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
-  //           window.location.replace('/login');
-  //           return Promise.reject(refreshError);
-  //         }
-  //       }
-  //     }
+  static setAccessToken(token: string) {
+    this.accessToken = token;
+  }
 
-  //     return Promise.reject(error);
-  //   }
-  // );
-
-  const get = async <T>(queries: object = {}) => {
+  async get<T>(queries: object = {}) {
     try {
-      const res = await instance.get<T>(endpoint, {
+      const res = await CustomAxiosInstance.instance.get<T>(this.endpoint, {
         params: queries,
       } as AxiosRequestConfig);
 
@@ -92,42 +97,37 @@ const getAxiosInstance = (url: string) => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const post = async <T>(params: object = {}, config?: AxiosRequestConfig) => {
+  }
+  async post<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
-      const res = await instance.post<T>(endpoint, params, config);
+      const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params, config);
 
       const { data, status } = res;
       return { ...data, status };
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const patch = async <T>(params: object = {}, config?: AxiosRequestConfig) => {
+  }
+  async patch<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
-      const res = await instance.patch<T>(endpoint, params, config);
+      const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params, config);
 
       const { data, status } = res;
       return { ...data, status };
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const remove = async <T>(params: object = {}) => {
+  }
+  async delete<T>(params: object = {}) {
     try {
-      const res = await instance.delete<T>(endpoint, params);
+      const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params);
 
       const { data, status } = res;
       return { ...data, status };
     } catch (error) {
       console.error(error);
     }
-  };
+  }
+}
 
-  return { get, post, patch, remove };
-};
-
-export default getAxiosInstance;
+export default CustomAxiosInstance;

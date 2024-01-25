@@ -6,15 +6,15 @@ import { LoginResponse, SignUpRes, SignUpReq, LoginParams } from 'types';
 export const login = async (user: LoginParams) => {
   const auth = btoa(`${user.email}:${user.password}`);
 
-  const res = await Axios('/auth/login/email').post<LoginResponse>(
+  const res = await new Axios('/auth/login/email').post<LoginResponse>(
     {},
-    { headers: { Authorization: `Basic ${auth}` } },
+    { headers: { Authorization: `Basic ${auth}` } }
   );
   return res;
 };
 
 export const signUp = async (params: SignUpReq) => {
-  const res = await Axios('/auth/register/email').post<SignUpRes>({ ...params });
+  const res = await new Axios('/auth/register/email').post<SignUpRes>({ ...params });
 
   return res;
 };
