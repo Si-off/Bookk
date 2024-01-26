@@ -74,6 +74,7 @@ const AdminManage = () => {
   };
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
+    if (!books) return;
 
     const totalPages = Math.ceil(books.total / 10);
 

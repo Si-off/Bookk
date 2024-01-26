@@ -34,6 +34,7 @@ const UserPage = () => {
 
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
+    if (!books) return;
 
     const totalPages = Math.ceil(books.total / TAKE);
 
@@ -71,7 +72,7 @@ const UserPage = () => {
         </ArrowButton>
         <BookWrapper $isSuccess={isSuccess}>
           {status === 'success' &&
-            books.data.map((book) => {
+            books?.data.map((book) => {
               return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
             })}
         </BookWrapper>
