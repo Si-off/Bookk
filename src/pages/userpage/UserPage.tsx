@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
 import Book from '../../components/Book';
@@ -10,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import queryKeys from 'queries/queryKeys';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
+
 const TAKE = 4;
 
 const UserPage = () => {
@@ -17,17 +17,13 @@ const UserPage = () => {
   const [nextPage, setNextPage] = useState(2);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
-  const {
-    data: books,
-    status,
-    isSuccess,
-    isFetching,
-    isPreviousData,
-  } = useGetBooks({ take: TAKE, page: currentPage });
+
+  const { data: books, status, isSuccess } = useGetBooks({ take: TAKE, page: currentPage });
 
   const queryClient = useQueryClient();
   const key = [queryKeys.USER, 'books', nextPage.toString()];
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (nextPage) {
       queryClient.prefetchQuery({
         queryKey: key,

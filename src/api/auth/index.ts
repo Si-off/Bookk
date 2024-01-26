@@ -1,12 +1,12 @@
-import Axios from "../axios";
-import secureLocalStorage from "react-secure-storage";
-import { useUserStore } from "store/useUserStore";
-import { LoginResponse, SignUpRes, SignUpReq, LoginParams } from "types";
-const { setIsLogin } = useUserStore();
+import Axios from '../axios';
+import secureLocalStorage from 'react-secure-storage';
+import { useUserStore } from 'store/useUserStore';
+import { LoginResponse, SignUpRes, SignUpReq, LoginParams } from 'types';
+
 export const login = async (user: LoginParams) => {
   const auth = btoa(`${user.email}:${user.password}`);
 
-  const res = await new Axios("/auth/login/email").post<LoginResponse>(
+  const res = await new Axios('/auth/login/email').post<LoginResponse>(
     {},
     { headers: { Authorization: `Basic ${auth}` } }
   );
@@ -14,7 +14,7 @@ export const login = async (user: LoginParams) => {
 };
 
 export const signUp = async (params: SignUpReq) => {
-  const res = await new Axios("/auth/register/email").post<SignUpRes>({
+  const res = await new Axios('/auth/register/email').post<SignUpRes>({
     ...params,
   });
 
@@ -22,12 +22,13 @@ export const signUp = async (params: SignUpReq) => {
 };
 
 export const logout = async () => {
-  secureLocalStorage.removeItem("refreshToken");
-  setIsLogin(false);
+  const { getState } = useUserStore;
+  secureLocalStorage.removeItem('refreshToken');
+  getState().setIsLogin(false);
 };
 
 export const getUser = async () => {
-  const res = await new Axios("/users/me").get<LoginResponse>();
+  const res = await new Axios('/users/me').get<LoginResponse>();
 
   return res;
 };

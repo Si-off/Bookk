@@ -102,16 +102,16 @@ export const useDeleteBook = () => {
 };
 
 export const useLogin = () => {
+  const { getState } = useUserStore;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { setIsLogin } = useUserStore();
 
   return useMutation({
     mutationKey: [queryKeys.USER],
     mutationFn: login,
     onSuccess: (data) => {
       if (!data) return;
-      setIsLogin(true);
+      getState().setIsLogin(true);
       queryClient.setQueryData([queryKeys.USER], data.userInfo);
       CustomAxiosInstance.setAccessToken(data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
@@ -121,9 +121,14 @@ export const useLogin = () => {
 };
 
 export const useGetUser = (token: string) => {
+  const { getState } = useUserStore;
+
   return useQuery({
     queryKey: [queryKeys.USER],
     queryFn: getUser,
     enabled: !!token,
+    onSuccess: () => {
+      getState().setIsLogin(true);
+    },
   });
 };

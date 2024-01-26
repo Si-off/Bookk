@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import NavigationItem from './NavigationItem';
 import { useNavigate } from 'react-router-dom';

@@ -1,33 +1,42 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { logout } from "api/auth";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { logout } from 'api/auth';
+import { useUserStore } from 'store/useUserStore';
 
 const NavigationItem = () => {
+  const { isLogin } = useUserStore();
+
   return (
     <Wrapper>
-      <LinkStyle to="/admin/create">
+      <LinkStyle to='/admin/create'>
         <span>create</span>
       </LinkStyle>
 
-      <LinkStyle to="/">
+      <LinkStyle to='/'>
         <span>홈</span>
       </LinkStyle>
-      <LinkStyle to="/admin">
-        <span>관리자</span>
-      </LinkStyle>
-      <LinkStyle to="/user">
+      {isLogin && (
+        <LinkStyle to='/admin'>
+          <span>관리자</span>
+        </LinkStyle>
+      )}
+      <LinkStyle to='/user'>
         <span>유저</span>
       </LinkStyle>
-      <LinkStyle to="/login">
-        {" "}
-        <span>로그인</span>
-      </LinkStyle>
 
-      <LinkStyle to="/signup">
-        {" "}
-        <span>회원가입</span>
-      </LinkStyle>
-      <button onClick={() => logout()}>로그아웃</button>
+      {!isLogin && (
+        <>
+          <LinkStyle to='/login'>
+            {' '}
+            <span>로그인</span>
+          </LinkStyle>
+          <LinkStyle to='/signup'>
+            {' '}
+            <span>회원가입</span>
+          </LinkStyle>
+        </>
+      )}
+      {isLogin && <button onClick={() => logout()}>로그아웃</button>}
     </Wrapper>
   );
 };
