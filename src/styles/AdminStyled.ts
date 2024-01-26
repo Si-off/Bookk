@@ -62,6 +62,10 @@ export const Tcell = styled.td`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  & button {
+    background-color: inherit;
+  }
 `;
 //
 
