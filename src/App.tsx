@@ -3,7 +3,7 @@ import Navigation from './components/layout/Navigation';
 import AdminManage from './pages/adminpage/AdminManage';
 import AdminCreateItem from './pages/adminpage/AdminCreateItem';
 import AdminEditItem from './pages/adminpage/AdminEditItem';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import UserPage from './pages/userpage/UserPage';
 import { LoginPage, MainPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
 
 function App() {
-  const { isLogin, setIsLogin } = useUserStore();
+  const { isLogin, setIsLogin, setIsInit } = useUserStore();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -27,6 +27,7 @@ function App() {
       })();
       setIsLogin(true);
     }
+    setIsInit(false);
   }, []);
 
   return (
