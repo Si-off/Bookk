@@ -119,16 +119,3 @@ export const useLogin = () => {
     },
   });
 };
-
-export const useGetUser = (token: string) => {
-  const { getState } = useUserStore;
-
-  return useQuery({
-    queryKey: [queryKeys.USER],
-    queryFn: getUser,
-    enabled: !!token,
-    onSuccess: () => {
-      getState().setIsLogin(true);
-    },
-  });
-};
