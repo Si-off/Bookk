@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import {
-  FaPenToSquare,
-  FaRegTrashCan,
-  FaAngleLeft,
-  FaAngleRight,
-} from 'react-icons/fa6';
+import { FaPenToSquare, FaRegTrashCan, FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import * as S from 'styles/AdminStyled';
 import { StyledLoader } from 'styles/LoginStyled';
 import { useDeleteBook, useGetBooksAdmin } from 'queries';
@@ -16,8 +11,8 @@ import { getDateStr } from 'utils';
 import { BookInfoType } from 'types';
 import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
-import queryKeys from 'queries/queryKeys';
 import { CustomModal } from 'components/modal/CustomModal';
+import { QueryKeys } from 'constant';
 
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +29,7 @@ const AdminManage = () => {
   });
 
   const queryClient = useQueryClient();
-  const key = [queryKeys.ADMIN, 'books', (currentPage + 1).toString()];
+  const key = [QueryKeys.ADMIN, 'books', (currentPage + 1).toString()];
 
   useEffect(() => {
     if (currentPage) {
@@ -93,8 +88,7 @@ const AdminManage = () => {
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
-          showScroll={showScroll}
-        ></CustomModal>
+          showScroll={showScroll}></CustomModal>
       )}
       <Layout>
         <S.Container>
@@ -133,9 +127,7 @@ const AdminManage = () => {
                         <S.Trow key={id}>
                           <S.Tcell>{id}</S.Tcell>
                           <S.Tcell>
-                            <button onClick={() => handleClick(id)}>
-                              {title}
-                            </button>
+                            <button onClick={() => handleClick(id)}>{title}</button>
                           </S.Tcell>
                           <S.Tcell>{author.name}</S.Tcell>
                           <S.Tcell>{clicks}</S.Tcell>
@@ -155,29 +147,18 @@ const AdminManage = () => {
                   display: 'flex',
                   justifyContent: 'center',
                   marginTop: '16px',
-                }}
-              >
+                }}>
                 <Pagination>
                   <PButton>
-                    <FaAngleLeft
-                      onClick={() => handlePageClick(currentPage - 1)}
-                    />
+                    <FaAngleLeft onClick={() => handlePageClick(currentPage - 1)} />
                   </PButton>
-                  {Array.from(
-                    { length: Math.ceil(books?.total / 10) },
-                    (_, index) => (
-                      <PNumber
-                        key={index}
-                        onClick={() => handlePageClick(index + 1)}
-                      >
-                        {index + 1}
-                      </PNumber>
-                    )
-                  )}
+                  {Array.from({ length: Math.ceil(books?.total / 10) }, (_, index) => (
+                    <PNumber key={index} onClick={() => handlePageClick(index + 1)}>
+                      {index + 1}
+                    </PNumber>
+                  ))}
                   <PButton>
-                    <FaAngleRight
-                      onClick={() => handlePageClick(currentPage + 1)}
-                    />
+                    <FaAngleRight onClick={() => handlePageClick(currentPage + 1)} />
                   </PButton>
                 </Pagination>
               </div>
