@@ -1,4 +1,4 @@
-import Axios from 'api/axios';
+import Axios from "api/axios";
 import {
   BookReq,
   BooklistParams,
@@ -6,17 +6,19 @@ import {
   BookRes,
   BookPatchReq,
   BookAddImageRes,
-} from 'types';
+  CommentGetRes,
+  CommentPostRes,
+} from "types";
 
 export const getBooks = async (queries: BooklistParams) => {
-  const res = await new Axios('/api2s').get<BooklistRes>(queries);
+  const res = await new Axios("/api2s").get<BooklistRes>(queries);
 
   return res;
 };
 
 export const getNextBooks = async (queries: BooklistParams) => {
-  const res = await new Axios('/api2s').get<BooklistRes>(queries);
-  console.log('res', res);
+  const res = await new Axios("/api2s").get<BooklistRes>(queries);
+  console.log("res", res);
 
   return res;
 };
@@ -26,7 +28,7 @@ export const postBooks = async (params: BookReq) => {
     const fileName = await postImage(params.images[0]);
     if (fileName) params.images[0] = fileName;
   }
-  const res = await new Axios('/api2s').post(params);
+  const res = await new Axios("/api2s").post(params);
 
   return res;
 };
@@ -58,9 +60,9 @@ export const postImage = async (
   imageFile: File
 ): Promise<string | undefined> => {
   const formData = new FormData();
-  formData.append('image', imageFile);
+  formData.append("image", imageFile);
 
-  const res = await new Axios('/fb/image/temp').post<{
+  const res = await new Axios("/fb/image/temp").post<{
     tempFilePath: string[];
   }>(formData);
   return res?.tempFilePath[0];
@@ -79,5 +81,29 @@ export const addImage = async (bookId: number, images: string[]) => {
   ).post<BookAddImageRes>({
     images: images,
   });
+  return res;
+};
+export const getComments = async (bookId: number) => {
+  const res = await new Axios(`/api2s/${bookId}/reply2s`).get<CommentGetRes>();
+  return res;
+};
+export const postComment = async (bookId: number, comment: string) => {
+  const res = await new Axios(`/api2s/${bookId}/reply2s`).post<CommentPostRes>({
+    reply2: comment,
+  });
+  return res;
+};
+export const patchComment = async (
+  bookId: number,
+  commentId: number,
+  comment: string
+) => {
+  const res = await new Axios(`/api2s/${bookId}/reply2s/${commentId}`).patch({
+    reply2: comment,
+  });
+  return res;
+};
+export const deleteComment = async (bookId: number, commentId: number) => {
+  const res = await new Axios(`/api2s/${bookId}/reply2s/${commentId}`).delete();
   return res;
 };
