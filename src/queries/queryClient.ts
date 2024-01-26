@@ -5,7 +5,7 @@ const getQueryClient = () => {
     defaultOptions: {
       queries: {
         staleTime: Infinity,
-        gcTime: Infinity,
+        cacheTime: Infinity,
         retry: 0,
       },
     },
