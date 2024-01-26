@@ -148,3 +148,33 @@ export type SelectedBook = {
   content: string;
   images?: ImagesType[];
 };
+
+export type CommentPostRes = {
+  reply2: string;
+  api2: {
+    id: number;
+  };
+  author: {
+    id: number;
+    nickname: string;
+    name: string;
+    email: string;
+    followerCount: number;
+    followeeCount: number;
+    profileImg: string[];
+  };
+};
+export type CommentGetRes = {
+  data: Array<{
+    id: number;
+    updatedAt: string;
+    createdAt: string;
+    reply2: string;
+    likeCount: number;
+    author: {
+      id: number;
+      nickname: string;
+    };
+  }>;
+  total: number;
+};
