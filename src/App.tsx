@@ -9,18 +9,25 @@ import { LoginPage, MainPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { StorageKeys } from 'constant';
-import { useGetUser } from 'queries';
 import { useUserStore } from 'store/useUserStore';
 import PrivateRoutes from 'pages/PrivateRoutes';
+import queryKeys from 'constant/queryKeys';
+import { useQueryClient } from '@tanstack/react-query';
+import { getUser } from 'api/auth';
 
 function App() {
-  const { isLogin } = useUserStore();
-  const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-  if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
-    useGetUser(refreshToken);
-  }
+  const { isLogin, setIsLogin } = useUserStore();
+  const queryClient = useQueryClient();
+
   useEffect(() => {
-    CustomAxiosInstance.init();
+    const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+    if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
+      (async () => {
+        await CustomAxiosInstance.init();
+        await queryClient.fetchQuery({ queryKey: [queryKeys.USER], queryFn: getUser });
+      })();
+      setIsLogin(true);
+    }
   }, []);
 
   return (
