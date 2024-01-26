@@ -1,3 +1,3 @@
-const QueryKeys = { USER: 'USER', ADMIN: 'ADMIN' } as const;
+const QueryKeys = { USER: 'USER', ADMIN: 'ADMIN', LOGIN: 'LOGIN' } as const;
 
 export default QueryKeys;

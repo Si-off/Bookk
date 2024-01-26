@@ -21,10 +21,11 @@ export const signUp = async (params: SignUpReq) => {
   return res;
 };
 
-export const logout = async () => {
+export const logout = () => {
   const { getState } = useUserStore;
   secureLocalStorage.removeItem('refreshToken');
   getState().setIsLogin(false);
+  window.location.replace('/');
 };
 
 export const getUser = async () => {

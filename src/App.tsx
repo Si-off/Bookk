@@ -8,16 +8,25 @@ import UserPage from './pages/userpage/UserPage';
 import { LoginPage, MainPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
-import { StorageKeys } from 'constant';
-import { useGetUser } from 'queries';
+import { QueryKeys, StorageKeys } from 'constant';
+import { useUserStore } from 'store/useUserStore';
+import PrivateRoutes from 'pages/PrivateRoutes';
+import { useQueryClient } from '@tanstack/react-query';
+import { getUser } from 'api/auth';
 
 function App() {
-  const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-  if (refreshToken && typeof refreshToken === 'string') {
-    useGetUser(refreshToken);
-  }
+  const { isLogin, setIsLogin } = useUserStore();
+  const queryClient = useQueryClient();
+
   useEffect(() => {
-    CustomAxiosInstance.init();
+    const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+    if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
+      (async () => {
+        await CustomAxiosInstance.init();
+        await queryClient.fetchQuery({ queryKey: [QueryKeys.LOGIN], queryFn: getUser });
+      })();
+      setIsLogin(true);
+    }
   }, []);
 
   return (
@@ -27,11 +36,14 @@ function App() {
         <Route path='/' element={<MainPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
-        <Route path='/admin' element={<AdminManage />} />
-        <Route path='/admin/create' element={<AdminCreateItem />} />
-        <Route path='/admin/edit/:id' element={<AdminEditItem />} />
         <Route path='/user' element={<UserPage />} />
         <Route path='*' element={<Navigate to='/' />} />
+
+        <Route element={<PrivateRoutes />}>
+          <Route path='/admin' element={<AdminManage />} />
+          <Route path='/admin/create' element={<AdminCreateItem />} />
+          <Route path='/admin/edit/:id' element={<AdminEditItem />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

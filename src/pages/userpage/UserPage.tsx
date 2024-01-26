@@ -6,9 +6,9 @@ import { useGetBooks } from 'queries';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 import { useQueryClient } from '@tanstack/react-query';
-import queryKeys from 'queries/queryKeys';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
+import { QueryKeys } from 'constant';
 
 const TAKE = 4;
 
@@ -21,7 +21,7 @@ const UserPage = () => {
   const { data: books, status, isSuccess } = useGetBooks({ take: TAKE, page: currentPage });
 
   const queryClient = useQueryClient();
-  const key = [queryKeys.USER, 'books', nextPage.toString()];
+  const key = [QueryKeys.USER, 'books', nextPage.toString()];
 
   useEffect(() => {
     if (nextPage) {
@@ -34,6 +34,7 @@ const UserPage = () => {
 
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
+    if (!books) return;
 
     const totalPages = Math.ceil(books.total / TAKE);
 
@@ -71,7 +72,7 @@ const UserPage = () => {
         </ArrowButton>
         <BookWrapper $isSuccess={isSuccess}>
           {status === 'success' &&
-            books.data.map((book) => {
+            books?.data.map((book) => {
               return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
             })}
         </BookWrapper>

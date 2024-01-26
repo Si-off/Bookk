@@ -16,16 +16,38 @@ class CustomAxiosInstance {
     withCredentials: true,
   });
   private static accessToken: string | null = null;
+  private static refreshToken: string | null = secureLocalStorage.getItem(
+    StorageKeys.REFRESH_TOKEN
+  ) as string;
   private readonly endpoint: string;
 
   constructor(url: string) {
     this.endpoint = url;
   }
 
-  static init() {
+  private static async getAccessToken(token: string): Promise<{ accessToken: 'accessToken' }> {
+    const { data } = await axios.post(
+      `${BASE_URL}/auth/token/access`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return data;
+  }
+
+  public static setAccessToken(token: string) {
+    this.accessToken = token;
+  }
+
+  // TODO : 에러 핸들링
+  public static async init() {
     this.instance.defaults.paramsSerializer = (params) => {
       return qs.stringify(params);
     };
+
+    if (this.refreshToken) {
+      const data = await this.getAccessToken(this.refreshToken);
+      this.accessToken = data.accessToken;
+    }
 
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
@@ -55,17 +77,14 @@ class CustomAxiosInstance {
       async (error) => {
         const { config, response } = error;
         let isRefreshing = false;
-
         if (response?.status === 401 || response?.status === 404) {
           if (!isRefreshing) {
             isRefreshing = true;
-            const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
             try {
-              const { data } = await axios.post(
-                `${BASE_URL}/auth/token/access`,
-                {},
-                { headers: { Authorization: `Bearer ${refreshToken}` } }
-              );
+              if (!this.refreshToken) {
+                return Promise.reject(error);
+              }
+              const data = await this.getAccessToken(this.refreshToken);
               const newAccessToken = data.accessToken;
               this.setAccessToken(newAccessToken);
 
@@ -73,7 +92,6 @@ class CustomAxiosInstance {
               isRefreshing = true;
               return this.instance.request(config);
             } catch (refreshError) {
-              console.error(refreshError);
               isRefreshing = false;
               alert('다시 로그인 해주세요.');
               secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
@@ -82,17 +100,12 @@ class CustomAxiosInstance {
             }
           }
         }
-
         return Promise.reject(error);
       }
     );
   }
 
-  static setAccessToken(token: string) {
-    this.accessToken = token;
-  }
-
-  async get<T>(queries: object = {}) {
+  public async get<T>(queries: object = {}) {
     try {
       const res = await CustomAxiosInstance.instance.get<T>(this.endpoint, {
         params: queries,
@@ -104,7 +117,7 @@ class CustomAxiosInstance {
       console.error(error);
     }
   }
-  async post<T>(params: object = {}, config?: AxiosRequestConfig) {
+  public async post<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
       const res = await CustomAxiosInstance.instance.post<T>(this.endpoint, params, config);
 
@@ -114,7 +127,7 @@ class CustomAxiosInstance {
       console.error(error);
     }
   }
-  async patch<T>(params: object = {}, config?: AxiosRequestConfig) {
+  public async patch<T>(params: object = {}, config?: AxiosRequestConfig) {
     try {
       const res = await CustomAxiosInstance.instance.patch<T>(this.endpoint, params, config);
 
@@ -124,7 +137,7 @@ class CustomAxiosInstance {
       console.error(error);
     }
   }
-  async delete<T>(params: object = {}) {
+  public async delete<T>(params: object = {}) {
     try {
       const res = await CustomAxiosInstance.instance.delete<T>(this.endpoint, params);
 
