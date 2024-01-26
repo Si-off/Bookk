@@ -1,20 +1,30 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getBooks, postBooks, patchBook, deleteBook, getBook, getNextBooks } from 'api';
-import { BooklistParams, BooklistRes } from 'types';
-import queryKeys from './queryKeys';
-import { login, getUser } from 'api/auth';
-import CustomAxiosInstance from 'api/axios';
-import { StorageKeys } from 'constant';
-import secureLocalStorage from 'react-secure-storage';
-import { useNavigate } from 'react-router-dom';
-import { useUserStore } from 'store/useUserStore';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getBooks,
+  postBooks,
+  patchBook,
+  deleteBook,
+  getBook,
+  postComment,
+  patchComment,
+  deleteComment,
+  getComments,
+} from "api";
+import { BooklistParams, BooklistRes } from "types";
+import queryKeys from "./queryKeys";
+import { login, getUser } from "api/auth";
+import CustomAxiosInstance from "api/axios";
+import { StorageKeys } from "constant";
+import secureLocalStorage from "react-secure-storage";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "store/useUserStore";
 
 export const useGetBooks = (queries: BooklistParams) => {
   const queryClient = useQueryClient();
-  const key = [queryKeys.USER, 'books'];
+  const key = [queryKeys.USER, "books"];
   if (queries) key.push(queries.page.toString());
 
-  console.log('queries', queries);
+  console.log("queries", queries);
 
   return useQuery({
     queryKey: key,
@@ -38,8 +48,7 @@ export const useGetBooks = (queries: BooklistParams) => {
 };
 
 export const useGetBooksAdmin = (queries: BooklistParams) => {
-  const queryClient = useQueryClient();
-  const key = [queryKeys.ADMIN, 'books'];
+  const key = [queryKeys.ADMIN, "books"];
   if (queries) key.push(queries.page.toString());
 
   return useQuery({
@@ -53,8 +62,7 @@ export const useGetBooksAdmin = (queries: BooklistParams) => {
 };
 
 export const useGetBook = (id: number) => {
-  const queryClient = useQueryClient();
-  const key = [queryKeys.ADMIN, 'books', id.toString()];
+  const key = [queryKeys.ADMIN, "books", id.toString()];
   return useQuery({
     queryKey: key,
     queryFn: () => getBook(id),
@@ -66,11 +74,11 @@ export const usePostBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [queryKeys.ADMIN, 'books'],
+    mutationKey: [queryKeys.ADMIN, "books"],
     mutationFn: postBooks,
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.ADMIN, 'books']);
-      queryClient.invalidateQueries([queryKeys.USER, 'books']);
+      queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.USER, "books"]);
     },
   });
 };
@@ -79,11 +87,11 @@ export const usePatchBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [queryKeys.ADMIN, 'books'],
+    mutationKey: [queryKeys.ADMIN, "books"],
     mutationFn: patchBook,
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.ADMIN, 'books']);
-      queryClient.invalidateQueries([queryKeys.USER, 'books']);
+      queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.USER, "books"]);
     },
   });
 };
@@ -92,11 +100,11 @@ export const useDeleteBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [queryKeys.ADMIN, 'books'],
+    mutationKey: [queryKeys.ADMIN, "books"],
     mutationFn: deleteBook,
     onSuccess: () => {
-      queryClient.invalidateQueries([queryKeys.ADMIN, 'books']);
-      queryClient.invalidateQueries([queryKeys.USER, 'books']);
+      queryClient.invalidateQueries([queryKeys.ADMIN, "books"]);
+      queryClient.invalidateQueries([queryKeys.USER, "books"]);
     },
   });
 };
@@ -115,7 +123,7 @@ export const useLogin = () => {
       queryClient.setQueryData([queryKeys.USER], data.userInfo);
       CustomAxiosInstance.setAccessToken(data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
-      navigate('/user');
+      navigate("/user");
     },
   });
 };
@@ -127,8 +135,65 @@ export const useGetUser = (token: string) => {
     queryKey: [queryKeys.USER],
     queryFn: getUser,
     enabled: !!token,
-    onSuccess: () => {
+
+    onSuccess: (data) => {
       getState().setIsLogin(true);
+      getState().setUser(data?.userInfo);
+    },
+  });
+};
+export const useGetComments = (bookId: number) => {
+  const key = [queryKeys.USER, "comments", bookId.toString()];
+
+  return useQuery({
+    queryKey: key,
+    queryFn: () => getComments(bookId),
+    select: (res) => res,
+  });
+};
+export const usePatchComment = (bookId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [queryKeys.USER, "comments", bookId.toString()],
+    mutationFn: (commentId: number, comment: string) =>
+      patchComment(bookId, commentId, comment),
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        queryKeys.USER,
+        "comments",
+        bookId.toString(),
+      ]);
+    },
+  });
+};
+export const usePostComment = (bookId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [queryKeys.USER, "comments", bookId.toString()],
+    mutationFn: (comment: string) => postComment(bookId, comment),
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        queryKeys.USER,
+        "comments",
+        bookId.toString(),
+      ]);
+    },
+  });
+};
+
+export const useDeleteComment = (bookId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: [queryKeys.USER, "comments", bookId.toString()],
+    mutationFn: (commentId: number) => deleteComment(bookId, commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        queryKeys.USER,
+        "comments",
+        bookId.toString(),
+      ]);
     },
   });
 };
