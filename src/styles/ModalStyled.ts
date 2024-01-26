@@ -106,3 +106,16 @@ export const ModalOverview = styled.p`
     font-size: 16px;
   }
 `;
+
+export const CommentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+`;
+export const CommentSection = styled.div`
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+`;
