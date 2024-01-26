@@ -10,10 +10,13 @@ import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { StorageKeys } from 'constant';
 import { useGetUser } from 'queries';
+import { useUserStore } from 'store/useUserStore';
+import PrivateRoutes from 'pages/PrivateRoutes';
 
 function App() {
+  const { isLogin } = useUserStore();
   const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
-  if (refreshToken && typeof refreshToken === 'string') {
+  if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
     useGetUser(refreshToken);
   }
   useEffect(() => {
@@ -27,11 +30,14 @@ function App() {
         <Route path='/' element={<MainPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
-        <Route path='/admin' element={<AdminManage />} />
-        <Route path='/admin/create' element={<AdminCreateItem />} />
-        <Route path='/admin/edit/:id' element={<AdminEditItem />} />
         <Route path='/user' element={<UserPage />} />
         <Route path='*' element={<Navigate to='/' />} />
+
+        <Route element={<PrivateRoutes />}>
+          <Route path='/admin' element={<AdminManage />} />
+          <Route path='/admin/create' element={<AdminCreateItem />} />
+          <Route path='/admin/edit/:id' element={<AdminEditItem />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
