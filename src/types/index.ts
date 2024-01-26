@@ -178,3 +178,9 @@ export type CommentGetRes = {
   }>;
   total: number;
 };
+
+export type PatchCommentReq = {
+  bookId: number;
+  commentId: number;
+  comment: string;
+};
