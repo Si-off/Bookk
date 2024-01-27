@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { getStyledColor } from "utils";
+import styled from 'styled-components';
+import { getStyledColor } from 'utils';
 
 export const Flex = styled.div`
   display: flex;
@@ -30,10 +30,8 @@ export const CommentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  background-color: ${getStyledColor("red", 300)};
   border-radius: 4px;
-  padding: 10px 20px;
-  box-shadow: 1px 1px 4px 2px ${getStyledColor("cool_gray", 500)};
+  padding: 20px 20px;
 `;
 
 interface CommentItemContainerProps {
@@ -41,16 +39,15 @@ interface CommentItemContainerProps {
 }
 
 export const CommentItemContainer = styled.div<CommentItemContainerProps>`
-  color: rgba(89, 80, 61, 1);
+  color: white;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   width: 100%;
   padding: 5px 5px;
   margin: 5px 0;
   border-radius: 5px;
-  background-color: ${(props) =>
-    props.$index % 2 === 0 ? "rgba(182,187,193,0.9)" : "rgba(250,204,224,0.9)"};
+  background-color: #24262b;
 `;
 
 export const CommentItemRight = styled.div`
@@ -69,11 +66,16 @@ export const CommentButtonContainer = styled.div`
 export const CommentButton = styled.button`
   padding: 5px 10px;
   border-radius: 5px;
-  background-color: ${getStyledColor("purple", 300)};
+  background-color: ${getStyledColor('purple', 300)};
   color: white;
   border: none;
   cursor: pointer;
   &:hover {
-    background-color: ${getStyledColor("blue", 400)};
+    background-color: ${getStyledColor('blue', 400)};
   }
 `;
+
+// background-color: ${(props) =>
+//   props.$index % 2 === 0
+//     ? 'linear-gradient(247deg, #FFF 51.78%, #00BFFF 181.14%)'
+//     : 'linear-gradient(247deg, #FFF 51.78%, #00BFFF 181.14%)'};

@@ -56,24 +56,36 @@ export const CustomModal = ({
             onClick={() => {
               setModalOpen(false);
               showScroll();
-            }}>
+            }}
+          >
             <IoIosClose />
           </S.ModalClose>
 
           {book?.images[0] && (
             <S.ModalPosterContainer>
               {' '}
-              <S.ModalPosterImg src={`${BASE_URL}${book.images[0].path}`} alt='modal-img' />
+              <S.ModalPosterImg
+                src={`${BASE_URL}${book.images[0].path}`}
+                alt='modal-img'
+              />
               <S.ModalContent>
-                <S.ModalDetails>등록날짜:{book && formatDate(book.createdAt)}</S.ModalDetails>
+                <S.ModalDetails>
+                  등록날짜: {'  '}
+                  {book && formatDate(book.createdAt)}
+                </S.ModalDetails>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
                 <S.ModalOverview>클릭수: {book?.clicks}</S.ModalOverview>
                 <S.ModalOverview>좋아요: {book?.likeCount}</S.ModalOverview>
                 <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
-                <S.ModalOverview>{book?.content}</S.ModalOverview>
+                <S.ModalSubject>책 소개</S.ModalSubject>
+                <S.ModalIntroduce>{book?.content}</S.ModalIntroduce>
                 <S.CommentContainer>
-                  <button onClick={toggleModal}>{isOpen ? '댓글 닫기' : '댓글 보기'}</button>
-                  <CommentToggle toggleModal={toggleModal} isOpen={isOpen} bookId={book?.id} />
+                  <S.ModalSubject>한줄리뷰</S.ModalSubject>
+                  <CommentToggle
+                    toggleModal={toggleModal}
+                    isOpen={isOpen}
+                    bookId={book?.id}
+                  />
 
                   <CommentWrite bookId={book?.id} />
                 </S.CommentContainer>

@@ -91,12 +91,28 @@ export const ModalContent = styled.div`
 export const ModalTitle = styled.h1`
   padding: 0;
   font-size: 40px;
-  margin: 16px 0;
+  margin: 16px 0 7px 0;
 `;
 
 export const ModalDetails = styled.div`
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 400;
+  font-size: 14px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+  }
+`;
+
+export const ModalSubject = styled.div`
+  border-left: 10px solid #688ff4;
+  padding: 0.5em;
+  margin: 20px 20px 0px 0px;
+  border-bottom: 2px solid #688ff4;
+`;
+
+export const ModalIntroduce = styled.p`
+  font-size: 20px;
+  line-height: 1.5;
 
   @media screen and (max-width: 768px) {
     font-size: 16px;
@@ -104,7 +120,7 @@ export const ModalDetails = styled.div`
 `;
 
 export const ModalOverview = styled.p`
-  font-size: 20px;
+  font-size: 14px;
   line-height: 1.5;
 
   @media screen and (max-width: 768px) {
@@ -115,7 +131,6 @@ export const ModalOverview = styled.p`
 export const CommentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
 `;
 export const CommentSection = styled.div`
   background-color: #fefefe;
