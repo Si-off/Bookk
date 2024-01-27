@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
 import Book from '../../components/Book';
-import { useGetBooks } from 'queries';
+import { useGetBooks, useInfinityScroll } from 'queries';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
 import { QueryKeys } from 'constant';
+import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
 import './UserPage.style.css';
 
 const TAKE = 10;
@@ -19,6 +20,10 @@ const UserPage = () => {
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
 
   const { data: books, status } = useGetBooks({ take: TAKE, page: currentPage });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinityScroll();
+  const target = useIntersectionObserver(() => {
+    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+  });
 
   const queryClient = useQueryClient();
   const key = [QueryKeys.USER, 'books', nextPage.toString()];
@@ -56,9 +61,16 @@ const UserPage = () => {
       <Stars3 />
       <Layout>
         {status === 'success' &&
-          books?.data.map((book) => {
-            return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
-          })}
+          data?.pages.map((page) =>
+            page?.data.map((book, index) => {
+              if (page.data.length - 1 === index) {
+                return (
+                  <Book key={book.id} ref={target} {...book} onClick={() => handleClick(book.id)} />
+                );
+              }
+              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
+            }),
+          )}
       </Layout>
     </>
   );
