@@ -115,8 +115,8 @@ export type UserType = {
 };
 
 export type BooklistParams = {
-  take: number;
-  page: number;
+  take?: number;
+  page?: number;
 };
 
 export type ErrorType = {
