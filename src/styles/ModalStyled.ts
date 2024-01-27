@@ -19,6 +19,7 @@ export const WrapperModal = styled.div`
   justify-content: center;
   overflow: hidden;
   height: 100%;
+  align-items: center;
 
   @media screen and (max-height: 768px) {
     align-items: unset;
@@ -42,11 +43,12 @@ export const ModalClose = styled.div`
   cursor: pointer;
   z-index: 1000;
   color: white;
+  font-size: 30px;
 `;
 
 export const Modal = styled.div`
-  position: relative;
-  min-width: 800px;
+  position: absolute;
+  width: 800px;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
     0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
   background: #111;
@@ -55,6 +57,8 @@ export const Modal = styled.div`
   transition: all 400ms ease-in-out 2s;
   animation: ${fadeIn} 400ms;
   overflow-y: scroll;
+  height: 70%;
+  align-items: center;
 
   &::-webkit-scrollbar {
     display: none;
@@ -66,20 +70,21 @@ export const Modal = styled.div`
   }
 `;
 export const ModalPosterContainer = styled.div`
-  background-color: rgb(0 0 0 / 71%);
-  position: relative;
+  // background-color: rgb(0 0 0 / 71%);
   display: flex;
-  justify-content: center;
-  height: ${pixelToRem(500)};
+  display-direction: column;
 `;
 export const ModalPosterImg = styled.img`
-  height: ${pixelToRem(500)};
-  background-color: ${getStyledColor('cool_gray', 400)};
-  object-fit: cover;
+  // height: ${pixelToRem(500)};
+  // background-color: ${getStyledColor('cool_gray', 400)};
+  object-fit: contain;
+  height: 200px;
+  margin: 100px 60px;
 `;
 
 export const ModalContent = styled.div`
-  padding: 40px;
+  padding-right: 40px;
+  padding-top: 40px;
   color: white;
 `;
 
