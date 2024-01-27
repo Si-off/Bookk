@@ -6,35 +6,29 @@ type Options = {
   threshold: number;
 };
 
-interface Params {
-  callback: () => void;
-  options?: Options;
-}
-
-const useIntersectionObserver = ({ callback, options }: Params) => {
-  const target = useRef<HTMLElement>(null);
+const useIntersectionObserver = (callback: () => void, options?: Options) => {
+  const target = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!target.current || !target) return;
+    if (target && target.current) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              observer.unobserve(entry.target);
+              callback();
+            }
+          });
+        },
+        { ...options },
+      );
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
-            callback();
-          }
-        });
-      },
-      { ...options },
-    );
-
-    observer.observe(target.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [target, callback]);
+      observer.observe(target.current);
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [target, callback, options]);
 
   return target;
 };
