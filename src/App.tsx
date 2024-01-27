@@ -19,6 +19,7 @@ import { useUserStore } from 'store/useUserStore';
 import PrivateRoutes from 'pages/PrivateRoutes';
 import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
+import './common.css';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit } = useUserStore();

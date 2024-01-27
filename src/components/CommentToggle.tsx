@@ -18,37 +18,43 @@ const CommentToggle = ({ toggleModal, isOpen, bookId }: CommentToggleProps) => {
   const user = useQueryClient().getQueryData([QueryKeys.LOGIN]);
   console.log(user);
 
+  function formatDate(timestamp: string) {
+    const dateObject = new Date(timestamp);
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObject.getDate().toString().padStart(2, '0');
+    const formattedDate = `${year}${month}${day}`;
+    return formattedDate;
+  }
+
   // console.log(user);
   if (status === 'loading') return <StyledLoader />;
   if (status === 'error') return <div>error</div>;
   return (
-    <Toggle isOpen={isOpen}>
-      <S.CommentContainer>
-        {comments?.data?.map((reply: any, index: any) => {
-          return (
-            <S.CommentItemContainer key={reply.id} $index={index}>
-              <div>
-                <span>작성자:{reply.author.nickname}</span>
-                <span>
-                  <div>{reply.reply2}</div>
-                </span>
+    <S.CommentContainer>
+      {comments?.data?.map((reply: any, index: any) => {
+        return (
+          <S.CommentItemContainer key={reply.id} $index={index}>
+            <div>
+              <span style={{ fontSize: '14px' }}>{reply.author.nickname}</span>
+              <div style={{ fontSize: '10px' }}>
+                {formatDate(reply.createdAt)}
               </div>
+              <span>
+                <div style={{ marginTop: '6px' }}>{reply.reply2}</div>
+              </span>
+            </div>
 
-              <S.CommentItemRight>
-                <span>{reply.createdAt}</span>
-                {/* {user?.nickname === reply?.author?.nickname && (
+            {/* {user?.nickname === reply?.author?.nickname && (
                 <S.CommentButtonContainer>
                   <S.CommentButton>수정</S.CommentButton>
                   <S.CommentButton>삭제</S.CommentButton>
                 </S.CommentButtonContainer>
               )} */}
-              </S.CommentItemRight>
-            </S.CommentItemContainer>
-          );
-        })}
-      </S.CommentContainer>
-      {/* <button onClick={toggleModal}>toggle</button> */}
-    </Toggle>
+          </S.CommentItemContainer>
+        );
+      })}
+    </S.CommentContainer>
   );
 };
 

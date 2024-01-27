@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
 import { QueryKeys } from 'constant';
+import './UserPage.style.css';
 
 const TAKE = 10;
 
