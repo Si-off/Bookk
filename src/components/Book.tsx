@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { keyframes, styled } from 'styled-components';
 import { BookInfoType } from 'types';
 import { getStyledColor } from 'utils';
@@ -10,7 +10,10 @@ interface Props extends BookInfoType {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const Book = ({ title, content, images, onClick }: Props) => {
+const Book = (
+  { title, content, images, onClick }: Props,
+  forwardedRef: React.ForwardedRef<HTMLDivElement>,
+) => {
   const [isShow, setIsShow] = useState(false);
   const imageUrl = images[0]?.path;
 
@@ -19,7 +22,7 @@ const Book = ({ title, content, images, onClick }: Props) => {
   }, []);
 
   return (
-    <Containe onClick={onClick}>
+    <Containe ref={forwardedRef} onClick={onClick}>
       <Inner>
         {images && <Image src={`${BASE_URL}${imageUrl}`} />}
         <Title>{title}</Title>
@@ -28,14 +31,13 @@ const Book = ({ title, content, images, onClick }: Props) => {
   );
 };
 
-export default Book;
+export default forwardRef(Book);
 
 const Title = styled.p`
   font-size: ${pixelToRem(16)};
   font-weight: 500;
   margin-top: 20px;
   position: relative;
-  }
 `;
 
 const Image = styled.img`
