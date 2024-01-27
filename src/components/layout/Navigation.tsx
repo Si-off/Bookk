@@ -6,10 +6,14 @@ import { getStyledColor } from 'utils';
 const Navigation = () => {
   const navigate = useNavigate();
 
+  const logoClick = () => {
+    navigate('/');
+  };
+
   return (
     <NavigationWrapper>
       <Logo>
-        <h3>BOOKK</h3>
+        <h3 onClick={logoClick}>BOOKK</h3>
       </Logo>
       <NavigationItem />
     </NavigationWrapper>
@@ -30,6 +34,7 @@ const Logo = styled.div`
   font-size: 24px;
   font-weight: bold;
   color: white;
+  cursor: pointer;
 
   img {
     height: 48px;
