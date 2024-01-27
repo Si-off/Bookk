@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import {
   getBooks,
   postBooks,
@@ -10,18 +10,17 @@ import {
   deleteComment,
   getComments,
 } from 'api';
-import { BooklistParams, PatchCommentReq } from 'types';
+import { BooklistParams } from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
 import { login, getUser } from 'api/auth';
 import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
-import { useInfiniteQuery } from '@tanstack/react-query';
 
 export const useGetBooks = (queries?: BooklistParams) => {
   const key = [QueryKeys.USER, 'books'];
-  if (queries) key.push(queries.page.toString());
+  if (queries?.page) key.push(queries.page.toString());
 
   return useQuery({
     queryKey: key,
@@ -35,7 +34,7 @@ export const useGetBooks = (queries?: BooklistParams) => {
 export const useGetBooksAdmin = (queries: BooklistParams) => {
   const key = [QueryKeys.ADMIN, 'books'];
 
-  if (queries) key.push(queries.page.toString());
+  if (queries?.page) key.push(queries.page.toString());
 
   return useQuery({
     queryKey: key,
@@ -140,11 +139,7 @@ export const usePatchComment = (bookId: number) => {
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: patchComment,
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        QueryKeys.USER,
-        'comments',
-        bookId.toString(),
-      ]);
+      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
   });
 };
@@ -155,11 +150,7 @@ export const usePostComment = (bookId: number) => {
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: (comment: string) => postComment(bookId, comment),
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        QueryKeys.USER,
-        'comments',
-        bookId.toString(),
-      ]);
+      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
   });
 };
@@ -170,11 +161,7 @@ export const useDeleteComment = (bookId: number) => {
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: (commentId: number) => deleteComment(bookId, commentId),
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        QueryKeys.USER,
-        'comments',
-        bookId.toString(),
-      ]);
+      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
   });
 };
@@ -182,9 +169,14 @@ export const useDeleteComment = (bookId: number) => {
 export const useInfinityScroll = () => {
   return useInfiniteQuery({
     queryKey: [QueryKeys.USER, 'books', 'infinity'],
-    queryFn: () => getBooks,
-    // getNextPageParam: (lastPage, pages) => {
-    //   if(pages)
-    // },
+    queryFn: ({ pageParam = 1 }) => getBooks({ page: pageParam }),
+    getNextPageParam: (lastPage, pages) => {
+      if (!lastPage) {
+        return;
+      }
+      if (pages.length < lastPage.total / 10) {
+        return pages.length + 1;
+      }
+    },
   });
 };
