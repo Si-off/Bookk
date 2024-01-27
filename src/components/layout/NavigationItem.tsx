@@ -47,8 +47,17 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
+  color: white;
+
+  span {
+    color: white;
+  }
+
+  button {
+    background-color: transparent;
+    color: white;
+  }
 `;
 const LinkStyle = styled(Link)`
   text-decoration: none;
-  color: #212529;
 `;

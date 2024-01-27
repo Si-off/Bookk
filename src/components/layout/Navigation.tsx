@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import NavigationItem from './NavigationItem';
 import { useNavigate } from 'react-router-dom';
+import { getStyledColor } from 'utils';
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -8,12 +9,7 @@ const Navigation = () => {
   return (
     <NavigationWrapper>
       <Logo>
-        <img
-          onClick={() => {
-            navigate('/user');
-          }}
-          src='img/bookk.png'
-        />
+        <h3>BOOKK</h3>
       </Logo>
       <NavigationItem />
     </NavigationWrapper>
@@ -28,13 +24,12 @@ const NavigationWrapper = styled.div`
   align-items: center;
   height: 56px;
   padding: 0 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e9ecef;
+  background-color: ${getStyledColor('cool_gray', 1200)};
 `;
 const Logo = styled.div`
   font-size: 24px;
   font-weight: bold;
-  color: #212529;
+  color: white;
 
   img {
     height: 48px;

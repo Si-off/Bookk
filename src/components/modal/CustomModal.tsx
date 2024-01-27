@@ -1,11 +1,11 @@
-import { useRef, useState } from "react";
-import * as S from "styles/ModalStyled";
-import styled from "styled-components";
-import { useGetBook } from "queries";
-import useOnclickOutside from "pages/hooks/useOnclickOutside";
-import { StyledLoader } from "styles/LoginStyled";
-import CommentWrite from "components/CommentWrite";
-import CommentToggle from "components/CommentToggle";
+import { useRef, useState } from 'react';
+import * as S from 'styles/ModalStyled';
+import styled from 'styled-components';
+import { useGetBook } from 'queries';
+import useOnclickOutside from 'pages/hooks/useOnclickOutside';
+import { StyledLoader } from 'styles/LoginStyled';
+import CommentWrite from 'components/CommentWrite';
+import CommentToggle from 'components/CommentToggle';
 export const CustomModal = ({
   bookId,
   setModalOpen,
@@ -26,25 +26,25 @@ export const CustomModal = ({
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
-    const day = dateObject.getDate().toString().padStart(2, "0");
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObject.getDate().toString().padStart(2, '0');
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
 
-  if (status === "loading")
+  if (status === 'loading')
     return (
       <LoaderContainer>
         <StyledLoader />
       </LoaderContainer>
     );
-  if (status === "error") return <div>error...</div>;
+  if (status === 'error') return <div>error...</div>;
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
   return (
-    <S.Presentation role="presentation">
+    <S.Presentation role='presentation'>
       <S.WrapperModal>
         <S.Modal ref={ref}>
           <S.ModalClose
@@ -57,10 +57,10 @@ export const CustomModal = ({
           </S.ModalClose>
           {book?.images[0]?.fbPath[0] && (
             <S.ModalPosterContainer>
-              {" "}
+              {' '}
               <S.ModalPosterImg
                 src={book?.images[0].fbPath[0]}
-                alt="modal-img"
+                alt='modal-img'
               />
             </S.ModalPosterContainer>
           )}
