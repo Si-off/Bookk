@@ -17,6 +17,7 @@ import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 export const useGetBooks = (queries?: BooklistParams) => {
   const key = [QueryKeys.USER, 'books'];
@@ -139,7 +140,11 @@ export const usePatchComment = (bookId: number) => {
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: patchComment,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
+      queryClient.invalidateQueries([
+        QueryKeys.USER,
+        'comments',
+        bookId.toString(),
+      ]);
     },
   });
 };
@@ -150,7 +155,11 @@ export const usePostComment = (bookId: number) => {
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: (comment: string) => postComment(bookId, comment),
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
+      queryClient.invalidateQueries([
+        QueryKeys.USER,
+        'comments',
+        bookId.toString(),
+      ]);
     },
   });
 };
@@ -161,7 +170,11 @@ export const useDeleteComment = (bookId: number) => {
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: (commentId: number) => deleteComment(bookId, commentId),
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
+      queryClient.invalidateQueries([
+        QueryKeys.USER,
+        'comments',
+        bookId.toString(),
+      ]);
     },
   });
 };
