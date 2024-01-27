@@ -1,18 +1,14 @@
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent as ReactChangeEvent,
-} from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
-import * as $ from "styles/AdminStyled";
-import * as S from "styles/LoginStyled";
-import { usePatchBook, useDeleteBook, useGetBook } from "queries";
-import ImageUploader from "components/ImageUploader";
-import Button from "components/Button";
-import { ImagePatchReq } from "types";
-import { postImage, deleteImage, addImage } from "api";
-import { StyledLoader } from "styles/LoginStyled";
+import React, { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { styled } from 'styled-components';
+import * as $ from 'styles/AdminStyled';
+import * as S from 'styles/LoginStyled';
+import { usePatchBook, useDeleteBook, useGetBook } from 'queries';
+import ImageUploader from 'components/ImageUploader';
+import Button from 'components/Button';
+import { ImagePatchReq } from 'types';
+import { postImage, deleteImage, addImage } from 'api';
+import { StyledLoader } from 'styles/LoginStyled';
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const AdminEditItem = () => {
@@ -23,9 +19,9 @@ const AdminEditItem = () => {
   }
 
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [patchLoading, setPatchLoading] = useState(false);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const [images, setImages] = useState<ImagePatchReq[]>([]);
   const [newImagePath, setNewImagePath] = useState<string | null>(null);
   const [originalImageId, setOriginalImageId] = useState<number | null>(null);
@@ -33,22 +29,20 @@ const AdminEditItem = () => {
   const { mutate, status: patchStatus } = usePatchBook();
   const { mutate: remove, status: removeStatus } = useDeleteBook();
   useEffect(() => {
-    setTitle(book?.title || "");
-    setContent(book?.content || "");
+    setTitle(book?.title || '');
+    setContent(book?.content || '');
     setImages(
       book?.images.map((image) => ({
         id: image.id,
         newOrder: image.order,
-      })) || []
+      })) || [],
     );
     setOriginalImageId(book?.images[0]?.id || null);
-    console.log(title, content, images, "bookinfo");
   }, [book]);
   // id를 숫자로 변환
   if (isLoading || patchLoading) {
     return <StyledLoader />;
   }
-  console.log(book);
   if (!book) {
     return <div>책 정보를 찾을 수 없습니다.</div>;
   }
@@ -67,7 +61,7 @@ const AdminEditItem = () => {
         setNewImagePath(uploadedImagePath);
       }
     } else {
-      console.log("이미지 업로드가 취소되었거나 이미지가 선택되지 않았습니다.");
+      console.log('이미지 업로드가 취소되었거나 이미지가 선택되지 않았습니다.');
     }
   };
   const handleFinalUpdate = async () => {
@@ -81,11 +75,7 @@ const AdminEditItem = () => {
       let updatedImages = [...images];
       if (newImagePath) {
         const addImageResponse = await addImage(numericId, [newImagePath]);
-        if (
-          addImageResponse &&
-          addImageResponse.images &&
-          addImageResponse.images.length > 0
-        ) {
+        if (addImageResponse && addImageResponse.images && addImageResponse.images.length > 0) {
           const newId = addImageResponse.images[0].id;
           updatedImages = [{ id: newId, newOrder: 0 }];
         }
@@ -94,7 +84,7 @@ const AdminEditItem = () => {
       // 업데이트된 images 배열로 책 정보 업데이트
       await mutate({ id: numericId, title, content, images: updatedImages });
     } catch (error) {
-      console.error("Error during the update process:", error);
+      console.error('Error during the update process:', error);
       // 에러 발생 시 처리할 로직 추가 가능
     } finally {
       // 성공적으로 완료되었거나 에러가 발생했을 때 모두 실행
@@ -115,18 +105,13 @@ const AdminEditItem = () => {
         <S.Wrapper>
           <S.InputField>
             <S.Label>도서명</S.Label>
-            <S.Input
-              name="title"
-              placeholder="Title"
-              value={title}
-              onChange={handleChangeTitle}
-            />
+            <S.Input name='title' placeholder='Title' value={title} onChange={handleChangeTitle} />
           </S.InputField>
           <S.InputField $marginTop={20}>
             <S.Label>설명</S.Label>
             <S.Input
-              name="content"
-              placeholder="content"
+              name='content'
+              placeholder='content'
               value={content}
               onChange={handleChangeContent}
             />
@@ -141,11 +126,11 @@ const AdminEditItem = () => {
             />
           )}
         </S.InputField>
-        <S.InputField style={{ display: "flex", marginTop: 30, gap: 20 }}>
+        <S.InputField style={{ display: 'flex', marginTop: 30, gap: 20 }}>
           <Button onClick={handleFinalUpdate} status={patchStatus}>
             수정
           </Button>
-          <Button onClick={handleRemove} color="red">
+          <Button onClick={handleRemove} color='red'>
             삭제
           </Button>
         </S.InputField>

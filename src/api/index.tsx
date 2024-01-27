@@ -25,7 +25,6 @@ export const getBooks = async (queries?: BooklistParams) => {
 
 export const getNextBooks = async (queries: BooklistParams) => {
   const res = await new Axios('/api2s').get<BooklistRes>(queries);
-  console.log('res', res);
 
   return res;
 };

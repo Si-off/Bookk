@@ -16,7 +16,6 @@ const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
   const { mutate, status } = usePostComment(bookId);
   const onChangeComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
-    console.log(comment);
   };
   const onHandleClick = async () => {
     if (!comment) {

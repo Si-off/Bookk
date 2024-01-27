@@ -13,7 +13,6 @@ const useScrollLock = () => {
   const lockScroll = useCallback(() => {
     document.body.style.overflow = 'hidden';
     document.body.style.paddingRight = `${scrollBarWidth}px`;
-    console.log(scrollBarWidth);
   }, [scrollBarWidth]);
 
   const unLockScroll = useCallback(() => {

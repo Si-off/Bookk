@@ -16,7 +16,6 @@ const CommentToggle = ({ toggleModal, isOpen, bookId }: CommentToggleProps) => {
   const { data: comments, status } = useGetComments(bookId);
   // const user = useUserStore((state) => state.user);
   const user = useQueryClient().getQueryData([QueryKeys.LOGIN]);
-  console.log(user);
 
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
@@ -37,9 +36,7 @@ const CommentToggle = ({ toggleModal, isOpen, bookId }: CommentToggleProps) => {
           <S.CommentItemContainer key={reply.id} $index={index}>
             <div>
               <span style={{ fontSize: '14px' }}>{reply.author.nickname}</span>
-              <div style={{ fontSize: '10px' }}>
-                {formatDate(reply.createdAt)}
-              </div>
+              <div style={{ fontSize: '10px' }}>{formatDate(reply.createdAt)}</div>
               <span>
                 <div style={{ marginTop: '6px' }}>{reply.reply2}</div>
               </span>

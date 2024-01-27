@@ -75,7 +75,6 @@ const SignupPage = () => {
         body: JSON.stringify({ email, code }),
       });
       const data = await res.json();
-      console.log(data);
       setIsVerify(false);
       alert('인증이 완료되었습니다.');
     } catch (error) {
