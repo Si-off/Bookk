@@ -9,10 +9,16 @@ import {
   CommentGetRes,
   CommentPostRes,
   PatchCommentReq,
+  BookTakelistRes,
 } from 'types';
 
-export const getBooks = async (queries: BooklistParams) => {
-  const res = await new Axios('/api2s').get<BooklistRes>(queries);
+export const getBooks = async (queries?: BooklistParams) => {
+  let res;
+  if (queries) {
+    res = await new Axios('/api2s').get<BookTakelistRes>(queries);
+  } else {
+    res = await new Axios('/api2s').get<BooklistRes>(queries);
+  }
 
   return res;
 };

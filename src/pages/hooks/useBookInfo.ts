@@ -1,12 +1,9 @@
-import { useCallback, useState } from "react";
-import { BookReq } from "types";
-interface BookInfoState {
-  bookInfo: BookReq;
-  setBookInfo: (newBookInfo: BookReq) => void;
-}
+import { useCallback, useState } from 'react';
+import { BookReq } from 'types';
+
 const InitData: BookReq = {
-  title: "",
-  content: "",
+  title: '',
+  content: '',
   images: [],
 };
 
