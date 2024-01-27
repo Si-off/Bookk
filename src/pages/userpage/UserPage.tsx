@@ -10,7 +10,7 @@ import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
 import { QueryKeys } from 'constant';
 
-const TAKE = 4;
+const TAKE = 10;
 
 const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +18,11 @@ const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
 
-  const { data: books, status, isSuccess } = useGetBooks({ take: TAKE, page: currentPage });
+  const {
+    data: books,
+    status,
+    isSuccess,
+  } = useGetBooks({ take: TAKE, page: currentPage });
 
   const queryClient = useQueryClient();
   const key = [QueryKeys.USER, 'books', nextPage.toString()];
@@ -61,24 +65,29 @@ const UserPage = () => {
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
-          showScroll={showScroll}></CustomModal>
+          showScroll={showScroll}
+        ></CustomModal>
       )}
       <Stars />
       <Stars2 />
       <Stars3 />
       <Layout>
-        <ArrowButton>
+        {/* <ArrowButton>
           <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
-        </ArrowButton>
-        <BookWrapper $isSuccess={isSuccess}>
-          {status === 'success' &&
-            books?.data.map((book) => {
-              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
-            })}
-        </BookWrapper>
-        <ArrowButton>
+        </ArrowButton> */}
+        {status === 'success' &&
+          books?.data.map((book) => {
+            return (
+              <Book
+                key={book.id}
+                {...book}
+                onClick={() => handleClick(book.id)}
+              />
+            );
+          })}
+        {/* <ArrowButton>
           <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
-        </ArrowButton>
+        </ArrowButton> */}
       </Layout>
     </>
   );
@@ -86,12 +95,21 @@ const UserPage = () => {
 
 export default UserPage;
 
+// const Layout = styled.div`
+//   height: 100vh;
+//   background-color: ${getStyledColor('cool_gray', 1200)};
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
+
 const Layout = styled.div`
-  height: 100vh;
   background-color: ${getStyledColor('cool_gray', 1200)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(500px, auto);
+  grid-gap: 5px;
+  padding: 100px 300px;
 `;
 
 const BookWrapper = styled.div<{ $isSuccess?: boolean }>`
