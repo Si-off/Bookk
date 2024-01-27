@@ -42,6 +42,11 @@ export type BooklistRes = {
   total: number;
 };
 
+export type BookTakelistRes = {
+  data: BookInfoType[];
+  total: number;
+};
+
 export type ImagePatchReq = {
   id: number;
   newOrder: number;

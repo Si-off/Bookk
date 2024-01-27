@@ -18,7 +18,7 @@ import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
 
-export const useGetBooks = (queries: BooklistParams) => {
+export const useGetBooks = (queries?: BooklistParams) => {
   const key = [QueryKeys.USER, 'books'];
   if (queries) key.push(queries.page.toString());
 
@@ -163,5 +163,15 @@ export const useDeleteComment = (bookId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
+  });
+};
+
+export const useInfinityScroll = () => {
+  return useInfiniteQuery({
+    queryKey: [QueryKeys.USER, 'books', 'infinity'],
+    queryFn: () => getBooks,
+    // getNextPageParam: (lastPage, pages) => {
+    //   if(pages)
+    // },
   });
 };
