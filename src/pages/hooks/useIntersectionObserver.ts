@@ -1,18 +1,18 @@
 import { useEffect, useRef } from 'react';
 
 type Options = {
-  root: Element | Document;
-  rootMargin: string;
-  threshold: number;
+  root?: Element | Document;
+  rootMargin?: string;
+  threshold?: number;
 };
 
 const useIntersectionObserver = (callback: () => void, options?: Options) => {
-  const target = useRef<HTMLDivElement>(null);
+  const target = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (target && target.current) {
-      const observer = new IntersectionObserver(
-        (entries) => {
+      const intersectionObserver = new IntersectionObserver(
+        (entries, observer) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               observer.unobserve(entry.target);
@@ -22,10 +22,9 @@ const useIntersectionObserver = (callback: () => void, options?: Options) => {
         },
         { ...options },
       );
-
-      observer.observe(target.current);
+      intersectionObserver.observe(target.current);
       return () => {
-        observer.disconnect();
+        intersectionObserver.disconnect();
       };
     }
   }, [target, callback, options]);
