@@ -19,7 +19,7 @@ const Book = ({ title, content, images, onClick }: Props) => {
   }, []);
 
   return (
-    <Containe>
+    <Containe onClick={onClick}>
       <Inner>
         {images && <Image src={`${BASE_URL}${imageUrl}`} />}
         <Title>{title}</Title>
@@ -53,6 +53,8 @@ const Containe = styled.div`
 `;
 
 const Inner = styled.div`
+  cursor: pointer;
+
   &:after {
     content: '';
     display: block;
