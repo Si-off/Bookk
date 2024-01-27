@@ -3,7 +3,13 @@ import Navigation from './components/layout/Navigation';
 import AdminManage from './pages/adminpage/AdminManage';
 import AdminCreateItem from './pages/adminpage/AdminCreateItem';
 import AdminEditItem from './pages/adminpage/AdminEditItem';
-import { BrowserRouter, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 import UserPage from './pages/userpage/UserPage';
 import { LoginPage, MainPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
@@ -23,7 +29,10 @@ function App() {
     if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
       (async () => {
         await CustomAxiosInstance.init();
-        await queryClient.fetchQuery({ queryKey: [QueryKeys.LOGIN], queryFn: getUser });
+        await queryClient.fetchQuery({
+          queryKey: [QueryKeys.LOGIN],
+          queryFn: getUser,
+        });
       })();
       setIsLogin(true);
     }
@@ -34,10 +43,9 @@ function App() {
     <BrowserRouter>
       <Navigation />
       <Routes>
-        <Route path='/' element={<MainPage />} />
+        <Route path='/' element={<UserPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
-        <Route path='/user' element={<UserPage />} />
         <Route path='*' element={<Navigate to='/' />} />
 
         <Route element={<PrivateRoutes />}>

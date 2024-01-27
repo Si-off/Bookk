@@ -1,5 +1,5 @@
-import styled, { keyframes } from "styled-components";
-import { pixelToRem, getStyledColor } from "utils";
+import styled, { keyframes } from 'styled-components';
+import { pixelToRem, getStyledColor } from 'utils';
 export const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -74,7 +74,7 @@ export const ModalPosterContainer = styled.div`
 `;
 export const ModalPosterImg = styled.img`
   height: ${pixelToRem(500)};
-  background-color: ${getStyledColor("cool_gray", 400)};
+  background-color: ${getStyledColor('cool_gray', 400)};
   object-fit: cover;
 `;
 

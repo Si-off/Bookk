@@ -47,7 +47,7 @@ const CommentToggle = ({ toggleModal, isOpen, bookId }: CommentToggleProps) => {
           );
         })}
       </S.CommentContainer>
-      <button onClick={toggleModal}>toggle</button>
+      {/* <button onClick={toggleModal}>toggle</button> */}
     </Toggle>
   );
 };

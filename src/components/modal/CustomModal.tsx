@@ -15,7 +15,7 @@ export const CustomModal = ({
   setModalOpen: (open: boolean) => void;
   showScroll: () => void;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const ref = useRef(null);
   useOnclickOutside(ref, () => {
     setModalOpen(false);
@@ -74,7 +74,9 @@ export const CustomModal = ({
             <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
             <S.ModalOverview>{book?.content}</S.ModalOverview>
             <S.CommentContainer>
-              <button onClick={toggleModal}>댓글 보기</button>
+              <button onClick={toggleModal}>
+                {isOpen ? '댓글 닫기' : '댓글 보기'}
+              </button>
               <CommentToggle
                 toggleModal={toggleModal}
                 isOpen={isOpen}
