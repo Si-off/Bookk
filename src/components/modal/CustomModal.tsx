@@ -1,14 +1,11 @@
-import { useRef, useState } from 'react';
-import * as S from 'styles/ModalStyled';
-import styled from 'styled-components';
-import { useGetBook } from 'queries';
-import useOnclickOutside from 'pages/hooks/useOnclickOutside';
+import { useRef, useState } from "react";
+import * as S from "styles/ModalStyled";
+import { useGetBook, useGetComments } from "queries";
+import useOnclickOutside from "pages/hooks/useOnclickOutside";
 
-import CommentWrite from 'components/CommentWrite';
-import CommentToggle from 'components/CommentToggle';
-import { IoIosClose } from 'react-icons/io';
-
-const BASE_URL = process.env.REACT_APP_SERVER_URL;
+import CommentWrite from "components/CommentWrite";
+import CommentToggle from "components/CommentToggle";
+import { IoIosClose } from "react-icons/io";
 
 export const CustomModal = ({
   bookId,
@@ -19,29 +16,23 @@ export const CustomModal = ({
   setModalOpen: (open: boolean) => void;
   showScroll: () => void;
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
   const ref = useRef(null);
   useOnclickOutside(ref, () => {
     setModalOpen(false);
     showScroll();
   });
   const { data: book, status } = useGetBook(bookId || 0);
-
+  const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObject.getDate().toString().padStart(2, '0');
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObject.getDate().toString().padStart(2, "0");
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
 
-  if (status === 'error') return <div>error...</div>;
-
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-  };
-
+  if (status === "error") return <div>error...</div>;
   return (
     <S.Presentation>
       <S.WrapperModal>
@@ -57,14 +48,14 @@ export const CustomModal = ({
 
           {book?.images[0] && (
             <S.ModalPosterContainer>
-              {' '}
+              {" "}
               <S.ModalPosterImg
                 src={`${book.images[0].fbPath[0]}`}
-                alt='modal-img'
+                alt="modal-img"
               />
               <S.ModalContent>
                 <S.ModalDetails>
-                  등록날짜: {'  '}
+                  등록날짜: {"  "}
                   {book && formatDate(book.createdAt)}
                 </S.ModalDetails>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
@@ -75,11 +66,7 @@ export const CustomModal = ({
                 <S.ModalIntroduce>{book?.content}</S.ModalIntroduce>
                 <S.CommentContainer>
                   <S.ModalSubject>한줄리뷰</S.ModalSubject>
-                  <CommentToggle
-                    toggleModal={toggleModal}
-                    isOpen={isOpen}
-                    bookId={book?.id}
-                  />
+                  <CommentToggle comments={comments} bookId={book?.id} />
 
                   <CommentWrite bookId={book?.id} />
                 </S.CommentContainer>

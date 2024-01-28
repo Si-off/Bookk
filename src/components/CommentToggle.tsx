@@ -1,21 +1,19 @@
 import { useGetComments } from "queries";
 import React from "react";
 import styled from "styled-components";
-import { StyledLoader } from "styles/LoginStyled";
 import * as S from "styles/CommentStyled";
 import { useUserStore } from "store/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { QueryKeys } from "constant";
+import { CommentGetRes } from "types";
 interface CommentToggleProps {
-  toggleModal: () => void;
-  isOpen: boolean;
+  comments: CommentGetRes | undefined;
   bookId: number | undefined;
 }
-const CommentToggle = ({ toggleModal, isOpen, bookId }: CommentToggleProps) => {
+const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
   if (bookId === undefined) return null;
-  const { data: comments, status } = useGetComments(bookId);
   const user = useQueryClient().getQueryData([QueryKeys.LOGIN]);
-
+  console.log(user, "user");
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
@@ -24,8 +22,6 @@ const CommentToggle = ({ toggleModal, isOpen, bookId }: CommentToggleProps) => {
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
-  if (status === "loading") return <StyledLoader />;
-  if (status === "error") return <div>error</div>;
   return (
     <S.CommentContainer>
       {comments?.data?.map((reply: any, index: any) => {
