@@ -66,15 +66,15 @@ const Show = keyframes`
 const S = {
   Container: styled.div`
     position: absolute;
-    top: 100px;
-    right: 50px;
+    top: 8%;
+    right: 2%;
   `,
   Wrapper: styled.div`
     position: relative;
   `,
   Button: styled.button`
     position: relative;
-    width: 100px;
+    width: ${pixelToRem(100)};
     padding: 14px 20px;
     border-radius: 4px;
     background-color: ${getStyledColor('white', 'high')};
@@ -99,7 +99,7 @@ const S = {
     animation: ${Show} 0.3s ease forwards;
   `,
   Item: styled.li`
-    width: 100px;
+    width: ${pixelToRem(100)};
     padding: 14px 20px;
     text-align: center;
     transition: background-color 0.07s ease, color 0.07s ease;

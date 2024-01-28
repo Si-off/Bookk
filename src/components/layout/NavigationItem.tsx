@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { logout } from 'api/auth';
 import { useUserStore } from 'store/useUserStore';
+import { getStyledColor, pixelToRem } from 'utils';
 
 const NavigationItem = () => {
   const { isLogin } = useUserStore();
@@ -11,23 +12,23 @@ const NavigationItem = () => {
       {!isLogin && (
         <>
           <LinkStyle to='/login'>
-            <span>로그인</span>
+            <Text>로그인</Text>
           </LinkStyle>
           <LinkStyle to='/signup'>
-            <span>회원가입</span>
+            <Text>회원가입</Text>
           </LinkStyle>
         </>
       )}
       {isLogin && (
         <>
           <LinkStyle to='/admin'>
-            <span>관리자</span>
+            <Text>관리자</Text>
           </LinkStyle>
 
           <LinkStyle to='/user'>
-            <span>유저</span>
+            <Text>유저</Text>
           </LinkStyle>
-          <button onClick={() => logout()}>로그아웃</button>
+          <Logout onClick={() => logout()}>로그아웃</Logout>
         </>
       )}
     </Wrapper>
@@ -39,18 +40,44 @@ export default NavigationItem;
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 10%;
-  color: white;
-  span {
-    color: white;
-  }
+  justify-content: flex-end;
+  width: 30%;
+  gap: 15px;
 
-  button {
-    background-color: transparent;
-    color: white;
+  @media screen and (max-width: 768px) {
+    width: auto;
+    gap: ${pixelToRem(10)};
   }
 `;
 const LinkStyle = styled(Link)`
   text-decoration: none;
+`;
+
+const Text = styled.div`
+  color: ${getStyledColor('white', 'high')};
+  font-size: ${pixelToRem(16)};
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${getStyledColor('primary', 600)};
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: ${pixelToRem(12)};
+  }
+`;
+
+const Logout = styled.button`
+  color: ${getStyledColor('white', 'high')};
+  background-color: inherit;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${getStyledColor('primary', 600)};
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: ${pixelToRem(12)};
+    align-self: flex-end;
+  }
 `;

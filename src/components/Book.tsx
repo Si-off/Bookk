@@ -3,15 +3,12 @@ import { css, keyframes, styled } from 'styled-components';
 import { BookInfoType } from 'types';
 import { getStyledColor } from 'utils';
 import pixelToRem from 'utils/pixelToRem';
-
-const BASE_URL = process.env.REACT_APP_SERVER_URL;
-
 interface Props extends BookInfoType {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const Book = (
-  { title, content, images, onClick }: Props,
+  { title, images, onClick }: Props,
   forwardedRef: React.ForwardedRef<HTMLDivElement>
 ) => {
   const [isShow, setIsShow] = useState(false);
@@ -36,7 +33,7 @@ export default forwardRef(Book);
 const Effect = keyframes`
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   } 
   100% {
     opacity: 1;
@@ -51,8 +48,8 @@ const Title = styled.p`
 `;
 
 const Image = styled.img`
-  width: 200px;
-  height: 300px;
+  width: ${pixelToRem(200)};
+  height: ${pixelToRem(300)};
   border-radius: 4px;
   object-fit: cover;
   box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.2), 0px 3px 14px 0px rgba(0, 0, 0, 0.12),
@@ -64,7 +61,7 @@ const Container = styled.div<{ $isShow: boolean }>`
   justify-content: center;
   display: inline-flex;
   flex-direction: column;
-  color: white;
+  color: ${getStyledColor('white', 'high')};
   opacity: 0;
   ${({ $isShow }) =>
     $isShow &&
