@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent as ReactChangeEvent,
-} from 'react';
+import React, { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import * as $ from 'styles/AdminStyled';
@@ -12,7 +8,8 @@ import ImageUploader from 'components/ImageUploader';
 import Button from 'components/Button';
 import { ImagePatchReq } from 'types';
 import { postImage, deleteImage, addImage } from 'api';
-import { StyledLoader } from 'styles/LoginStyled';
+
+import Loader from 'components/Loader';
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const AdminEditItem = () => {
@@ -45,7 +42,7 @@ const AdminEditItem = () => {
   }, [book]);
   // id를 숫자로 변환
   if (isLoading || patchLoading) {
-    return <StyledLoader />;
+    return <Loader />;
   }
   if (!book) {
     return <div>책 정보를 찾을 수 없습니다.</div>;
@@ -79,11 +76,7 @@ const AdminEditItem = () => {
       let updatedImages = [...images];
       if (newImagePath) {
         const addImageResponse = await addImage(numericId, [newImagePath]);
-        if (
-          addImageResponse &&
-          addImageResponse.images &&
-          addImageResponse.images.length > 0
-        ) {
+        if (addImageResponse && addImageResponse.images && addImageResponse.images.length > 0) {
           const newId = addImageResponse.images[0].id;
           updatedImages = [{ id: newId, newOrder: 0 }];
         }
@@ -113,12 +106,7 @@ const AdminEditItem = () => {
         <S.Wrapper>
           <S.InputField>
             <S.Label>도서명</S.Label>
-            <S.Input
-              name='title'
-              placeholder='Title'
-              value={title}
-              onChange={handleChangeTitle}
-            />
+            <S.Input name='title' placeholder='Title' value={title} onChange={handleChangeTitle} />
           </S.InputField>
           <S.InputField $marginTop={20}>
             <S.Label>설명</S.Label>

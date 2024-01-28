@@ -9,43 +9,21 @@ import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
 import { QueryKeys } from 'constant';
 import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
-import { StyledLoader } from 'styles/LoginStyled';
+
 import DropDown from 'components/Dropdown';
+import Loader from 'components/Loader';
 
 const TAKE = 10;
 
 const UserPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [nextPage, setNextPage] = useState(2);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [order, setOrder] = useState<'DESC' | 'ASC'>('DESC');
-  const { data: books, status } = useGetBooks({
-    take: TAKE,
-    page: currentPage,
-    order__createdAt: order,
-  });
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinityScroll(order);
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfinityScroll(order);
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
-
-  const queryClient = useQueryClient();
-  const key = [QueryKeys.USER, 'books', nextPage.toString()];
-
-  useEffect(() => {
-    if (nextPage) {
-      queryClient.prefetchQuery({
-        queryKey: key,
-        queryFn: () =>
-          getNextBooks({
-            take: TAKE,
-            page: nextPage,
-            order__createdAt: order,
-          }),
-      });
-    }
-  }, [nextPage]);
 
   const unshowScroll = () => {
     document.body.style.overflow = 'hidden';
@@ -62,7 +40,7 @@ const UserPage = () => {
   if (status === 'loading')
     return (
       <LoaderContainer>
-        <StyledLoader />
+        <Loader />
       </LoaderContainer>
     );
 

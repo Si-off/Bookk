@@ -5,6 +5,7 @@ import * as S from '../styles/LoginStyled';
 import { useLogin } from 'queries';
 import { getStyledColor } from 'utils';
 import { styled } from 'styled-components';
+import Loader from 'components/Loader';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -32,8 +33,8 @@ const LoginPage = () => {
         setPassword(e.target.value);
         break;
     }
-
-    email && password ? setDisabled(false) : setDisabled(true);
+    console.log(email.length !== 0 && password.length !== 0);
+    email.length !== 0 && password.length !== 0 ? setDisabled(false) : setDisabled(true);
   };
 
   const handleLogin = () => {
@@ -47,7 +48,7 @@ const LoginPage = () => {
   if (isLoading) {
     return (
       <S.Body>
-        <S.StyledLoader />
+        <Loader />
       </S.Body>
     );
   }
