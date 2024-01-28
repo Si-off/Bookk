@@ -7,10 +7,10 @@ type Options = {
 };
 
 const useIntersectionObserver = (callback: () => void, options?: Options) => {
-  const target = useRef<HTMLDivElement | null>(null);
+  const targetRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (target && target.current) {
+    if (targetRef && targetRef.current) {
       const intersectionObserver = new IntersectionObserver(
         (entries, observer) => {
           entries.forEach((entry) => {
@@ -20,16 +20,17 @@ const useIntersectionObserver = (callback: () => void, options?: Options) => {
             }
           });
         },
-        { ...options },
+        { ...options }
       );
-      intersectionObserver.observe(target.current);
+      intersectionObserver.observe(targetRef.current);
       return () => {
+        console.log('dis');
         intersectionObserver.disconnect();
       };
     }
-  }, [target, callback, options]);
+  }, [targetRef, callback, options]);
 
-  return target;
+  return targetRef;
 };
 
 export default useIntersectionObserver;
