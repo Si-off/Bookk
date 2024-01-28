@@ -1,105 +1,121 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { getStyledColor, pixelToRem } from "utils";
+import useOnclickOutside from 'pages/hooks/useOnclickOutside';
+import React, { useCallback, useRef, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { getStyledColor, pixelToRem } from 'utils';
 
 const DropdownObject: { [key: string]: string } = {
-  DESC: "최신순",
-  ASC: "오래된순",
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 interface DropdownProps {
   order: string;
-  setOrder: React.Dispatch<React.SetStateAction<"DESC" | "ASC">>;
+  setOrder: React.Dispatch<React.SetStateAction<'DESC' | 'ASC'>>;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ order, setOrder }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<string | null>("최신순");
+  const [selectedItem, setSelectedItem] = useState<string | null>('최신순');
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleOutsideClick = useCallback(() => {
+    setIsOpen(false);
+  }, [setIsOpen]);
+
+  useOnclickOutside(ref, handleOutsideClick);
+
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleItemClick = (item: string) => {
     setSelectedItem(item);
-    setOrder(item === "최신순" ? "DESC" : "ASC");
+    setOrder(item === '최신순' ? 'DESC' : 'ASC');
     setIsOpen(false);
   };
 
   return (
-    <S.Wrapper>
-      <S.container>
-        <button onClick={toggleDropdown}>
-          {selectedItem ? selectedItem : "최신순"}
-        </button>
-
+    <S.Container ref={ref}>
+      <S.Wrapper>
+        <S.Button onClick={toggleDropdown}>{selectedItem ? selectedItem : '최신순'}</S.Button>
         {isOpen && (
-          <ul>
+          <S.List>
             {Object.keys(DropdownObject).map((key) => (
-              <S.item
-                key={key}
-                onClick={() => handleItemClick(DropdownObject[key])}
-              >
+              <S.Item key={key} onClick={() => handleItemClick(DropdownObject[key])}>
                 {DropdownObject[key]}
-              </S.item>
+              </S.Item>
             ))}
-          </ul>
+          </S.List>
         )}
-      </S.container>
-    </S.Wrapper>
+      </S.Wrapper>
+    </S.Container>
   );
 };
 
 export default Dropdown;
 
+const Show = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const S = {
-  Wrapper: styled.div`
+  Container: styled.div`
     position: absolute;
     top: 100px;
     right: 50px;
-    height: 50px;
-    width: 100px;
-    border-radius: 10px;
   `,
-  container: styled.div`
+  Wrapper: styled.div`
     position: relative;
-    display: flex;
+  `,
+  Button: styled.button`
+    position: relative;
     width: 100px;
-    height: 50px;
-    display: flex;
-    border-radius: 10px;
-    justify-content: center;
-    & > button {
-      background-color: #018786;
-      color: white;
-      padding: 16px;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-    & > ul {
-      position: absolute;
-      top: 60px;
-      width: 100px;
-      background-color: ${getStyledColor("gray", 500)};
-      list-style-type: none;
-      padding: 0;
-      margin: 0 auto;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      border-radius: 10px;
+    padding: 14px 20px;
+    border-radius: 4px;
+    background-color: ${getStyledColor('white', 'high')};
+    font-weight: 700;
+
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:focus {
+      color: ${getStyledColor('white', 'high')};
+      background-color: ${getStyledColor('primary', 600)};
     }
   `,
-  item: styled.li`
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    width: 100%;
-    margin: 0 auto;
+  List: styled.ul`
+    position: absolute;
+    top: 50px;
+    left: calc(50% - 50px);
+    background-color: ${getStyledColor('white', 'medium')};
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 4px;
+    animation: ${Show} 0.3s ease forwards;
+  `,
+  Item: styled.li`
+    width: 100px;
+    padding: 14px 20px;
+    text-align: center;
+    transition: background-color 0.07s ease, color 0.07s ease;
     &:hover {
-      background-color: #018786;
+      color: ${getStyledColor('white', 'high')};
+      background-color: ${getStyledColor('primary', 800)};
+    }
+
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
     }
   `,
 };
