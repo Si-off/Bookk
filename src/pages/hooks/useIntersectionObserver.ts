@@ -24,7 +24,6 @@ const useIntersectionObserver = (callback: () => void, options?: Options) => {
       );
       intersectionObserver.observe(targetRef.current);
       return () => {
-        console.log('dis');
         intersectionObserver.disconnect();
       };
     }

@@ -176,7 +176,7 @@ export const useInfinityScroll = () => {
       }
       if (pages.length < lastPage.total / 10) {
         return pages.length + 1;
-      } else return;
+      } else return undefined;
     },
   });
 };
