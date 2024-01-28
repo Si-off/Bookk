@@ -1,8 +1,8 @@
-import { forwardRef, useEffect, useState } from 'react';
-import { keyframes, styled } from 'styled-components';
-import { BookInfoType } from 'types';
-import { getStyledColor } from 'utils';
-import pixelToRem from 'utils/pixelToRem';
+import { forwardRef, useEffect, useState } from "react";
+import { keyframes, styled } from "styled-components";
+import { BookInfoType } from "types";
+import { getStyledColor } from "utils";
+import pixelToRem from "utils/pixelToRem";
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -12,10 +12,10 @@ interface Props extends BookInfoType {
 
 const Book = (
   { title, content, images, onClick }: Props,
-  forwardedRef: React.ForwardedRef<HTMLDivElement>,
+  forwardedRef: React.ForwardedRef<HTMLDivElement>
 ) => {
   const [isShow, setIsShow] = useState(false);
-  const imageUrl = images[0]?.path;
+  const imageUrl = images[0]?.fbPath[0];
 
   useEffect(() => {
     setIsShow(true);
@@ -24,7 +24,7 @@ const Book = (
   return (
     <Containe ref={forwardedRef} onClick={onClick}>
       <Inner>
-        {images && <Image src={`${BASE_URL}${imageUrl}`} />}
+        {images && <Image src={imageUrl} />}
         <Title>{title}</Title>
       </Inner>
     </Containe>
@@ -58,7 +58,7 @@ const Inner = styled.div`
   cursor: pointer;
 
   &:after {
-    content: '';
+    content: "";
     display: block;
     padding-bottom: 15px;
     border-bottom: 1px solid;

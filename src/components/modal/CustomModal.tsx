@@ -1,12 +1,12 @@
-import { useRef, useState } from 'react';
-import * as S from 'styles/ModalStyled';
-import styled from 'styled-components';
-import { useGetBook } from 'queries';
-import useOnclickOutside from 'pages/hooks/useOnclickOutside';
-import { StyledLoader } from 'styles/LoginStyled';
-import CommentWrite from 'components/CommentWrite';
-import CommentToggle from 'components/CommentToggle';
-import { IoIosClose } from 'react-icons/io';
+import { useRef, useState } from "react";
+import * as S from "styles/ModalStyled";
+import styled from "styled-components";
+import { useGetBook } from "queries";
+import useOnclickOutside from "pages/hooks/useOnclickOutside";
+import { StyledLoader } from "styles/LoginStyled";
+import CommentWrite from "components/CommentWrite";
+import CommentToggle from "components/CommentToggle";
+import { IoIosClose } from "react-icons/io";
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -30,19 +30,19 @@ export const CustomModal = ({
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObject.getDate().toString().padStart(2, '0');
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObject.getDate().toString().padStart(2, "0");
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
 
-  if (status === 'loading')
+  if (status === "loading")
     return (
       <LoaderContainer>
         <StyledLoader />
       </LoaderContainer>
     );
-  if (status === 'error') return <div>error...</div>;
+  if (status === "error") return <div>error...</div>;
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -63,14 +63,14 @@ export const CustomModal = ({
 
           {book?.images[0] && (
             <S.ModalPosterContainer>
-              {' '}
+              {" "}
               <S.ModalPosterImg
-                src={`${BASE_URL}${book.images[0].path}`}
-                alt='modal-img'
+                src={`${book.images[0].fbPath[0]}`}
+                alt="modal-img"
               />
               <S.ModalContent>
                 <S.ModalDetails>
-                  등록날짜: {'  '}
+                  등록날짜: {"  "}
                   {book && formatDate(book.createdAt)}
                 </S.ModalDetails>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
