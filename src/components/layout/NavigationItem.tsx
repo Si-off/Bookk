@@ -11,11 +11,9 @@ const NavigationItem = () => {
       {!isLogin && (
         <>
           <LinkStyle to='/login'>
-            {' '}
             <span>로그인</span>
           </LinkStyle>
           <LinkStyle to='/signup'>
-            {' '}
             <span>회원가입</span>
           </LinkStyle>
         </>
@@ -41,9 +39,9 @@ export default NavigationItem;
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  width: 10%;
   color: white;
-
   span {
     color: white;
   }

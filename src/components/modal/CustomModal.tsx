@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import * as S from "styles/ModalStyled";
 import { useGetBook, useGetComments } from "queries";
 import useOnclickOutside from "pages/hooks/useOnclickOutside";
+
 import CommentWrite from "components/CommentWrite";
 import CommentToggle from "components/CommentToggle";
 import { IoIosClose } from "react-icons/io";
@@ -30,11 +31,18 @@ export const CustomModal = ({
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // 모달 바깥을 클릭하면 모달을 닫음
+    if (e.target === e.currentTarget) {
+      setModalOpen(false);
+      showScroll(); // 필요에 따라 모달이 닫힐 때 실행할 추가 작업을 수행할 수 있습니다.
+    }
+  };
 
   if (status === "error") return <div>error...</div>;
   return (
     <S.Presentation>
-      <S.WrapperModal>
+      <S.WrapperModal onClick={handleOutsideClick}>
         <S.Modal>
           <S.ModalClose
             onClick={() => {

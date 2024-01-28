@@ -11,11 +11,7 @@ interface InputFieldProps {
 }
 
 const Body = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
-  color: ${getStyledColor('white', 'high')};
 `;
 
 const Wrapper = styled.div<WrapperProps>`
@@ -28,6 +24,10 @@ const Wrapper = styled.div<WrapperProps>`
 `;
 
 const Layout = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   max-width: ${pixelToRem(430)};
   display: flex;
@@ -35,8 +35,8 @@ const Layout = styled.div`
   justify-content: center;
   flex-direction: column;
   background-color: ${getStyledColor('black', 100)};
-  padding: 20px 24px;
-  border-radius: 4px;
+  padding: 40px 48px;
+  border-radius: 2px;
   box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2), 0px 9px 46px 0px rgba(0, 0, 0, 0.12),
     0px 24px 38px 0px rgba(0, 0, 0, 0.14);
 `;
@@ -57,10 +57,11 @@ const InputField = styled.div<InputFieldProps>`
 
 const Input = styled.input`
   width: 100%;
+  max-width: ${pixelToRem(380)};
   padding: 15px 20px;
   background-color: ${getStyledColor('gray', 500)};
   color: ${getStyledColor('gray', 1200)};
-  border: 2px solid ${getStyledColor('black', 100)};
+  border: 2px solid rgba(0, 0, 0, 0);
   border-radius: 2px;
   transition: border 0.2s ease;
 
@@ -75,6 +76,7 @@ const Input = styled.input`
 
 const LoginButton = styled.button`
   width: 100%;
+  max-width: ${pixelToRem(380)};
   background-color: ${getStyledColor('primary', 500)};
   color: ${getStyledColor('gray', 100)};
   border-radius: 8px;
@@ -136,14 +138,15 @@ const Divider = styled.div`
 const RegistText = styled.span`
   font-size: 14px;
   margin-right: 4px;
+  color: ${getStyledColor('white', 'high')};
 `;
 
 const StyledLink = styled(Link)`
   font-size: 14px;
-  color: ${getStyledColor('primary', 500)};
+  color: ${getStyledColor('primary', 300)};
 
   &:hover {
-    color: ${getStyledColor('primary', 400)};
+    color: ${getStyledColor('primary', 200)};
   }
 `;
 
