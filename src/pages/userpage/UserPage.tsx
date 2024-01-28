@@ -1,19 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
-import { getStyledColor } from 'utils';
+import { getStyledColor, pixelToRem } from 'utils';
 import Book from '../../components/Book';
-import { useGetBooks, useInfinityScroll } from 'queries';
+import { useInfinityScroll } from 'queries';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
-import { useQueryClient } from '@tanstack/react-query';
-import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
-import { QueryKeys } from 'constant';
 import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
-
-import DropDown from 'components/Dropdown';
+import Dropdown from 'components/Dropdown';
 import Loader from 'components/Loader';
-
-const TAKE = 10;
 
 const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -45,14 +39,14 @@ const UserPage = () => {
     );
 
   return (
-    <>
+    <Main>
       {modalOpen && (
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
           showScroll={showScroll}></CustomModal>
       )}
-      <DropDown order={order} setOrder={setOrder} />
+      <Dropdown order={order} setOrder={setOrder} />
       <Stars />
       <Stars2 />
       <Stars3 />
@@ -74,19 +68,26 @@ const UserPage = () => {
             })
           )}
       </Layout>
-    </>
+    </Main>
   );
 };
 
 export default UserPage;
 
+const Main = styled.main`
+  display: flex;
+  justify-content: center;
+  padding-top: 10%;
+`;
+
 const Layout = styled.div`
+  width: 1200px;
   background-color: ${getStyledColor('background', 'dark')};
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(500px, auto);
   grid-gap: 5px;
-  padding: 100px 300px;
+  grid-auto-flow: dense;
+  grid-auto-rows: minmax(500px, auto);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 `;
 
 const LoaderContainer = styled.div`
