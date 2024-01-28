@@ -229,7 +229,7 @@ export const styledOptions = {
     disabled: '#FFFFFF61',
   },
   background: {
-    dark: '#292929',
+    dark: '#121212',
   },
 } as const;
 

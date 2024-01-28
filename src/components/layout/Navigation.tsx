@@ -52,7 +52,7 @@ const NavigationWrapper = styled.div<{ $isVisible: boolean; $height: number }>`
   transition: top 0.2s ease-in-out, opacity 0.2s ease-in-out;
   top: ${({ $isVisible, $height }) => ($isVisible ? '0' : `-${$height}px`)};
   opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
-  background-color: ${getStyledColor('black', 1000)};
+  background-color: ${getStyledColor('primary', 900)};
   z-index: 2;
 `;
 
@@ -72,19 +72,4 @@ const Logo = styled.div`
 
 const Title = styled.h1`
   font-size: 32px;
-
-  &:after {
-    content: '';
-    display: block;
-    border-bottom: 1px solid;
-    transform: scaleX(0);
-    transform-origin: 0% 50%;
-    transition: transform 250ms ease-in-out;
-    color: ${getStyledColor('primary', 200)};
-  }
-
-  &:hover:after {
-    transform: scaleX(1);
-    transform-origin: 0% 50%;
-  }
 `;

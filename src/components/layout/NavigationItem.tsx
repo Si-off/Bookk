@@ -42,7 +42,8 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
   width: 30%;
-  gap: 15px;
+  height: 100%;
+  gap: 25px;
 
   @media screen and (max-width: 768px) {
     width: auto;
@@ -54,12 +55,14 @@ const LinkStyle = styled(Link)`
 `;
 
 const Text = styled.div`
+  height: 100%;
   color: ${getStyledColor('white', 'high')};
   font-size: ${pixelToRem(16)};
   transition: color 0.2s ease;
+  font-weight: 500;
 
   &:hover {
-    color: ${getStyledColor('primary', 600)};
+    color: ${getStyledColor('primary', 200)};
   }
 
   @media screen and (max-width: 768px) {
@@ -68,12 +71,14 @@ const Text = styled.div`
 `;
 
 const Logout = styled.button`
+  height: 100%;
   color: ${getStyledColor('white', 'high')};
   background-color: inherit;
   transition: color 0.2s ease;
+  font-weight: 500;
 
   &:hover {
-    color: ${getStyledColor('primary', 600)};
+    color: ${getStyledColor('primary', 200)};
   }
 
   @media screen and (max-width: 768px) {
