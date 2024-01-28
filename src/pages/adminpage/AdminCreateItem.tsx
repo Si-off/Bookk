@@ -1,12 +1,12 @@
-import React, { ChangeEvent as ReactChangeEvent } from "react";
-import styled from "styled-components";
-import * as S from "styles/LoginStyled";
-import * as $ from "styles/AdminStyled";
-import { usePostBook } from "queries";
-import useBookInfo from "pages/hooks/useBookInfo";
-import { TextChange } from "typescript";
-import ImageUploader from "components/ImageUploader";
-import Button from "components/Button";
+import React, { ChangeEvent as ReactChangeEvent } from 'react';
+import styled from 'styled-components';
+import * as S from 'styles/LoginStyled';
+import * as $ from 'styles/AdminStyled';
+import { usePostBook } from 'queries';
+import useBookInfo from 'pages/hooks/useBookInfo';
+import { TextChange } from 'typescript';
+import ImageUploader from 'components/ImageUploader';
+import Button from 'components/Button';
 
 const AdminCreateItem = () => {
   const { mutate, status } = usePostBook();
@@ -16,10 +16,10 @@ const AdminCreateItem = () => {
     const { name, value } = e.target;
 
     switch (name) {
-      case "title":
+      case 'title':
         setBookInfo((prev) => ({ ...prev, title: value }));
         break;
-      case "content":
+      case 'content':
         setBookInfo((prev) => ({ ...prev, content: value }));
         break;
 
@@ -31,7 +31,7 @@ const AdminCreateItem = () => {
   // TODO: 유효성 검사
   const onClick = async () => {
     if (!bookInfo.title || !bookInfo.content)
-      return alert("모든 내용을 채워주세요!");
+      return alert('모든 내용을 채워주세요!');
     resetBookInfo();
     mutate({ ...bookInfo });
   };
@@ -46,8 +46,8 @@ const AdminCreateItem = () => {
           <$.InputField>
             <$.Label>도서명</$.Label>
             <$.Input
-              name="title"
-              placeholder="Title"
+              name='title'
+              placeholder='Title'
               value={bookInfo.title}
               onChange={handleChange}
             />
@@ -55,8 +55,8 @@ const AdminCreateItem = () => {
           <$.InputField $marginTop={20}>
             <$.Label>설명</$.Label>
             <$.Input
-              name="content"
-              placeholder="content"
+              name='content'
+              placeholder='content'
               value={bookInfo.content}
               onChange={handleChange}
             />
@@ -64,7 +64,7 @@ const AdminCreateItem = () => {
           <$.InputField $marginTop={20}>
             <$.Label>이미지</$.Label>
             <ImageUploader
-              src=""
+              src=''
               onChange={(fileData) =>
                 setBookInfo((prev) => ({
                   ...prev,
@@ -93,4 +93,6 @@ const Layout = styled.div`
   min-width: 1200px;
   padding: 45px;
   overflow-x: scroll;
+  background-color: white;
+  height: 100vh;
 `;

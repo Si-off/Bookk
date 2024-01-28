@@ -15,6 +15,7 @@ const Body = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+  color: white;
 `;
 
 const Wrapper = styled.div<WrapperProps>`
