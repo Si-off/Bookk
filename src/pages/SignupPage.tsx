@@ -85,7 +85,7 @@ const SignupPage = () => {
   return (
     <S.Body>
       <S.Layout>
-        <h2>회원가입</h2>
+        <Title>회원가입</Title>
         <S.Wrapper $gap={25}>
           <EmailField>
             <S.InputField>
@@ -166,11 +166,17 @@ const SignupPage = () => {
 
 export default SignupPage;
 
+const Title = styled.h2`
+  font-size: 24px;
+  color: ${getStyledColor('white', 'high')};
+  margin-bottom: 12px;
+`;
+
 const AuthButton = styled.button`
-  color: ${getStyledColor('blue', 800)};
-  border: 2px solid ${getStyledColor('blue', 800)};
+  color: ${getStyledColor('primary', 200)};
+  border: 2px solid ${getStyledColor('primary', 500)};
   border-radius: 6px;
-  background-color: #fff;
+  background-color: inherit;
   font-weight: 500;
   margin-left: 30px;
   white-space: nowrap;
@@ -181,14 +187,14 @@ const AuthButton = styled.button`
   transition: color 0.2s ease, background-color 0.2s ease;
 
   &:hover {
-    background-color: ${getStyledColor('blue', 800)};
+    background-color: ${getStyledColor('primary', 400)};
     color: #fff;
   }
 
   &:active {
-    background-color: ${getStyledColor('blue', 900)};
+    background-color: ${getStyledColor('primary', 700)};
     color: #fff;
-    border-color: ${getStyledColor('blue', 900)};
+    border-color: ${getStyledColor('primary', 700)};
   }
 `;
 const EmailField = styled.div`

@@ -4,14 +4,16 @@ import { useUserStore } from 'store/useUserStore';
 import * as S from '../styles/LoginStyled';
 import { useLogin } from 'queries';
 import { getStyledColor } from 'utils';
+import { styled } from 'styled-components';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+  const [disabled, setDisabled] = useState(true);
   const { isLogin } = useUserStore();
 
   const navigate = useNavigate();
-
   useEffect(() => {
     if (isLogin) {
       navigate('/user');
@@ -19,6 +21,20 @@ const LoginPage = () => {
   }, [isLogin, navigate]);
 
   const { mutate, isLoading } = useLogin();
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    switch (name) {
+      case 'email':
+        setEmail(e.target.value);
+        break;
+      case 'password':
+        setPassword(e.target.value);
+        break;
+    }
+
+    email && password ? setDisabled(false) : setDisabled(true);
+  };
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -39,7 +55,7 @@ const LoginPage = () => {
   return (
     <S.Body>
       <S.Layout>
-        <h2>로그인</h2>
+        <Title>로그인</Title>
         <S.Wrapper $gap={25}>
           <S.InputField>
             <S.Label htmlFor='email'>Email</S.Label>
@@ -47,8 +63,9 @@ const LoginPage = () => {
               id='email'
               type='email'
               placeholder='Email'
+              name='email'
               value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+              onChange={handleChange}
             />
           </S.InputField>
           <S.InputField>
@@ -57,13 +74,16 @@ const LoginPage = () => {
               id='password'
               type='password'
               placeholder='Password'
+              name='password'
               value={password}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+              onChange={handleChange}
             />
           </S.InputField>
         </S.Wrapper>
         <S.Wrapper $gap={30} $marginTop={40}>
-          <S.LoginButton onClick={handleLogin}>로그인</S.LoginButton>
+          <S.LoginButton onClick={handleLogin} disabled={disabled}>
+            로그인
+          </S.LoginButton>
           <S.Divider>
             <div>OR</div>
           </S.Divider>
@@ -79,3 +99,9 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+const Title = styled.h2`
+  font-size: 24px;
+  color: ${getStyledColor('white', 'high')};
+  margin-bottom: 12px;
+`;

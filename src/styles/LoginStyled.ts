@@ -15,7 +15,7 @@ const Body = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: white;
+  color: ${getStyledColor('white', 'high')};
 `;
 
 const Wrapper = styled.div<WrapperProps>`
@@ -43,6 +43,7 @@ const Layout = styled.div`
 
 const Label = styled.label`
   font-weight: 300;
+  color: ${getStyledColor('white', 'medium')};
 `;
 
 const InputField = styled.div<InputFieldProps>`
@@ -57,19 +58,24 @@ const InputField = styled.div<InputFieldProps>`
 const Input = styled.input`
   width: 100%;
   padding: 15px 20px;
-  background-color: ${getStyledColor('gray', 300)};
-  color: ${getStyledColor('gray', 800)};
-  border: none;
-  border-radius: 8px;
+  background-color: ${getStyledColor('gray', 500)};
+  color: ${getStyledColor('gray', 1200)};
+  border: 2px solid ${getStyledColor('black', 100)};
+  border-radius: 2px;
+  transition: border 0.2s ease;
 
   &:focus {
-    outline: 1px solid ${getStyledColor('blue', 500)};
+    border: 2px solid ${getStyledColor('primary', 200)};
+  }
+
+  &::placeholder {
+    color: ${getStyledColor('gray', 900)};
   }
 `;
 
 const LoginButton = styled.button`
   width: 100%;
-  background-color: ${getStyledColor('blue', 800)};
+  background-color: ${getStyledColor('primary', 500)};
   color: ${getStyledColor('gray', 100)};
   border-radius: 8px;
   font-weight: 500;
@@ -79,15 +85,16 @@ const LoginButton = styled.button`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: ${getStyledColor('blue', 900)};
+    background-color: ${getStyledColor('primary', 700)};
   }
 
   &:active {
-    background-color: ${getStyledColor('blue', 1000)};
+    background-color: ${getStyledColor('primary', 900)};
   }
 
   &:disabled {
-    background-color: ${getStyledColor('gray', 500)};
+    background-color: ${getStyledColor('white', 'disabled')};
+    color: ${getStyledColor('white', 'medium')};
   }
 `;
 
@@ -133,7 +140,11 @@ const RegistText = styled.span`
 
 const StyledLink = styled(Link)`
   font-size: 14px;
-  color: ${getStyledColor('blue', 800)};
+  color: ${getStyledColor('primary', 500)};
+
+  &:hover {
+    color: ${getStyledColor('primary', 400)};
+  }
 `;
 
 export {

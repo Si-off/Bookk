@@ -23,9 +23,11 @@ const Navigation = () => {
 export default Navigation;
 
 const NavigationWrapper = styled.div`
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100vw;
   height: 56px;
   padding: 0 16px;
 
