@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const [disabled, setDisabled] = useState(true);
+  const [isEmpty, setIsEmpty] = useState(true);
   const { isLogin } = useUserStore();
 
   const navigate = useNavigate();
@@ -23,18 +23,22 @@ const LoginPage = () => {
 
   const { mutate, isLoading } = useLogin();
 
+  useEffect(() => {
+    setIsEmpty(email.length === 0 || password.length === 0);
+  }, [email, password]);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
+    const { name, value } = e.target;
     switch (name) {
       case 'email':
-        setEmail(e.target.value);
+        setEmail(value);
         break;
       case 'password':
-        setPassword(e.target.value);
+        setPassword(value);
+        break;
+      default:
         break;
     }
-    console.log(email.length !== 0 && password.length !== 0);
-    email.length !== 0 && password.length !== 0 ? setDisabled(false) : setDisabled(true);
   };
 
   const handleLogin = () => {
@@ -82,7 +86,7 @@ const LoginPage = () => {
           </S.InputField>
         </S.Wrapper>
         <S.Wrapper $gap={30} $marginTop={40}>
-          <S.LoginButton onClick={handleLogin} disabled={disabled}>
+          <S.LoginButton onClick={handleLogin} disabled={isEmpty}>
             로그인
           </S.LoginButton>
           <S.Divider>
