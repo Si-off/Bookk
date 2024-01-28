@@ -1,8 +1,8 @@
-import { forwardRef, useEffect, useState } from "react";
-import { keyframes, styled } from "styled-components";
-import { BookInfoType } from "types";
-import { getStyledColor } from "utils";
-import pixelToRem from "utils/pixelToRem";
+import { forwardRef, useEffect, useState } from 'react';
+import { css, keyframes, styled } from 'styled-components';
+import { BookInfoType } from 'types';
+import { getStyledColor } from 'utils';
+import pixelToRem from 'utils/pixelToRem';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -22,17 +22,27 @@ const Book = (
   }, []);
 
   return (
-    <Containe ref={forwardedRef} onClick={onClick}>
-      <Inner>
+    <Container ref={forwardedRef} $isShow={isShow}>
+      <Inner onClick={onClick}>
         {images && <Image src={imageUrl} />}
         <Title>{title}</Title>
       </Inner>
-    </Containe>
+    </Container>
   );
 };
 
 export default forwardRef(Book);
 
+const Effect = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  } 
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 const Title = styled.p`
   font-size: ${pixelToRem(16)};
   font-weight: 500;
@@ -42,30 +52,38 @@ const Title = styled.p`
 
 const Image = styled.img`
   width: 200px;
+  height: 300px;
   border-radius: 4px;
   object-fit: cover;
+  box-shadow: 0px 10px 12px 12px rgba(20, 20, 20, 0.5);
 `;
 
-const Containe = styled.div`
+const Container = styled.div<{ $isShow: boolean }>`
   align-items: center;
   justify-content: center;
   display: inline-flex;
   flex-direction: column;
   color: white;
+  opacity: 0;
+  ${({ $isShow }) =>
+    $isShow &&
+    css`
+      animation: ${Effect} 0.25s ease-in-out forwards;
+    `};
 `;
 
 const Inner = styled.div`
   cursor: pointer;
 
   &:after {
-    content: "";
+    content: '';
     display: block;
     padding-bottom: 15px;
     border-bottom: 1px solid;
     transform: scaleX(0);
     transform-origin: 0% 50%;
     transition: transform 250ms ease-in-out;
-    color: #fd697b;
+    color: ${getStyledColor('primary', 200)};
   }
 
   &:hover:after {

@@ -13,7 +13,7 @@ const Navigation = () => {
   return (
     <NavigationWrapper>
       <Logo>
-        <h3 onClick={logoClick}>BOOKK</h3>
+        <Title onClick={logoClick}>BOOKK</Title>
       </Logo>
       <NavigationItem />
     </NavigationWrapper>
@@ -28,7 +28,13 @@ const NavigationWrapper = styled.div`
   align-items: center;
   height: 56px;
   padding: 0 16px;
-  background-color: ${getStyledColor('cool_gray', 1200)};
+  background-color: #121212;
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #000;
+  }
 `;
 const Logo = styled.div`
   font-size: 24px;
@@ -41,5 +47,24 @@ const Logo = styled.div`
     object-fit: contain;
     margin-top: 5px;
     cursor: pointer;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 32px;
+
+  &:after {
+    content: '';
+    display: block;
+    border-bottom: 1px solid;
+    transform: scaleX(0);
+    transform-origin: 0% 50%;
+    transition: transform 250ms ease-in-out;
+    color: ${getStyledColor('primary', 200)};
+  }
+
+  &:hover:after {
+    transform: scaleX(1);
+    transform-origin: 0% 50%;
   }
 `;
