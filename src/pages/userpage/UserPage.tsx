@@ -23,9 +23,8 @@ const UserPage = () => {
     page: currentPage,
     order__createdAt: "DESC",
   });
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfinityScroll();
-  const target = useIntersectionObserver(() => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinityScroll();
+  const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
 
@@ -63,8 +62,7 @@ const UserPage = () => {
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
-          showScroll={showScroll}
-        ></CustomModal>
+          showScroll={showScroll}></CustomModal>
       )}
       <Stars />
       <Stars2 />
@@ -77,19 +75,13 @@ const UserPage = () => {
                 return (
                   <Book
                     key={book.id}
-                    ref={target}
+                    ref={targetRef}
                     {...book}
                     onClick={() => handleClick(book.id)}
                   />
                 );
               }
-              return (
-                <Book
-                  key={book.id}
-                  {...book}
-                  onClick={() => handleClick(book.id)}
-                />
-              );
+              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
             })
           )}
       </Layout>
