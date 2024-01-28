@@ -56,6 +56,7 @@ const S = {
     right: 50px;
     height: 50px;
     width: 100px;
+    border-radius: 10px;
   `,
   container: styled.div`
     position: relative;
@@ -63,14 +64,16 @@ const S = {
     width: 100px;
     height: 50px;
     display: flex;
+    border-radius: 10px;
     justify-content: center;
     & > button {
-      background-color: ${getStyledColor("orange", 500)};
+      background-color: #018786;
       color: black;
       padding: 16px;
       font-size: 16px;
       border: none;
       cursor: pointer;
+      border-radius: 10px;
     }
     & > ul {
       position: absolute;
@@ -84,6 +87,7 @@ const S = {
       display: flex;
       justify-content: center;
       flex-direction: column;
+      border-radius: 10px;
     }
   `,
   item: styled.li`
@@ -91,11 +95,11 @@ const S = {
     font-size: 16px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 100%;
     margin: 0 auto;
     &:hover {
-      background-color: ${getStyledColor("orange", 500)};
+      background-color: #018786;
     }
   `,
 };
