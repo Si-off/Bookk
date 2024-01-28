@@ -51,13 +51,16 @@ const SignupPage = () => {
   };
 
   const handleSendToEmail = async () => {
-    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/send-code`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
+    const res = await fetch(
+      `${process.env.REACT_APP_SERVER_URL}/mail/send-code`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
     const data = await res.json();
     alert(`${data.message} \n ${data.expirationTime}`);
 
@@ -67,13 +70,16 @@ const SignupPage = () => {
 
   const handleVerifyCode = async () => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/verify-code`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, code }),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/mail/verify-code`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, code }),
+        }
+      );
       const data = await res.json();
       setIsVerify(false);
       alert('인증이 완료되었습니다.');
@@ -179,6 +185,7 @@ const AuthButton = styled.button`
   background-color: inherit;
   font-weight: 500;
   margin-left: 30px;
+  margin-bottom: 6px;
   white-space: nowrap;
   height: 42px;
   align-self: flex-end;
