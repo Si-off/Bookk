@@ -1,17 +1,35 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NavigationItem from './NavigationItem';
 import { useNavigate } from 'react-router-dom';
 import { getStyledColor } from 'utils';
 
+const HEIGHT = 56;
+
 const Navigation = () => {
   const navigate = useNavigate();
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setIsVisible(prevScrollPos > currentScrollPos || currentScrollPos < HEIGHT * 2);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
 
   const logoClick = () => {
     navigate('/');
   };
 
   return (
-    <NavigationWrapper>
+    <NavigationWrapper $isVisible={isVisible} $height={HEIGHT}>
       <Logo>
         <Title onClick={logoClick}>BOOKK</Title>
       </Logo>
@@ -22,21 +40,22 @@ const Navigation = () => {
 
 export default Navigation;
 
-const NavigationWrapper = styled.div`
+const NavigationWrapper = styled.div<{ $isVisible: boolean; $height: number }>`
   position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100vw;
-  height: 56px;
-  padding: 0 16px;
-
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: ${getStyledColor('black', 1000)};
-  }
+  height: ${({ $height }) => $height && `${$height}px`};
+  padding-left: 30px;
+  padding-right: 10%;
+  transition: top 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  top: ${({ $isVisible, $height }) => ($isVisible ? '0' : `-${$height}px`)};
+  opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
+  background-color: ${getStyledColor('black', 1000)};
+  z-index: 2;
 `;
+
 const Logo = styled.div`
   font-size: 24px;
   font-weight: bold;
