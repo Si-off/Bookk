@@ -10,7 +10,7 @@ import { CustomModal } from "components/modal/CustomModal";
 import { QueryKeys } from "constant";
 import useIntersectionObserver from "pages/hooks/useIntersectionObserver";
 import { StyledLoader } from "styles/LoginStyled";
-import DropDown from "components/Dropdown";
+import DropDown from "components/DropDown";
 
 const TAKE = 10;
 
