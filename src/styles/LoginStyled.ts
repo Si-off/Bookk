@@ -44,13 +44,14 @@ const Layout = styled.div`
   background-color: ${getStyledColor('gray', 1000)};
   padding: 40px 48px;
   border-radius: 4px;
-  box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2), 0px 9px 46px 0px rgba(0, 0, 0, 0.12),
-    0px 24px 38px 0px rgba(0, 0, 0, 0.14);
+  box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2),
+    0px 9px 46px 0px rgba(0, 0, 0, 0.12), 0px 24px 38px 0px rgba(0, 0, 0, 0.14);
 `;
 
 const Label = styled.label`
   font-weight: 300;
   color: ${getStyledColor('white', 'medium')};
+  margin-bottom: 20px;
 `;
 
 const InputField = styled.div<InputFieldProps>`
