@@ -23,7 +23,7 @@ export const Container = styled.div`
   box-shadow: 0px 1px 4px 0px ${getStyledColor('cool_gray', 300)};
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   justify-content: center;
 `;
 
