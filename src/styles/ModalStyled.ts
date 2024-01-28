@@ -49,8 +49,8 @@ export const ModalClose = styled.div`
 export const Modal = styled.div`
   position: absolute;
   width: 800px;
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 14px 0px rgba(0, 0, 0, 0.12);
   background: #111;
   overflow: hidden;
   border-radius: 8px;
@@ -88,7 +88,7 @@ export const ModalContent = styled.div`
   color: white;
 `;
 
-export const ModalTitle = styled.h1`
+export const ModalTitle = styled.h2`
   padding: 0;
   font-size: 40px;
   margin: 16px 0 7px 0;

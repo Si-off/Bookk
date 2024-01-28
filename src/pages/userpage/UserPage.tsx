@@ -24,8 +24,7 @@ const UserPage = () => {
     page: currentPage,
     order__createdAt: 'DESC',
   });
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfinityScroll();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinityScroll();
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
@@ -72,8 +71,7 @@ const UserPage = () => {
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
-          showScroll={showScroll}
-        ></CustomModal>
+          showScroll={showScroll}></CustomModal>
       )}
       <Stars />
       <Stars2 />
@@ -92,13 +90,7 @@ const UserPage = () => {
                   />
                 );
               }
-              return (
-                <Book
-                  key={book.id}
-                  {...book}
-                  onClick={() => handleClick(book.id)}
-                />
-              );
+              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
             })
           )}
       </Layout>
@@ -109,7 +101,7 @@ const UserPage = () => {
 export default UserPage;
 
 const Layout = styled.div`
-  background-color: ${getStyledColor('cool_gray', 1200)};
+  background-color: #121212;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(500px, auto);
