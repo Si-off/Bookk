@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
-import * as S from 'styles/ModalStyled';
-import { useGetBook, useGetComments } from 'queries';
-import useOnclickOutside from 'pages/hooks/useOnclickOutside';
+import { useRef, useState } from "react";
+import * as S from "styles/ModalStyled";
+import { useGetBook, useGetComments } from "queries";
+import useOnclickOutside from "pages/hooks/useOnclickOutside";
 
-import CommentWrite from 'components/CommentWrite';
-import CommentToggle from 'components/CommentToggle';
-import { IoIosClose } from 'react-icons/io';
+import CommentWrite from "components/CommentWrite";
+import CommentToggle from "components/CommentToggle";
+import { IoIosClose } from "react-icons/io";
 
 export const CustomModal = ({
   bookId,
@@ -26,8 +26,8 @@ export const CustomModal = ({
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObject.getDate().toString().padStart(2, '0');
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObject.getDate().toString().padStart(2, "0");
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
@@ -39,7 +39,7 @@ export const CustomModal = ({
     }
   };
 
-  if (status === 'error') return <div>error...</div>;
+  if (status === "error") return <div>error...</div>;
   return (
     <S.Presentation>
       <S.WrapperModal onClick={handleOutsideClick}>
@@ -55,14 +55,14 @@ export const CustomModal = ({
 
           {book?.images[0] && (
             <S.ModalPosterContainer>
-              {' '}
+              {" "}
               <S.ModalPosterImg
                 src={`${book.images[0].fbPath[0]}`}
-                alt='modal-img'
+                alt="modal-img"
               />
               <S.ModalContent>
                 <S.ModalDetails>
-                  등록날짜: {'  '}
+                  등록날짜: {"  "}
                   {book && formatDate(book.createdAt)}
                 </S.ModalDetails>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
