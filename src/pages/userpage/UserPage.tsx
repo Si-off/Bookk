@@ -9,7 +9,6 @@ import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
 import { QueryKeys } from 'constant';
 import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
-import './UserPage.style.css';
 
 const TAKE = 10;
 
@@ -19,8 +18,12 @@ const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
 
-  const { data: books, status } = useGetBooks({ take: TAKE, page: currentPage });
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinityScroll();
+  const { data: books, status } = useGetBooks({
+    take: TAKE,
+    page: currentPage,
+  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfinityScroll();
   const target = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
@@ -54,7 +57,8 @@ const UserPage = () => {
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
-          showScroll={showScroll}></CustomModal>
+          showScroll={showScroll}
+        ></CustomModal>
       )}
       <Stars />
       <Stars2 />
@@ -65,11 +69,22 @@ const UserPage = () => {
             page?.data.map((book, index) => {
               if (page.data.length - 1 === index) {
                 return (
-                  <Book key={book.id} ref={target} {...book} onClick={() => handleClick(book.id)} />
+                  <Book
+                    key={book.id}
+                    ref={target}
+                    {...book}
+                    onClick={() => handleClick(book.id)}
+                  />
                 );
               }
-              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
-            }),
+              return (
+                <Book
+                  key={book.id}
+                  {...book}
+                  onClick={() => handleClick(book.id)}
+                />
+              );
+            })
           )}
       </Layout>
     </>
