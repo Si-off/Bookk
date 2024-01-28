@@ -55,7 +55,8 @@ const Image = styled.img`
   height: 300px;
   border-radius: 4px;
   object-fit: cover;
-  box-shadow: 0px 10px 12px 12px rgba(20, 20, 20, 0.5);
+  box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.2), 0px 3px 14px 0px rgba(0, 0, 0, 0.12),
+    0px 8px 10px 0px rgba(0, 0, 0, 0.14);
 `;
 
 const Container = styled.div<{ $isShow: boolean }>`
