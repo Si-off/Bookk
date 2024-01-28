@@ -1,4 +1,4 @@
-import Axios from 'api/axios';
+import Axios from "api/axios";
 import {
   BookReq,
   BooklistParams,
@@ -10,21 +10,21 @@ import {
   CommentPostRes,
   PatchCommentReq,
   BookTakelistRes,
-} from 'types';
+} from "types";
 
 export const getBooks = async (queries?: BooklistParams) => {
   let res;
   if (queries) {
-    res = await new Axios('/api2s').get<BookTakelistRes>(queries);
+    res = await new Axios("/api2s").get<BookTakelistRes>(queries);
   } else {
-    res = await new Axios('/api2s').get<BooklistRes>(queries);
+    res = await new Axios("/api2s").get<BooklistRes>(queries);
   }
 
   return res;
 };
 
 export const getNextBooks = async (queries: BooklistParams) => {
-  const res = await new Axios('/api2s').get<BooklistRes>(queries);
+  const res = await new Axios("/api2s").get<BooklistRes>(queries);
 
   return res;
 };
@@ -34,7 +34,7 @@ export const postBooks = async (params: BookReq) => {
     const fileName = await postImage(params.images[0]);
     if (fileName) params.images[0] = fileName;
   }
-  const res = await new Axios('/api2s').post(params);
+  const res = await new Axios("/api2s").post(params);
 
   return res;
 };
@@ -62,23 +62,29 @@ export const deleteBook = async (id: number) => {
   return res;
 };
 
-export const postImage = async (imageFile: File): Promise<string | undefined> => {
+export const postImage = async (
+  imageFile: File
+): Promise<string | undefined> => {
   const formData = new FormData();
-  formData.append('image', imageFile);
+  formData.append("image", imageFile);
 
-  const res = await new Axios('/fb/image/temp').post<{
+  const res = await new Axios("/fb/image/temp").post<{
     tempFilePath: string[];
   }>(formData);
   return res?.tempFilePath[0];
 };
 
 export const deleteImage = async (bookId: number, imageId: number) => {
-  const res = await new Axios(`/api2s/${bookId}/delete-image/${imageId}`).delete();
+  const res = await new Axios(
+    `/api2s/${bookId}/delete-image/${imageId}`
+  ).delete();
   return res;
 };
 
 export const addImage = async (bookId: number, images: string[]) => {
-  const res = await new Axios(`/api2s/${bookId}/add-image`).post<BookAddImageRes>({
+  const res = await new Axios(
+    `/api2s/${bookId}/add-image`
+  ).post<BookAddImageRes>({
     images: images,
   });
   return res;

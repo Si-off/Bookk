@@ -1,23 +1,23 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import {
   FaPenToSquare,
   FaRegTrashCan,
   FaAngleLeft,
   FaAngleRight,
-} from 'react-icons/fa6';
-import * as S from 'styles/AdminStyled';
-import { StyledLoader } from 'styles/LoginStyled';
-import { useDeleteBook, useGetBooksAdmin } from 'queries';
-import { getStyledColor } from 'utils';
-import { useSelectedBook } from 'store/useSelectedBooks';
-import { getDateStr } from 'utils';
-import { BookInfoType } from 'types';
-import { useQueryClient } from '@tanstack/react-query';
-import { getNextBooks } from 'api';
-import { CustomModal } from 'components/modal/CustomModal';
-import { QueryKeys } from 'constant';
+} from "react-icons/fa6";
+import * as S from "styles/AdminStyled";
+import { StyledLoader } from "styles/LoginStyled";
+import { useDeleteBook, useGetBooksAdmin } from "queries";
+import { getStyledColor } from "utils";
+import { useSelectedBook } from "store/useSelectedBooks";
+import { getDateStr } from "utils";
+import { BookInfoType } from "types";
+import { useQueryClient } from "@tanstack/react-query";
+import { getNextBooks } from "api";
+import { CustomModal } from "components/modal/CustomModal";
+import { QueryKeys } from "constant";
 
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,16 +31,22 @@ const AdminManage = () => {
   } = useGetBooksAdmin({
     take: 10,
     page: currentPage,
+    order__createdAt: "DESC",
   });
 
   const queryClient = useQueryClient();
-  const key = [QueryKeys.ADMIN, 'books', (currentPage + 1).toString()];
+  const key = [QueryKeys.ADMIN, "books", (currentPage + 1).toString()];
 
   useEffect(() => {
     if (currentPage) {
       queryClient.prefetchQuery({
         queryKey: key,
-        queryFn: () => getNextBooks({ take: 10, page: currentPage + 1 }),
+        queryFn: () =>
+          getNextBooks({
+            take: 10,
+            page: currentPage + 1,
+            order__createdAt: "DESC",
+          }),
       });
     }
   }, [currentPage]);
@@ -51,10 +57,10 @@ const AdminManage = () => {
   const navigate = useNavigate();
 
   const unshowScroll = () => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   };
   const showScroll = () => {
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = "unset";
   };
   const handleClick = (id: number) => {
     setModalOpen(true);
@@ -78,7 +84,7 @@ const AdminManage = () => {
     remove(id);
   };
   const handlePageClick = (pageNum: number) => {
-    if (status !== 'success') return;
+    if (status !== "success") return;
     if (!books) return;
 
     const totalPages = Math.ceil(books.total / 10);
@@ -118,7 +124,7 @@ const AdminManage = () => {
                   </S.Trow>
                 </S.Theader>
                 <S.Tbody>
-                  {status === 'success' &&
+                  {status === "success" &&
                     books.data.map((book) => {
                       const {
                         id,
@@ -153,9 +159,9 @@ const AdminManage = () => {
               </S.Table>
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginTop: '16px',
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "16px",
                 }}
               >
                 <Pagination>
@@ -194,12 +200,12 @@ export default AdminManage;
 const EditIcon = styled(FaPenToSquare)`
   font-size: 20px;
   transition: color 0.15s ease;
-  color: ${getStyledColor('cool_gray', 700)};
+  color: ${getStyledColor("cool_gray", 700)};
   &:hover {
-    color: ${getStyledColor('blue', 900)};
+    color: ${getStyledColor("blue", 900)};
   }
   &:active {
-    color: ${getStyledColor('blue', 1000)};
+    color: ${getStyledColor("blue", 1000)};
   }
   margin-right: 20px;
   cursor: pointer;
@@ -208,12 +214,12 @@ const EditIcon = styled(FaPenToSquare)`
 const TrashIcon = styled(FaRegTrashCan)`
   font-size: 20px;
   transition: color 0.15s ease;
-  color: ${getStyledColor('cool_gray', 700)};
+  color: ${getStyledColor("cool_gray", 700)};
   &:hover {
-    color: ${getStyledColor('red', 900)};
+    color: ${getStyledColor("red", 900)};
   }
   &:active {
-    color: ${getStyledColor('red', 1000)};
+    color: ${getStyledColor("red", 1000)};
   }
   cursor: pointer;
 `;
@@ -228,16 +234,16 @@ const Pagination = styled.nav`
 const PNumber = styled.button`
   padding: 8px;
   background-color: #fff;
-  border: 1px solid ${getStyledColor('blue', 400)};
+  border: 1px solid ${getStyledColor("blue", 400)};
   border-radius: 4px;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: ${getStyledColor('blue', 400)};
+    background-color: ${getStyledColor("blue", 400)};
   }
 
   &:active {
-    background-color: ${getStyledColor('blue', 500)};
+    background-color: ${getStyledColor("blue", 500)};
   }
 `;
 

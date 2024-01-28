@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
-import { getStyledColor } from 'utils';
-import Book from '../../components/Book';
-import { useGetBooks, useInfinityScroll } from 'queries';
-import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
-import { useQueryClient } from '@tanstack/react-query';
-import { getNextBooks } from 'api';
-import { CustomModal } from 'components/modal/CustomModal';
-import { QueryKeys } from 'constant';
-import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
+import { useEffect, useState } from "react";
+import { styled } from "styled-components";
+import { getStyledColor } from "utils";
+import Book from "../../components/Book";
+import { useGetBooks, useInfinityScroll } from "queries";
+import { Stars, Stars2, Stars3 } from "styles/StarParticles";
+import { useQueryClient } from "@tanstack/react-query";
+import { getNextBooks } from "api";
+import { CustomModal } from "components/modal/CustomModal";
+import { QueryKeys } from "constant";
+import useIntersectionObserver from "pages/hooks/useIntersectionObserver";
 
 const TAKE = 10;
 
@@ -21,6 +21,7 @@ const UserPage = () => {
   const { data: books, status } = useGetBooks({
     take: TAKE,
     page: currentPage,
+    order__createdAt: "DESC",
   });
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfinityScroll();
@@ -29,22 +30,27 @@ const UserPage = () => {
   });
 
   const queryClient = useQueryClient();
-  const key = [QueryKeys.USER, 'books', nextPage.toString()];
+  const key = [QueryKeys.USER, "books", nextPage.toString()];
 
   useEffect(() => {
     if (nextPage) {
       queryClient.prefetchQuery({
         queryKey: key,
-        queryFn: () => getNextBooks({ take: TAKE, page: nextPage }),
+        queryFn: () =>
+          getNextBooks({
+            take: TAKE,
+            page: nextPage,
+            order__createdAt: "DESC",
+          }),
       });
     }
   }, [nextPage]);
 
   const unshowScroll = () => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   };
   const showScroll = () => {
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = "unset";
   };
   const handleClick = (id: number) => {
     setModalOpen(true);
@@ -64,7 +70,7 @@ const UserPage = () => {
       <Stars2 />
       <Stars3 />
       <Layout>
-        {status === 'success' &&
+        {status === "success" &&
           data?.pages.map((page) =>
             page?.data.map((book, index) => {
               if (page.data.length - 1 === index) {
@@ -94,7 +100,7 @@ const UserPage = () => {
 export default UserPage;
 
 const Layout = styled.div`
-  background-color: ${getStyledColor('cool_gray', 1200)};
+  background-color: ${getStyledColor("cool_gray", 1200)};
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(500px, auto);

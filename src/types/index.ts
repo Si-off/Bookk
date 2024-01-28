@@ -117,6 +117,7 @@ export type UserType = {
 export type BooklistParams = {
   take?: number;
   page?: number;
+  order__createdAt: "DESC" | "ASC";
 };
 
 export type ErrorType = {
