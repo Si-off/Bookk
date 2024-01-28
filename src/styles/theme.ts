@@ -197,6 +197,18 @@ export const styledOptions = {
     1100: '#363840',
     1200: '#24262B',
   },
+  primary: {
+    100: '#C8FFF4',
+    200: '#70EFDE',
+    300: '#03DAC5',
+    400: '#00C4B4',
+    500: '#00B3A6',
+    600: '#01A299',
+    700: '#019592',
+    800: '#018786',
+    900: '#017374',
+    1000: '#005457',
+  },
 } as const;
 
 const theme: DefaultTheme = { ...styledOptions };

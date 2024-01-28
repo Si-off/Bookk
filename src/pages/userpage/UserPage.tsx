@@ -9,6 +9,7 @@ import { getNextBooks } from "api";
 import { CustomModal } from "components/modal/CustomModal";
 import { QueryKeys } from "constant";
 import useIntersectionObserver from "pages/hooks/useIntersectionObserver";
+import { StyledLoader } from "styles/LoginStyled";
 import DropDown from "components/Dropdown";
 
 const TAKE = 10;
@@ -58,6 +59,14 @@ const UserPage = () => {
     unshowScroll();
     setSelectedBookId(id); // 선택된 책의 ID를 상태에 저장
   };
+
+  if (status === "loading")
+    return (
+      <LoaderContainer>
+        <StyledLoader />
+      </LoaderContainer>
+    );
+
   return (
     <>
       {modalOpen && (
@@ -102,10 +111,17 @@ const UserPage = () => {
 export default UserPage;
 
 const Layout = styled.div`
-  background-color: ${getStyledColor("cool_gray", 1200)};
+  background-color: #121212;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(500px, auto);
   grid-gap: 5px;
   padding: 100px 300px;
+`;
+
+const LoaderContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
 `;

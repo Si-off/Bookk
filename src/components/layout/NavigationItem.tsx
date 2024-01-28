@@ -22,10 +22,6 @@ const NavigationItem = () => {
       )}
       {isLogin && (
         <>
-          <LinkStyle to='/admin/create'>
-            <span>create</span>
-          </LinkStyle>
-
           <LinkStyle to='/admin'>
             <span>관리자</span>
           </LinkStyle>
