@@ -34,6 +34,11 @@ const Layout = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-color: ${getStyledColor('black', 100)};
+  padding: 20px 24px;
+  border-radius: 4px;
+  box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2), 0px 9px 46px 0px rgba(0, 0, 0, 0.12),
+    0px 24px 38px 0px rgba(0, 0, 0, 0.14);
 `;
 
 const Label = styled.label`

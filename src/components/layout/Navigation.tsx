@@ -28,12 +28,11 @@ const NavigationWrapper = styled.div`
   align-items: center;
   height: 56px;
   padding: 0 16px;
-  background-color: #121212;
 
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #000;
+    background-color: ${getStyledColor('black', 1000)};
   }
 `;
 const Logo = styled.div`

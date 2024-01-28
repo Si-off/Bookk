@@ -209,6 +209,21 @@ export const styledOptions = {
     900: '#017374',
     1000: '#005457',
   },
+  black: {
+    100: '#FFFFFF29',
+    200: '#FFFFFF26',
+    300: '#FFFFFF24',
+    400: '#FFFFFF1F',
+    500: '#FFFFFF1C',
+    600: '#FFFFFF17',
+    700: '#FFFFFF14',
+    800: '#FFFFFF12',
+    900: '#FFFFFF0D',
+    1000: '#121212',
+  },
+  background: {
+    dark: '#292929',
+  },
 } as const;
 
 const theme: DefaultTheme = { ...styledOptions };

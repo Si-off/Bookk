@@ -111,7 +111,7 @@ const UserPage = () => {
 export default UserPage;
 
 const Layout = styled.div`
-  background-color: #121212;
+  background-color: ${getStyledColor('background', 'dark')};
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(500px, auto);
