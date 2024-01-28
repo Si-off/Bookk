@@ -1,25 +1,61 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react';
+import Navigation from './components/layout/Navigation';
+import AdminManage from './pages/adminpage/AdminManage';
+import AdminCreateItem from './pages/adminpage/AdminCreateItem';
+import AdminEditItem from './pages/adminpage/AdminEditItem';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
+import UserPage from './pages/userpage/UserPage';
+import { LoginPage, MainPage, SignupPage } from 'pages';
+import CustomAxiosInstance from 'api/axios';
+import secureLocalStorage from 'react-secure-storage';
+import { QueryKeys, StorageKeys } from 'constant';
+import { useUserStore } from 'store/useUserStore';
+import PrivateRoutes from 'pages/PrivateRoutes';
+import { useQueryClient } from '@tanstack/react-query';
+import { getUser } from 'api/auth';
+import './common.css';
 
 function App() {
+  const { isLogin, setIsLogin, setIsInit } = useUserStore();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+    if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
+      (async () => {
+        await CustomAxiosInstance.init();
+        await queryClient.fetchQuery({
+          queryKey: [QueryKeys.LOGIN],
+          queryFn: getUser,
+        });
+      })();
+      setIsLogin(true);
+    }
+    setIsInit(false);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navigation />
+      <Routes>
+        <Route path='/' element={<UserPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='*' element={<Navigate to='/' />} />
+
+        <Route element={<PrivateRoutes />}>
+          <Route path='/admin' element={<AdminManage />} />
+          <Route path='/admin/create' element={<AdminCreateItem />} />
+          <Route path='/admin/edit/:id' element={<AdminEditItem />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
