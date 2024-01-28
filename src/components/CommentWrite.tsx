@@ -2,8 +2,9 @@ import React, { useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import Button from 'components/Button';
 import { getStyledColor } from 'utils';
-import { StyledLoader } from 'styles/LoginStyled';
+
 import { usePostComment } from 'queries';
+import Loader from './Loader';
 
 interface CommentWriteProps {
   bookId: number | undefined;
@@ -29,7 +30,7 @@ const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
   return (
     <S.container>
       {status === 'loading' ? (
-        <StyledLoader />
+        <Loader />
       ) : (
         <S.textArea
           placeholder='한줄리뷰를 작성하세요!'

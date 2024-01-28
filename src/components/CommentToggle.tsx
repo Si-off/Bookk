@@ -1,11 +1,9 @@
-import { useGetComments } from "queries";
-import React from "react";
+import { CommentGetRes } from "types";
 import styled from "styled-components";
 import * as S from "styles/CommentStyled";
-import { useUserStore } from "store/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { QueryKeys } from "constant";
-import { CommentGetRes } from "types";
+
 interface CommentToggleProps {
   comments: CommentGetRes | undefined;
   bookId: number | undefined;
@@ -22,6 +20,7 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
+
   return (
     <S.CommentContainer>
       {comments?.data?.map((reply: any, index: any) => {
