@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import * as S from "styles/ModalStyled";
 import { useGetBook, useGetComments } from "queries";
 import useOnclickOutside from "pages/hooks/useOnclickOutside";
-
 import CommentWrite from "components/CommentWrite";
 import CommentToggle from "components/CommentToggle";
 import { IoIosClose } from "react-icons/io";
