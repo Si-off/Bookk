@@ -11,7 +11,14 @@ interface InputFieldProps {
 }
 
 const Body = styled.div`
+  background-color: #282828;
   height: 100vh;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  color: ${getStyledColor('white', 'high')};
+  margin-bottom: 12px;
 `;
 
 const Wrapper = styled.div<WrapperProps>`
@@ -34,9 +41,9 @@ const Layout = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: ${getStyledColor('black', 100)};
+  background-color: ${getStyledColor('gray', 1000)};
   padding: 40px 48px;
-  border-radius: 2px;
+  border-radius: 4px;
   box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2), 0px 9px 46px 0px rgba(0, 0, 0, 0.12),
     0px 24px 38px 0px rgba(0, 0, 0, 0.14);
 `;
@@ -61,12 +68,12 @@ const Input = styled.input`
   padding: 15px 20px;
   background-color: ${getStyledColor('gray', 500)};
   color: ${getStyledColor('gray', 1200)};
-  border: 2px solid rgba(0, 0, 0, 0);
+  border: 3px solid rgba(0, 0, 0, 0);
   border-radius: 2px;
   transition: border 0.2s ease;
 
   &:focus {
-    border: 2px solid ${getStyledColor('primary', 200)};
+    border: 3px solid ${getStyledColor('primary', 600)};
   }
 
   &::placeholder {
@@ -162,6 +169,7 @@ export {
   Divider,
   RegistText,
   StyledLink,
+  Title,
 };
 
 export const StyledLoader = styled.div`

@@ -60,25 +60,25 @@ const LoginPage = () => {
   return (
     <S.Body>
       <S.Layout>
-        <Title>로그인</Title>
+        <S.Title>로그인</S.Title>
         <S.Wrapper $gap={25}>
           <S.InputField>
-            <S.Label htmlFor='email'>Email</S.Label>
+            <S.Label htmlFor='email'>이메일</S.Label>
             <S.Input
               id='email'
               type='email'
-              placeholder='Email'
+              placeholder='이메일을 입력해주세요.'
               name='email'
               value={email}
               onChange={handleChange}
             />
           </S.InputField>
           <S.InputField>
-            <S.Label htmlFor='password'>Password</S.Label>
+            <S.Label htmlFor='password'>비밀번호</S.Label>
             <S.Input
               id='password'
               type='password'
-              placeholder='Password'
+              placeholder='비밀번호를 입력해주세요.'
               name='password'
               value={password}
               onChange={handleChange}
@@ -104,9 +104,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-const Title = styled.h2`
-  font-size: 24px;
-  color: ${getStyledColor('white', 'high')};
-  margin-bottom: 12px;
-`;
