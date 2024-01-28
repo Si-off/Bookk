@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { styled } from "styled-components";
-import { getStyledColor } from "utils";
-import Book from "../../components/Book";
-import { useGetBooks, useInfinityScroll } from "queries";
-import { Stars, Stars2, Stars3 } from "styles/StarParticles";
-import { useQueryClient } from "@tanstack/react-query";
-import { getNextBooks } from "api";
-import { CustomModal } from "components/modal/CustomModal";
-import { QueryKeys } from "constant";
-import useIntersectionObserver from "pages/hooks/useIntersectionObserver";
-import { StyledLoader } from "styles/LoginStyled";
-import DropDown from "components/DropDown";
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
+import { getStyledColor } from 'utils';
+import Book from '../../components/Book';
+import { useGetBooks, useInfinityScroll } from 'queries';
+import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
+import { useQueryClient } from '@tanstack/react-query';
+import { getNextBooks } from 'api';
+import { CustomModal } from 'components/modal/CustomModal';
+import { QueryKeys } from 'constant';
+import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
+import { StyledLoader } from 'styles/LoginStyled';
+import DropDown from 'components/Dropdown';
 
 const TAKE = 10;
 
@@ -19,20 +19,19 @@ const UserPage = () => {
   const [nextPage, setNextPage] = useState(2);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
-  const [order, setOrder] = useState<"DESC" | "ASC">("DESC");
+  const [order, setOrder] = useState<'DESC' | 'ASC'>('DESC');
   const { data: books, status } = useGetBooks({
     take: TAKE,
     page: currentPage,
     order__createdAt: order,
   });
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfinityScroll(order);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinityScroll(order);
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
 
   const queryClient = useQueryClient();
-  const key = [QueryKeys.USER, "books", nextPage.toString()];
+  const key = [QueryKeys.USER, 'books', nextPage.toString()];
 
   useEffect(() => {
     if (nextPage) {
@@ -49,10 +48,10 @@ const UserPage = () => {
   }, [nextPage]);
 
   const unshowScroll = () => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
   };
   const showScroll = () => {
-    document.body.style.overflow = "unset";
+    document.body.style.overflow = 'unset';
   };
   const handleClick = (id: number) => {
     setModalOpen(true);
@@ -60,7 +59,7 @@ const UserPage = () => {
     setSelectedBookId(id); // 선택된 책의 ID를 상태에 저장
   };
 
-  if (status === "loading")
+  if (status === 'loading')
     return (
       <LoaderContainer>
         <StyledLoader />
@@ -73,15 +72,14 @@ const UserPage = () => {
         <CustomModal
           bookId={selectedBookId}
           setModalOpen={setModalOpen}
-          showScroll={showScroll}
-        ></CustomModal>
+          showScroll={showScroll}></CustomModal>
       )}
       <DropDown order={order} setOrder={setOrder} />
       <Stars />
       <Stars2 />
       <Stars3 />
       <Layout>
-        {status === "success" &&
+        {status === 'success' &&
           data?.pages.map((page) =>
             page?.data.map((book, index) => {
               if (page.data.length - 1 === index) {
@@ -94,13 +92,7 @@ const UserPage = () => {
                   />
                 );
               }
-              return (
-                <Book
-                  key={book.id}
-                  {...book}
-                  onClick={() => handleClick(book.id)}
-                />
-              );
+              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
             })
           )}
       </Layout>
@@ -111,7 +103,7 @@ const UserPage = () => {
 export default UserPage;
 
 const Layout = styled.div`
-  background-color: ${getStyledColor("background", "dark")};
+  background-color: ${getStyledColor('background', 'dark')};
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(500px, auto);
