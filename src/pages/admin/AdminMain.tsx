@@ -18,11 +18,11 @@ export default AdminMain;
 
 const Layout = styled.div`
   display: flex;
-  background-color: ${getStyledColor('admin', 'background')};
+  background-color: white
   width: 100%;
   height: 100vh;
 
-  color: ${getStyledColor('admin', 'black')};
+  color: black;
 `;
 
 const Main = styled.main`
