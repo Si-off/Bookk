@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { styled } from "styled-components";
 import { getStyledColor, pixelToRem } from "utils";
 import Book from "../components/Book";
@@ -68,7 +68,7 @@ const UserPage = () => {
 
   return (
     <Main>
-      <div>
+      <Fragment>
         <S.Search>
           <S.SearchInput
             placeholder="검색어를 입력하세요"
@@ -79,7 +79,7 @@ const UserPage = () => {
           <S.SearchButton onClick={onClickSearch}>검색</S.SearchButton>
           <S.ResetButton onClick={onClickReset}>초기화</S.ResetButton>
         </S.Search>
-      </div>
+      </Fragment>
       <Dropdown order={order} setOrder={setOrder} />
       <Stars />
       <Stars2 />
@@ -90,7 +90,7 @@ const UserPage = () => {
             page?.data.map((book, index) => {
               if (page.data.length - 1 === index) {
                 return (
-                  <div key={book.id}>
+                  <Fragment key={book.id}>
                     <Book
                       ref={targetRef}
                       {...book}
@@ -104,7 +104,7 @@ const UserPage = () => {
                         showScroll={showScroll}
                       ></CustomModal>
                     )}
-                  </div>
+                  </Fragment>
                 );
               }
               return (

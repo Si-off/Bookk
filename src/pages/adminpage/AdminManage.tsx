@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import {
@@ -146,7 +146,7 @@ const AdminManage = () => {
                         author,
                       } = book;
                       return (
-                        <div key={id}>
+                        <Fragment key={id}>
                           <S.Trow>
                             <S.Tcell>{id}</S.Tcell>
                             <S.Tcell>
@@ -171,7 +171,7 @@ const AdminManage = () => {
                               showScroll={showScroll}
                             ></CustomModal>
                           )}
-                        </div>
+                        </Fragment>
                       );
                     })}
                 </S.Tbody>
