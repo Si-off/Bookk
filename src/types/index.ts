@@ -112,12 +112,13 @@ export type UserType = {
   email: string;
   followerCount: number;
   followeeCount: number;
+  role: string;
 };
 
 export type BooklistParams = {
   take?: number;
   page?: number;
-  order__createdAt: "DESC" | "ASC";
+  order__createdAt: 'DESC' | 'ASC';
 };
 
 export type ErrorType = {
