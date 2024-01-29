@@ -3,15 +3,8 @@ import Navigation from './components/layout/Navigation';
 import AdminManage from './pages/adminpage/AdminManage';
 import AdminCreateItem from './pages/adminpage/AdminCreateItem';
 import AdminEditItem from './pages/adminpage/AdminEditItem';
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-} from 'react-router-dom';
-import UserPage from './pages/userpage/UserPage';
-import { LoginPage, MainPage, SignupPage } from 'pages';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { LoginPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { QueryKeys, StorageKeys } from 'constant';
@@ -19,7 +12,7 @@ import { useUserStore } from 'store/useUserStore';
 import PrivateRoutes from 'pages/PrivateRoutes';
 import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
-import './common.css';
+import UserPage from 'pages/UserPage';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit } = useUserStore();

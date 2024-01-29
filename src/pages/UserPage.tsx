@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { styled } from "styled-components";
 import { getStyledColor, pixelToRem } from "utils";
-import Book from "../../components/Book";
+import Book from "../components/Book";
 import { useInfinityScroll } from "queries";
 import { Stars, Stars2, Stars3 } from "styles/StarParticles";
 import { CustomModal } from "components/modal/CustomModal";

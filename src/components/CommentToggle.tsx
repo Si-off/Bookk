@@ -1,8 +1,8 @@
-import { CommentGetRes } from "types";
-import styled from "styled-components";
-import * as S from "styles/CommentStyled";
-import { useQueryClient } from "@tanstack/react-query";
-import { QueryKeys } from "constant";
+import { CommentGetRes } from 'types';
+import styled from 'styled-components';
+import * as S from 'styles/CommentStyled';
+import { useQueryClient } from '@tanstack/react-query';
+import { QueryKeys } from 'constant';
 
 interface CommentToggleProps {
   comments: CommentGetRes | undefined;
@@ -11,12 +11,12 @@ interface CommentToggleProps {
 const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
   if (bookId === undefined) return null;
   const user = useQueryClient().getQueryData([QueryKeys.LOGIN]);
-  console.log(user, "user");
+  console.log(user, 'user');
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
-    const day = dateObject.getDate().toString().padStart(2, "0");
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObject.getDate().toString().padStart(2, '0');
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
@@ -27,12 +27,10 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
         return (
           <S.CommentItemContainer key={reply.id} $index={index}>
             <div>
-              <span style={{ fontSize: "14px" }}>{reply.author.nickname}</span>
-              <div style={{ fontSize: "10px" }}>
-                {formatDate(reply.createdAt)}
-              </div>
+              <span style={{ fontSize: '14px' }}>{reply.author.nickname}</span>
+              <div style={{ fontSize: '10px' }}>{formatDate(reply.createdAt)}</div>
               <span>
-                <div style={{ marginTop: "6px" }}>{reply.reply2}</div>
+                <div style={{ marginTop: '6px' }}>{reply.reply2}</div>
               </span>
             </div>
 
@@ -52,7 +50,7 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
 export default CommentToggle;
 
 const Toggle = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
