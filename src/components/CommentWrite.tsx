@@ -5,6 +5,7 @@ import { getStyledColor } from 'utils';
 
 import { usePostComment } from 'queries';
 import Loader from './Loader';
+import { useUserStore } from 'store/useUserStore';
 
 interface CommentWriteProps {
   bookId: number | undefined;
@@ -13,6 +14,7 @@ interface CommentWriteProps {
 const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
   if (bookId === undefined) return null;
 
+  const { isLogin } = useUserStore();
   const [comment, setComment] = useState<string>('');
   const { mutate, status } = usePostComment(bookId);
   const onChangeComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,7 +35,7 @@ const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
         <Loader />
       ) : (
         <S.textArea
-          placeholder='한줄리뷰를 작성하세요!'
+          placeholder={isLogin ? '한줄리뷰를 작성하세요!' : '로그인 후 작성 가능합니다.'}
           name='reply5'
           value={comment}
           onChange={onChangeComment}
@@ -41,9 +43,11 @@ const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
       )}
       {status === 'error' && <div>{'에러가 발생했습니다.'}</div>}
       <S.buttonContainer>
-        <Button onClick={onHandleClick} color={'blue'} status={status}>
-          댓글등록
-        </Button>
+        {isLogin && (
+          <Button onClick={onHandleClick} color={'blue'} status={status}>
+            댓글등록
+          </Button>
+        )}
       </S.buttonContainer>
     </S.container>
   );
