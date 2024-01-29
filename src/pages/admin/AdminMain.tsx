@@ -18,10 +18,9 @@ export default AdminMain;
 
 const Layout = styled.div`
   display: flex;
-  background-color: white
+  background-color: white;
   width: 100%;
   height: 100vh;
-
   color: black;
 `;
 
