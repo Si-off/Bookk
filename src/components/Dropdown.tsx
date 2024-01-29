@@ -73,6 +73,7 @@ const S = {
     position: absolute;
     top: 15%;
     right: 2%;
+    z-index: 1;
   `,
   Wrapper: styled.div`
     position: relative;
@@ -108,6 +109,7 @@ const S = {
     padding: 14px 20px;
     text-align: center;
     transition: background-color 0.07s ease, color 0.07s ease;
+    cursor: pointer;
     &:hover {
       color: ${getStyledColor("white", "high")};
       background-color: ${getStyledColor("primary", 800)};
