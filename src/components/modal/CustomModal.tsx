@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import * as S from 'styles/ModalStyled';
 import { useGetBook, useGetComments } from 'queries';
-import useOnclickOutside from 'pages/hooks/useOnclickOutside';
+import useOnclickOutside from 'hooks/useOnclickOutside';
 import { BookInfoType } from 'types';
 import CommentWrite from 'components/modal/CommentWrite';
 import CommentToggle from 'components/modal/CommentToggle';
