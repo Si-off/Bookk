@@ -1,24 +1,26 @@
-import { Fragment, useState } from "react";
-import { styled } from "styled-components";
-import { getStyledColor, pixelToRem } from "utils";
-import Book from "../components/Book";
-import { useInfinityScroll } from "queries";
-import { Stars, Stars2, Stars3 } from "styles/StarParticles";
-import { CustomModal } from "components/modal/CustomModal";
-import useIntersectionObserver from "pages/hooks/useIntersectionObserver";
-import Dropdown from "components/Dropdown";
-import Loader from "components/Loader";
-import * as S from "styles/SearchStyled";
-import { useSearchStore } from "store/useSearchStore";
+import { Fragment, useState } from 'react';
+import { styled } from 'styled-components';
+import { getStyledColor, pixelToRem } from 'utils';
+import Book from '../../components/user/Book';
+import { useInfinityScroll } from 'queries';
+import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
+import { CustomModal } from 'components/modal/CustomModal';
+import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
+import Dropdown from 'components/shared/Dropdown';
+import Loader from 'components/shared/Loader';
+import * as S from 'styles/SearchStyled';
+import { useSearchStore } from 'store/useSearchStore';
 
 const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [searchState, setSearchState] = useState("");
+  const [searchState, setSearchState] = useState('');
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
-  const [order, setOrder] = useState<"DESC" | "ASC">("DESC");
+  const [order, setOrder] = useState<'DESC' | 'ASC'>('DESC');
   const { search, setSearch } = useSearchStore();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useInfinityScroll(order, search);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfinityScroll(
+    order,
+    search
+  );
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
@@ -28,29 +30,27 @@ const UserPage = () => {
   };
 
   const onKeyPressSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       setSearch(searchState);
     }
   };
   const onClickSearch = () => {
-    if (!searchState) return alert("검색어를 입력해주세요");
+    if (!searchState) return alert('검색어를 입력해주세요');
     setSearch(searchState);
   };
   const onClickReset = () => {
-    setSearch("");
-    setSearchState("");
+    setSearch('');
+    setSearchState('');
   };
 
   const unshowScroll = () => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
   };
   const showScroll = () => {
-    document.body.style.overflow = "unset";
+    document.body.style.overflow = 'unset';
   };
   const findSelectedBook = () => {
-    return data?.pages
-      .flatMap((page) => page?.data)
-      .find((book) => book?.id === selectedBookId);
+    return data?.pages.flatMap((page) => page?.data).find((book) => book?.id === selectedBookId);
   };
   const selectedBook = findSelectedBook();
   const handleClick = (id: number) => {
@@ -59,7 +59,7 @@ const UserPage = () => {
     setSelectedBookId(id); // 선택된 책의 ID를 상태에 저장
   };
 
-  if (status === "loading")
+  if (status === 'loading')
     return (
       <LoaderContainer>
         <Loader />
@@ -71,7 +71,7 @@ const UserPage = () => {
       <Fragment>
         <S.Search>
           <S.SearchInput
-            placeholder="검색어를 입력하세요"
+            placeholder='검색어를 입력하세요'
             value={searchState}
             onChange={onChangeSearch}
             onKeyDown={onKeyPressSearch}
@@ -85,35 +85,24 @@ const UserPage = () => {
       <Stars2 />
       <Stars3 />
       <Layout>
-        {status === "success" &&
+        {status === 'success' &&
           data?.pages.map((page) =>
             page?.data.map((book, index) => {
               if (page.data.length - 1 === index) {
                 return (
                   <Fragment key={book.id}>
-                    <Book
-                      ref={targetRef}
-                      {...book}
-                      onClick={() => handleClick(book.id)}
-                    />
+                    <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
                     {modalOpen && (
                       <CustomModal
                         bookId={selectedBookId}
                         book={selectedBook}
                         setModalOpen={setModalOpen}
-                        showScroll={showScroll}
-                      ></CustomModal>
+                        showScroll={showScroll}></CustomModal>
                     )}
                   </Fragment>
                 );
               }
-              return (
-                <Book
-                  key={book.id}
-                  {...book}
-                  onClick={() => handleClick(book.id)}
-                />
-              );
+              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
             })
           )}
       </Layout>
@@ -131,7 +120,7 @@ const Main = styled.main`
 
 const Layout = styled.div`
   width: 1200px;
-  background-color: ${getStyledColor("background", "dark")};
+  background-color: ${getStyledColor('background', 'dark')};
   display: grid;
   grid-gap: 5px;
   grid-auto-flow: dense;

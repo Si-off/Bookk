@@ -234,7 +234,9 @@ export const styledOptions = {
   admin: {
     background: '#F4F7FE',
     primary: '#4318FF',
+    primaryDark: '#2B3674',
     secondary: '#6AD2FF',
+    secondaryGray: '#A3AED0',
     success: '#05CD99',
     error: '#EE5D50',
     warn: '#FFCE20',

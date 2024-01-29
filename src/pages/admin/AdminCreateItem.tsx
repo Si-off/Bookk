@@ -5,8 +5,8 @@ import * as $ from 'styles/AdminStyled';
 import { usePostBook } from 'queries';
 import useBookInfo from 'pages/hooks/useBookInfo';
 import { TextChange } from 'typescript';
-import ImageUploader from 'components/ImageUploader';
-import Button from 'components/Button';
+import ImageUploader from 'components/shared/ImageUploader';
+import Button from 'components/shared/Button';
 
 const AdminCreateItem = () => {
   const { mutate, status } = usePostBook();
@@ -30,8 +30,7 @@ const AdminCreateItem = () => {
 
   // TODO: 유효성 검사
   const onClick = async () => {
-    if (!bookInfo.title || !bookInfo.content)
-      return alert('모든 내용을 채워주세요!');
+    if (!bookInfo.title || !bookInfo.content) return alert('모든 내용을 채워주세요!');
     resetBookInfo();
     mutate({ ...bookInfo });
   };

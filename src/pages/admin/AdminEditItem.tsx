@@ -4,12 +4,12 @@ import { styled } from 'styled-components';
 import * as $ from 'styles/AdminStyled';
 import * as S from 'styles/LoginStyled';
 import { usePatchBook, useDeleteBook, useGetBook } from 'queries';
-import ImageUploader from 'components/ImageUploader';
-import Button from 'components/Button';
+import ImageUploader from 'components/shared/ImageUploader';
+import Button from 'components/shared/Button';
 import { ImagePatchReq } from 'types';
 import { postImage, deleteImage, addImage } from 'api';
 
-import Loader from 'components/Loader';
+import Loader from 'components/shared/Loader';
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
 const AdminEditItem = () => {

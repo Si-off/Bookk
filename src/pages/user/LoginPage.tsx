@@ -1,11 +1,11 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
-import * as S from '../styles/LoginStyled';
+import * as S from '../../styles/LoginStyled';
 import { useLogin } from 'queries';
 import { getStyledColor } from 'utils';
 import { styled } from 'styled-components';
-import Loader from 'components/Loader';
+import Loader from 'components/shared/Loader';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('');
