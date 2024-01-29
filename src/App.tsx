@@ -7,7 +7,13 @@ import { QueryKeys, StorageKeys } from 'constant';
 import { useUserStore } from 'store/useUserStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
-import { AdminManage, AdminCreateItem, AdminEditItem, AdminMain } from 'pages/admin';
+import {
+  AdminManage,
+  AdminCreateItem,
+  AdminEditItem,
+  AdminMain,
+  AdminDashboard,
+} from 'pages/admin';
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
 
@@ -43,9 +49,10 @@ function App() {
 
         <Route element={<PrivateRoutes />}>
           <Route path='/admin' element={<AdminMain />}>
-            <Route path='/admin/create' element={<AdminCreateItem />} />
-            <Route path='/admin/manage' element={<AdminManage />} />
-            <Route path='/admin/edit/:id' element={<AdminEditItem />} />
+            <Route path='' element={<AdminDashboard />} />
+            <Route path='create' element={<AdminCreateItem />} />
+            <Route path='manage' element={<AdminManage />} />
+            <Route path='edit/:id' element={<AdminEditItem />} />
           </Route>
         </Route>
       </Routes>
