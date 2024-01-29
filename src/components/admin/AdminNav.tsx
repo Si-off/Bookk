@@ -70,7 +70,7 @@ const Item = styled.li<{ $selected: boolean }>`
   ${({ $selected }) =>
     $selected &&
     css`
-      border-right: 3px solid ${getStyledColor('admin', 'primary')};
+      border-right: 3px solid red
 
       &:hover {
         color: #9c89ff;
@@ -88,14 +88,14 @@ const StyledLink = styled(Link)<{ $selected: boolean }>`
   padding: 8px 12px;
   border-radius: 4px;
   white-space: nowrap;
-  color: ${getStyledColor('admin', 'secondaryGray')};
+  color: red;
   font-weight: 500;
 
   ${({ $selected }) =>
     $selected
       ? css`
           font-weight: 500;
-          color: ${getStyledColor('admin', 'primary')};
+          color: red
 
           &:hover {
             color: #9c89ff;
