@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import NavigationItem from './NavigationItem';
-import { useNavigate } from 'react-router-dom';
-import { getStyledColor } from 'utils';
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import NavigationItem from "./NavigationItem";
+import { useNavigate } from "react-router-dom";
+import { getStyledColor } from "utils";
 
 const HEIGHT = 56;
 
@@ -14,18 +14,20 @@ const Navigation = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
-      setIsVisible(prevScrollPos > currentScrollPos || currentScrollPos < HEIGHT * 2);
+      setIsVisible(
+        prevScrollPos > currentScrollPos || currentScrollPos < HEIGHT * 2
+      );
       setPrevScrollPos(currentScrollPos);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [prevScrollPos]);
 
   const logoClick = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -50,9 +52,9 @@ const NavigationWrapper = styled.div<{ $isVisible: boolean; $height: number }>`
   padding-left: 30px;
   padding-right: 10%;
   transition: top 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  top: ${({ $isVisible, $height }) => ($isVisible ? '0' : `-${$height}px`)};
-  opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
-  background-color: ${getStyledColor('primary', 900)};
+  top: ${({ $isVisible, $height }) => ($isVisible ? "0" : `-${$height}px`)};
+  opacity: ${({ $isVisible }) => ($isVisible ? "1" : "0")};
+  background-color: ${getStyledColor("primary", 900)};
   z-index: 2;
 `;
 
