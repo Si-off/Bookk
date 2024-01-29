@@ -13,7 +13,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
 import { QueryKeys } from 'constant';
-import Loader from 'components/Loader';
+import Loader from 'components/shared/Loader';
 
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);

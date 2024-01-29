@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import Navigation from './components/layout/Navigation';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { LoginPage, SignupPage } from 'pages';
 import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { QueryKeys, StorageKeys } from 'constant';
 import { useUserStore } from 'store/useUserStore';
-import PrivateRoutes from 'pages/PrivateRoutes';
 import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
-import UserPage from 'pages/UserPage';
-import { AdminManage, AdminCreateItem, AdminEditItem, AdminMain } from 'pages/adminpage';
+import UserPage from 'pages/user/UserPage';
+import { AdminManage, AdminCreateItem, AdminEditItem, AdminMain } from 'pages/admin';
+import { PrivateRoutes } from 'pages';
+import { LoginPage, SignupPage } from 'pages/user';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit } = useUserStore();
@@ -43,8 +43,8 @@ function App() {
 
         <Route element={<PrivateRoutes />}>
           <Route path='/admin' element={<AdminMain />}>
-            <Route path='/admin' element={<AdminManage />} />
             <Route path='/admin/create' element={<AdminCreateItem />} />
+            <Route path='/admin/manage' element={<AdminManage />} />
             <Route path='/admin/edit/:id' element={<AdminEditItem />} />
           </Route>
         </Route>

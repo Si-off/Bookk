@@ -17,12 +17,10 @@ export const SubTitle = styled.h3`
 
 export const Container = styled.div`
   background-color: #fff;
-  border-radius: 4px;
-  padding: 24px 35px;
-  box-shadow: 0px 1px 4px 0px ${getStyledColor('cool_gray', 300)};
+  border-radius: 20px;
+  padding: 25px 30px;
   display: flex;
   flex-direction: column;
-  // align-items: center;
   justify-content: center;
 `;
 
