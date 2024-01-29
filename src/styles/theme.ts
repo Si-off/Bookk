@@ -231,6 +231,14 @@ export const styledOptions = {
   background: {
     dark: '#121212',
   },
+  admin: {
+    background: '#F4F7FE',
+    primary: '#4318FF',
+    secondary: '#6AD2FF',
+    success: '#05CD99',
+    error: '#EE5D50',
+    warn: '#FFCE20',
+  },
 } as const;
 
 const theme: DefaultTheme = { ...styledOptions };
