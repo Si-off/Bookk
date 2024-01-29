@@ -8,17 +8,38 @@ import { CustomModal } from "components/modal/CustomModal";
 import useIntersectionObserver from "pages/hooks/useIntersectionObserver";
 import Dropdown from "components/Dropdown";
 import Loader from "components/Loader";
+import * as S from "styles/SearchStyled";
+import { useSearchStore } from "store/useSearchStore";
 
 const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [searchState, setSearchState] = useState("");
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [order, setOrder] = useState<"DESC" | "ASC">("DESC");
-
+  const { search, setSearch } = useSearchStore();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useInfinityScroll(order);
+    useInfinityScroll(order, search);
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
+
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchState(e.target.value);
+  };
+
+  const onKeyPressSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setSearch(searchState);
+    }
+  };
+  const onClickSearch = () => {
+    if (!searchState) return alert("검색어를 입력해주세요");
+    setSearch(searchState);
+  };
+  const onClickReset = () => {
+    setSearch("");
+    setSearchState("");
+  };
 
   const unshowScroll = () => {
     document.body.style.overflow = "hidden";
@@ -47,6 +68,18 @@ const UserPage = () => {
 
   return (
     <Main>
+      <div>
+        <S.Search>
+          <S.SearchInput
+            placeholder="검색어를 입력하세요"
+            value={searchState}
+            onChange={onChangeSearch}
+            onKeyDown={onKeyPressSearch}
+          />
+          <S.SearchButton onClick={onClickSearch}>검색</S.SearchButton>
+          <S.ResetButton onClick={onClickReset}>초기화</S.ResetButton>
+        </S.Search>
+      </div>
       <Dropdown order={order} setOrder={setOrder} />
       <Stars />
       <Stars2 />

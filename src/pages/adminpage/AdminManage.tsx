@@ -33,6 +33,7 @@ const AdminManage = () => {
     take: 10,
     page: currentPage,
     order__createdAt: "DESC",
+    where__title__i_like: "",
   });
 
   const queryClient = useQueryClient();
@@ -47,6 +48,7 @@ const AdminManage = () => {
             take: 10,
             page: currentPage + 1,
             order__createdAt: "DESC",
+            where__title__i_like: "",
           }),
       });
     }
