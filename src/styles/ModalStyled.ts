@@ -50,8 +50,8 @@ export const Modal = styled.div`
   position: absolute;
   max-width: ${pixelToRem(800)};
   height: 80%;
-  box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2), 0px 9px 46px 0px rgba(0, 0, 0, 0.12),
-    0px 24px 38px 0px rgba(0, 0, 0, 0.14);
+  box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2),
+    0px 9px 46px 0px rgba(0, 0, 0, 0.12), 0px 24px 38px 0px rgba(0, 0, 0, 0.14);
 
   overflow: hidden;
   border-radius: 8px;
@@ -81,11 +81,15 @@ export const ModalPosterContainer = styled.div`
 export const ModalPosterImg = styled.img`
   object-fit: contain;
   height: 200px;
-  margin: ${pixelToRem([100, 60])};
-  box-shadow: 1px 1px ${getStyledColor('black', 700)}, 2px 2px ${getStyledColor('white', 'medium')},
-    3px 3px ${getStyledColor('black', 700)}, 4px 4px ${getStyledColor('white', 'medium')},
-    5px 5px ${getStyledColor('black', 700)}, 6px 6px ${getStyledColor('white', 'medium')},
-    7px 7px ${getStyledColor('black', 700)}, 8px 8px ${getStyledColor('black', 700)};
+  margin: ${pixelToRem([100, 60, 0, 60])};
+  box-shadow: 1px 1px ${getStyledColor('black', 700)},
+    2px 2px ${getStyledColor('white', 'medium')},
+    3px 3px ${getStyledColor('black', 700)},
+    4px 4px ${getStyledColor('white', 'medium')},
+    5px 5px ${getStyledColor('black', 700)},
+    6px 6px ${getStyledColor('white', 'medium')},
+    7px 7px ${getStyledColor('black', 700)},
+    8px 8px ${getStyledColor('black', 700)};
 `;
 
 export const ModalContent = styled.div`

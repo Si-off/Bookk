@@ -7,6 +7,7 @@ import CommentWrite from 'components/modal/CommentWrite';
 import CommentToggle from 'components/modal/CommentToggle';
 import { IoIosClose } from 'react-icons/io';
 import { useUserStore } from 'store/useUserStore';
+import { FaHeart } from 'react-icons/fa';
 
 export const CustomModal = ({
   bookId,
@@ -43,6 +44,12 @@ export const CustomModal = ({
     }
   };
 
+  const [liked, setLiked] = useState(false);
+
+  const toggleLike = () => {
+    setLiked(!liked);
+  };
+
   if (status === 'error') return <div>error...</div>;
   return (
     <S.Presentation>
@@ -52,14 +59,29 @@ export const CustomModal = ({
             onClick={() => {
               setModalOpen(false);
               showScroll();
-            }}>
+            }}
+          >
             <IoIosClose />
           </S.ModalClose>
 
           {book?.images[0] && (
             <S.ModalPosterContainer>
               {' '}
-              <S.ModalPosterImg src={`${book.images[0].fbPath[0]}`} alt='modal-img' />
+              <div>
+                <S.ModalPosterImg
+                  src={`${book.images[0].fbPath[0]}`}
+                  alt='modal-img'
+                />
+                <FaHeart
+                  style={{
+                    marginLeft: '60px',
+                    marginTop: '20px',
+                    scale: '1.2',
+                    color: liked ? 'red' : 'black',
+                  }}
+                  onClick={toggleLike}
+                />
+              </div>
               <S.ModalContent>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
                 <S.ModalOverview>클릭수: {book?.clicks}</S.ModalOverview>
