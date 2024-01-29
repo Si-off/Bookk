@@ -26,6 +26,7 @@ const AdminNav = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   return (
     <Nav>
+      <Title>BOOKK</Title>
       <ul>
         {tabs.map((tab, index) => (
           <Item $selected={index === selectedTab}>
@@ -45,6 +46,13 @@ const AdminNav = () => {
 };
 
 export default memo(AdminNav);
+
+const Title = styled.h1`
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+`;
 
 const Nav = styled.nav`
   min-width: ${pixelToRem(200)};
