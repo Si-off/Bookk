@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import * as S from "styles/ModalStyled";
 import {
   useDeleteBookLike,
-  useGetBook,
-  useGetBookLikes,
+  useGetBookIsLike,
   useGetComments,
   useGetUser,
   usePostBookLike,
@@ -32,12 +31,11 @@ export const CustomModal = ({
     setModalOpen(false);
     showScroll();
   });
-
+  if (!bookId) return <div>loading...</div>;
   const { user, isLogin } = useUserStore();
+
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
-  const { data: bookslike, status: likeStatus } = useGetBookLikes(
-    user?.id || 0
-  );
+  const { data: bookIsLike, status } = useGetBookIsLike(bookId, user?.id || 0);
   const { mutate: postLike } = usePostBookLike();
   const { mutate: deleteLike } = useDeleteBookLike();
   function formatDate(timestamp: string) {
@@ -64,15 +62,20 @@ export const CustomModal = ({
       return;
     }
     if (bookId) {
-      postLike(bookId);
+      if (bookIsLike) {
+        deleteLike({ bookId, likeId: user?.id });
+      } else {
+        postLike(bookId);
+      }
     }
   };
   useEffect(() => {
-    if (bookslike) {
-      console.log(bookslike);
-      console.log(user, "user");
+    if (bookIsLike) {
+      setLiked(true);
+    } else {
+      setLiked(false);
     }
-  }, [bookslike]);
+  }, [bookIsLike]);
   if (status === "error") return <div>error...</div>;
   return (
     <S.Presentation>

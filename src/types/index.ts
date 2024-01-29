@@ -192,3 +192,7 @@ export type PatchCommentReq = {
   commentId: number;
   comment: string;
 };
+
+export type BookisLike = {
+  isLike: boolean;
+};
