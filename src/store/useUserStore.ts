@@ -1,7 +1,8 @@
-import { create } from 'zustand';
+import { AuthorType } from "types";
+import { create } from "zustand";
 
 interface UserStore {
-  user: null;
+  user: AuthorType | null;
   isLogin: boolean;
   isInit: boolean;
   setIsLogin: (state: boolean) => void;

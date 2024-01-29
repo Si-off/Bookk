@@ -1,13 +1,20 @@
-import { useRef, useState } from 'react';
-import * as S from 'styles/ModalStyled';
-import { useGetBook, useGetComments } from 'queries';
-import useOnclickOutside from 'hooks/useOnclickOutside';
-import { BookInfoType } from 'types';
-import CommentWrite from 'components/modal/CommentWrite';
-import CommentToggle from 'components/modal/CommentToggle';
-import { IoIosClose } from 'react-icons/io';
-import { useUserStore } from 'store/useUserStore';
-import { FaHeart } from 'react-icons/fa';
+import { useEffect, useRef, useState } from "react";
+import * as S from "styles/ModalStyled";
+import {
+  useDeleteBookLike,
+  useGetBook,
+  useGetBookLikes,
+  useGetComments,
+  useGetUser,
+  usePostBookLike,
+} from "queries";
+import useOnclickOutside from "hooks/useOnclickOutside";
+import { BookInfoType } from "types";
+import CommentWrite from "components/modal/CommentWrite";
+import CommentToggle from "components/modal/CommentToggle";
+import { IoIosClose } from "react-icons/io";
+import { useUserStore } from "store/useUserStore";
+import { FaHeart } from "react-icons/fa";
 
 export const CustomModal = ({
   bookId,
@@ -26,13 +33,18 @@ export const CustomModal = ({
     showScroll();
   });
 
-  const { isLogin } = useUserStore();
+  const { user, isLogin } = useUserStore();
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
+  const { data: bookslike, status: likeStatus } = useGetBookLikes(
+    user?.id || 0
+  );
+  const { mutate: postLike } = usePostBookLike();
+  const { mutate: deleteLike } = useDeleteBookLike();
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObject.getDate().toString().padStart(2, '0');
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObject.getDate().toString().padStart(2, "0");
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
@@ -47,10 +59,21 @@ export const CustomModal = ({
   const [liked, setLiked] = useState(false);
 
   const toggleLike = () => {
-    setLiked(!liked);
+    if (!isLogin) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    if (bookId) {
+      postLike(bookId);
+    }
   };
-
-  if (status === 'error') return <div>error...</div>;
+  useEffect(() => {
+    if (bookslike) {
+      console.log(bookslike);
+      console.log(user, "user");
+    }
+  }, [bookslike]);
+  if (status === "error") return <div>error...</div>;
   return (
     <S.Presentation>
       <S.WrapperModal onClick={handleOutsideClick}>
@@ -66,18 +89,18 @@ export const CustomModal = ({
 
           {book?.images[0] && (
             <S.ModalPosterContainer>
-              {' '}
+              {" "}
               <div>
                 <S.ModalPosterImg
                   src={`${book.images[0].fbPath[0]}`}
-                  alt='modal-img'
+                  alt="modal-img"
                 />
                 <FaHeart
                   style={{
-                    marginLeft: '60px',
-                    marginTop: '20px',
-                    scale: '1.2',
-                    color: liked ? 'red' : 'black',
+                    marginLeft: "60px",
+                    marginTop: "20px",
+                    scale: "1.2",
+                    color: liked ? "red" : "black",
                   }}
                   onClick={toggleLike}
                 />
@@ -88,7 +111,7 @@ export const CustomModal = ({
                 <S.ModalOverview>좋아요: {book?.likeCount}</S.ModalOverview>
                 <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
                 <S.ModalDetails>
-                  등록날짜: {'  '}
+                  등록날짜: {"  "}
                   {book && formatDate(book.createdAt)}
                 </S.ModalDetails>
                 <S.ModalSubject>책 소개</S.ModalSubject>
