@@ -112,6 +112,7 @@ export type UserType = {
   email: string;
   followerCount: number;
   followeeCount: number;
+  role: string;
 };
 
 export type BooklistParams = {
