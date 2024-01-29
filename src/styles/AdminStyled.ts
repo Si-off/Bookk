@@ -1,4 +1,3 @@
-import { get } from 'http';
 import { styled } from 'styled-components';
 import { getStyledColor, pixelToRem } from 'utils';
 interface InputFieldProps {
