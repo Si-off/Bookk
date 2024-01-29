@@ -10,7 +10,7 @@ import PrivateRoutes from 'pages/PrivateRoutes';
 import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
 import UserPage from 'pages/UserPage';
-import { AdminManage, AdminCreateItem, AdminEditItem } from 'pages/adminpage';
+import { AdminManage, AdminCreateItem, AdminEditItem, AdminMain } from 'pages/adminpage';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit } = useUserStore();
@@ -42,9 +42,11 @@ function App() {
         </Route>
 
         <Route element={<PrivateRoutes />}>
-          <Route path='/admin' element={<AdminManage />} />
-          <Route path='/admin/create' element={<AdminCreateItem />} />
-          <Route path='/admin/edit/:id' element={<AdminEditItem />} />
+          <Route path='/admin' element={<AdminMain />}>
+            <Route path='/admin' element={<AdminManage />} />
+            <Route path='/admin/create' element={<AdminCreateItem />} />
+            <Route path='/admin/edit/:id' element={<AdminEditItem />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent as ReactChangeEvent,
-} from 'react';
+import React, { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import * as $ from 'styles/AdminStyled';
@@ -80,11 +76,7 @@ const AdminEditItem = () => {
       let updatedImages = [...images];
       if (newImagePath) {
         const addImageResponse = await addImage(numericId, [newImagePath]);
-        if (
-          addImageResponse &&
-          addImageResponse.images &&
-          addImageResponse.images.length > 0
-        ) {
+        if (addImageResponse && addImageResponse.images && addImageResponse.images.length > 0) {
           const newId = addImageResponse.images[0].id;
           updatedImages = [{ id: newId, newOrder: 0 }];
         }
@@ -109,61 +101,44 @@ const AdminEditItem = () => {
   };
 
   return (
-    <Layout>
-      <$.Container>
-        <S.Wrapper>
-          <S.InputField>
-            <S.Label style={{ color: 'black' }}>도서명</S.Label>
-            <S.Input
-              name='title'
-              placeholder='Title'
-              value={title}
-              onChange={handleChangeTitle}
-            />
-          </S.InputField>
-          <S.InputField $marginTop={20}>
-            <S.Label style={{ color: 'black' }}>설명</S.Label>
-            <S.Input
-              name='content'
-              placeholder='content'
-              value={content}
-              onChange={handleChangeContent}
-            />
-          </S.InputField>
-        </S.Wrapper>
+    <$.Container>
+      <S.Wrapper>
+        <S.InputField>
+          <S.Label style={{ color: 'black' }}>도서명</S.Label>
+          <S.Input name='title' placeholder='Title' value={title} onChange={handleChangeTitle} />
+        </S.InputField>
         <S.InputField $marginTop={20}>
-          <S.Label style={{ color: 'black' }}>이미지</S.Label>
-          {images && (
-            <ImageUploader
-              src={book?.images[0]?.fbPath[0]}
-              onChange={(fileData) => handleSetImage(fileData)}
-            />
-          )}
+          <S.Label style={{ color: 'black' }}>설명</S.Label>
+          <S.Input
+            name='content'
+            placeholder='content'
+            value={content}
+            onChange={handleChangeContent}
+          />
         </S.InputField>
-        <S.InputField style={{ display: 'flex', marginTop: 30, gap: 20 }}>
-          <Button onClick={handleFinalUpdate} status={patchStatus}>
-            수정
-          </Button>
-          <Button onClick={handleRemove} color='red'>
-            삭제
-          </Button>
-        </S.InputField>
-      </$.Container>
-    </Layout>
+      </S.Wrapper>
+      <S.InputField $marginTop={20}>
+        <S.Label style={{ color: 'black' }}>이미지</S.Label>
+        {images && (
+          <ImageUploader
+            src={book?.images[0]?.fbPath[0]}
+            onChange={(fileData) => handleSetImage(fileData)}
+          />
+        )}
+      </S.InputField>
+      <S.InputField style={{ display: 'flex', marginTop: 30, gap: 20 }}>
+        <Button onClick={handleFinalUpdate} status={patchStatus}>
+          수정
+        </Button>
+        <Button onClick={handleRemove} color='red'>
+          삭제
+        </Button>
+      </S.InputField>
+    </$.Container>
   );
 };
 
 export default AdminEditItem;
-const Layout = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-width: 1200px;
-  padding: 45px;
-  overflow-x: scroll;
-  background-color: white;
-  height: 100vh;
-`;
+
 //setImage때 postImage로 이미지 경로를 받은 뒤에 이미지 id를 일단 바꾼다. 취소 버튼을 누르면 해당 이미지를 deleteImage을 해야함
 //최종 수정버튼을 누를 때 deleteImage(기존 이미지id), addImage하고 patchbook을 한다.
