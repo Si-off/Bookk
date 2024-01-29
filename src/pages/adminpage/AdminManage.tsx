@@ -146,8 +146,8 @@ const AdminManage = () => {
                         author,
                       } = book;
                       return (
-                        <>
-                          <S.Trow key={id}>
+                        <div key={id}>
+                          <S.Trow>
                             <S.Tcell>{id}</S.Tcell>
                             <S.Tcell>
                               <button onClick={() => handleClick(id)}>
@@ -171,7 +171,7 @@ const AdminManage = () => {
                               showScroll={showScroll}
                             ></CustomModal>
                           )}
-                        </>
+                        </div>
                       );
                     })}
                 </S.Tbody>
