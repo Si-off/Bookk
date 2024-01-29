@@ -184,11 +184,15 @@ export const useDeleteComment = (bookId: number) => {
   });
 };
 
-export const useInfinityScroll = (order: "DESC" | "ASC") => {
+export const useInfinityScroll = (order: "DESC" | "ASC", search: string) => {
   return useInfiniteQuery({
-    queryKey: [QueryKeys.USER, "books", "infinity", order],
+    queryKey: [QueryKeys.USER, "books", "infinity", order, search],
     queryFn: ({ pageParam = 1 }) =>
-      getBooks({ page: pageParam, order__createdAt: order }),
+      getBooks({
+        page: pageParam,
+        order__createdAt: order,
+        where__title__i_like: search,
+      }),
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage) {
         return;

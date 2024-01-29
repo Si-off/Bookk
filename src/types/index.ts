@@ -118,6 +118,7 @@ export type BooklistParams = {
   take?: number;
   page?: number;
   order__createdAt: "DESC" | "ASC";
+  where__title__i_like: string;
 };
 
 export type ErrorType = {
