@@ -7,6 +7,7 @@ import axios, {
 import { StorageKeys } from 'constant';
 import qs from 'qs';
 import secureLocalStorage from 'react-secure-storage';
+import { useUserStore } from 'store/useUserStore';
 
 const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -15,7 +16,6 @@ class CustomAxiosInstance {
     baseURL: BASE_URL,
     withCredentials: true,
   });
-  private static accessToken: string | null = null;
   private static refreshToken: string | null = secureLocalStorage.getItem(
     StorageKeys.REFRESH_TOKEN
   ) as string;
@@ -34,10 +34,6 @@ class CustomAxiosInstance {
     return data;
   }
 
-  public static setAccessToken(token: string) {
-    this.accessToken = token;
-  }
-
   // TODO : 에러 핸들링
   public static async init() {
     this.instance.defaults.paramsSerializer = (params) => {
@@ -46,7 +42,8 @@ class CustomAxiosInstance {
 
     if (this.refreshToken) {
       const data = await this.getAccessToken(this.refreshToken);
-      this.accessToken = data.accessToken;
+      const { setAccessToken } = useUserStore.getState();
+      setAccessToken(data.accessToken);
     }
 
     this.instance.interceptors.request.use(
@@ -59,8 +56,10 @@ class CustomAxiosInstance {
 
         if (config.headers.Authorization) return config;
 
-        if (this.accessToken) {
-          config.headers['Authorization'] = `Bearer ${this.accessToken}`;
+        const { accessToken, setAccessToken } = useUserStore.getState();
+
+        if (accessToken) {
+          config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
         return config;
       },
@@ -84,11 +83,12 @@ class CustomAxiosInstance {
               if (!this.refreshToken) {
                 return Promise.reject(error);
               }
+              const { accessToken, setAccessToken } = useUserStore.getState();
               const data = await this.getAccessToken(this.refreshToken);
               const newAccessToken = data.accessToken;
-              this.setAccessToken(newAccessToken);
+              setAccessToken(newAccessToken);
 
-              config!.headers['Authorization'] = `Bearer ${this.accessToken}`;
+              config!.headers['Authorization'] = `Bearer ${accessToken}`;
               isRefreshing = true;
               return this.instance.request(config);
             } catch (refreshError) {
