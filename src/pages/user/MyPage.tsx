@@ -9,8 +9,11 @@ const MyPage = () => {
   return (
     <Wrapper>
       <div className='one'>
-        <div className='1'>내정보</div>
+        <h1 className='1'>내정보</h1>
         <div>이메일:{(user as any)?.email}</div>
+        <div>닉네임:{(user as any)?.nickname}</div>
+        <button style={{ marginRight: '20px' }}>비밀번호 변경</button>
+        <button>닉네임 변경</button>
       </div>
     </Wrapper>
   );
@@ -34,5 +37,10 @@ const Wrapper = styled.div`
     border: 1.778px solid #ebebee;
     background: #fff;
     box-shadow: 0px 3.556px 5.333px 0px rgba(0, 0, 0, 0.15);
+    line-height: 2.1;
+    padding: 20px;
+    h1 {
+      color: black;
+    }
   }
 `;

@@ -164,13 +164,13 @@ const TotheTop = styled.button`
   padding: 15px 10px;
   background-color: #000;
   color: #fff;
-  border: 1px solid rgb(210, 204, 193);
+  border: 2px solid rgb(210, 204, 193);
   border-radius: 50%;
   outline: none;
   cursor: pointer;
 
   &:hover {
     color: #017374;
-    border: 1px solid #017374;
+    border: 2px solid #017374;
   }
 `;
