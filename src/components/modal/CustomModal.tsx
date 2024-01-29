@@ -6,13 +6,16 @@ import useOnclickOutside from "pages/hooks/useOnclickOutside";
 import CommentWrite from "components/CommentWrite";
 import CommentToggle from "components/CommentToggle";
 import { IoIosClose } from "react-icons/io";
+import { BookInfoType, BookReq, BookRes } from "types";
 
 export const CustomModal = ({
   bookId,
+  book,
   setModalOpen,
   showScroll,
 }: {
   bookId: number | null;
+  book: BookInfoType | undefined;
   setModalOpen: (open: boolean) => void;
   showScroll: () => void;
 }) => {
@@ -21,7 +24,7 @@ export const CustomModal = ({
     setModalOpen(false);
     showScroll();
   });
-  const { data: book, status } = useGetBook(bookId || 0);
+  // const { data: book, status } = useGetBook(bookId || 0);
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
