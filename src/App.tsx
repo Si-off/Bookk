@@ -7,25 +7,15 @@ import { QueryKeys, StorageKeys } from 'constant';
 import { useUserStore } from 'store/useUserStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
-<<<<<<< HEAD
-import UserPage from 'pages/user/UserPage';
-=======
->>>>>>> 7e1c0e0966fe13c6173a506151fb29f90b364d49
 import {
   AdminManage,
   AdminCreateItem,
   AdminEditItem,
   AdminMain,
-<<<<<<< HEAD
-} from 'pages/admin';
-import { PrivateRoutes } from 'pages';
-import { LoginPage, SignupPage } from 'pages/user';
-=======
   AdminDashboard,
 } from 'pages/admin';
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
->>>>>>> 7e1c0e0966fe13c6173a506151fb29f90b364d49
 
 function App() {
   const { isLogin, setIsLogin, setIsInit } = useUserStore();
