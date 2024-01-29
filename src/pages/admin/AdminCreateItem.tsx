@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as S from 'styles/LoginStyled';
 import * as $ from 'styles/AdminStyled';
 import { usePostBook } from 'queries';
-import useBookInfo from 'pages/hooks/useBookInfo';
+import useBookInfo from 'hooks/useBookInfo';
 import { TextChange } from 'typescript';
 import ImageUploader from 'components/shared/ImageUploader';
 import Button from 'components/shared/Button';

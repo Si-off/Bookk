@@ -5,7 +5,7 @@ import Book from '../../components/user/Book';
 import { useInfinityScroll } from 'queries';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 import { CustomModal } from 'components/modal/CustomModal';
-import useIntersectionObserver from 'pages/hooks/useIntersectionObserver';
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import Dropdown from 'components/shared/Dropdown';
 import Loader from 'components/shared/Loader';
 import * as S from 'styles/SearchStyled';
