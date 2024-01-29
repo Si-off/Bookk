@@ -63,6 +63,10 @@ const AdminManage = () => {
   const showScroll = () => {
     document.body.style.overflow = "unset";
   };
+  const findSelectedBook = () => {
+    return books?.data.find((book) => book?.id === selectedBookId);
+  };
+  const selectedBook = findSelectedBook();
   const handleClick = (id: number) => {
     setModalOpen(true);
     unshowScroll();
@@ -160,7 +164,7 @@ const AdminManage = () => {
                           {modalOpen && (
                             <CustomModal
                               bookId={selectedBookId}
-                              book={book}
+                              book={selectedBook}
                               setModalOpen={setModalOpen}
                               showScroll={showScroll}
                             ></CustomModal>
