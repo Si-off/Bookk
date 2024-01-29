@@ -17,10 +17,8 @@ const UserPage = () => {
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [order, setOrder] = useState<'DESC' | 'ASC'>('DESC');
   const { search, setSearch } = useSearchStore();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfinityScroll(
-    order,
-    search
-  );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+    useInfinityScroll(order, search);
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
@@ -50,13 +48,22 @@ const UserPage = () => {
     document.body.style.overflow = 'unset';
   };
   const findSelectedBook = () => {
-    return data?.pages.flatMap((page) => page?.data).find((book) => book?.id === selectedBookId);
+    return data?.pages
+      .flatMap((page) => page?.data)
+      .find((book) => book?.id === selectedBookId);
   };
   const selectedBook = findSelectedBook();
   const handleClick = (id: number) => {
     setModalOpen(true);
     unshowScroll();
     setSelectedBookId(id); // 선택된 책의 ID를 상태에 저장
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   if (status === 'loading')
@@ -85,24 +92,36 @@ const UserPage = () => {
       <Stars2 />
       <Stars3 />
       <Layout>
+        <TotheTop onClick={scrollToTop}>Top</TotheTop>
         {status === 'success' &&
           data?.pages.map((page) =>
             page?.data.map((book, index) => {
               if (page.data.length - 1 === index) {
                 return (
                   <Fragment key={book.id}>
-                    <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
+                    <Book
+                      ref={targetRef}
+                      {...book}
+                      onClick={() => handleClick(book.id)}
+                    />
                     {modalOpen && (
                       <CustomModal
                         bookId={selectedBookId}
                         book={selectedBook}
                         setModalOpen={setModalOpen}
-                        showScroll={showScroll}></CustomModal>
+                        showScroll={showScroll}
+                      ></CustomModal>
                     )}
                   </Fragment>
                 );
               }
-              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
+              return (
+                <Book
+                  key={book.id}
+                  {...book}
+                  onClick={() => handleClick(book.id)}
+                />
+              );
             })
           )}
       </Layout>
@@ -133,4 +152,25 @@ const LoaderContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%);
+`;
+
+const TotheTop = styled.button`
+  position: fixed;
+  right: 5%;
+  bottom: 5%;
+  z-index: 200;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 15px 10px;
+  background-color: #000;
+  color: #fff;
+  border: 1px solid rgb(210, 204, 193);
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #017374;
+    border: 1px solid #017374;
+  }
 `;
