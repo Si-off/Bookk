@@ -10,7 +10,13 @@ import PrivateRoutes from 'pages/PrivateRoutes';
 import { useQueryClient } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
 import UserPage from 'pages/UserPage';
-import { AdminManage, AdminCreateItem, AdminEditItem, AdminMain } from 'pages/adminpage';
+import {
+  AdminManage,
+  AdminCreateItem,
+  AdminEditItem,
+  AdminMain,
+} from 'pages/adminpage';
+import MyPage from 'pages/MyPage';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit } = useUserStore();
@@ -38,6 +44,7 @@ function App() {
           <Route path='/' element={<UserPage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
+          <Route path='/mypage' element={<MyPage />} />
           <Route path='*' element={<Navigate to='/' />} />
         </Route>
 

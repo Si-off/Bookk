@@ -28,6 +28,11 @@ const NavigationItem = () => {
           <LinkStyle to='/user'>
             <Text>유저</Text>
           </LinkStyle>
+
+          <LinkStyle to='/mypage'>
+            <Text>마이페이지</Text>
+          </LinkStyle>
+
           <Logout onClick={() => logout()}>로그아웃</Logout>
         </>
       )}
