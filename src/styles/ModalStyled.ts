@@ -50,8 +50,10 @@ export const Modal = styled.div`
   position: absolute;
   max-width: ${pixelToRem(800)};
   height: 80%;
-  box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2),
-    0px 9px 46px 0px rgba(0, 0, 0, 0.12), 0px 24px 38px 0px rgba(0, 0, 0, 0.14);
+  box-shadow:
+    0px 11px 15px 0px rgba(0, 0, 0, 0.2),
+    0px 9px 46px 0px rgba(0, 0, 0, 0.12),
+    0px 24px 38px 0px rgba(0, 0, 0, 0.14);
 
   overflow: hidden;
   border-radius: 8px;
@@ -82,7 +84,8 @@ export const ModalPosterImg = styled.img`
   object-fit: contain;
   height: 200px;
   margin: ${pixelToRem([100, 60, 0, 60])};
-  box-shadow: 1px 1px ${getStyledColor('black', 700)},
+  box-shadow:
+    1px 1px ${getStyledColor('black', 700)},
     2px 2px ${getStyledColor('white', 'medium')},
     3px 3px ${getStyledColor('black', 700)},
     4px 4px ${getStyledColor('white', 'medium')},
@@ -146,4 +149,29 @@ export const CommentSection = styled.div`
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+`;
+export const HeartButton = styled.button<{ $liked: boolean | undefined }>`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 60px;
+  margin-top: 20px;
+  transform: scale(1.2);
+  color: ${(props) => (props.$liked ? 'red' : 'black')};
+
+  &:hover {
+    color: ${(props) => (props.$liked ? 'darkred' : 'grey')};
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  svg {
+    font-size: 24px; // Adjust the size of the FaHeart icon
+  }
 `;
