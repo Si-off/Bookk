@@ -1,12 +1,25 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
+import { useGetBookLikes } from 'queries';
 import React from 'react';
 import { styled } from 'styled-components';
 import { UserType } from 'types';
 
+// const {
+//   data: books,
+//   status,
+//   isSuccess,
+// } = useGetBooks({ take: 4, page: currentPage });
 
 const MyPage = () => {
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
+
+  const authorId = user?.id;
+
+  const { data: LikesBooks, status, isSuccess,} = useGetBookLikes(authorId || 0);
+
+  console.log('LikesBooks', LikesBooks);
+
   return (
     <Wrapper>
       <div className="one">
