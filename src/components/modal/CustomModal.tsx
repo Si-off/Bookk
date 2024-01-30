@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import * as S from 'styles/ModalStyled';
 import { useDeleteBookLike, useGetBookIsLike, useGetComments, usePostBookLike } from 'queries';
 
@@ -94,15 +94,15 @@ export const CustomModal = ({
               {' '}
               <div>
                 <S.ModalPosterImg src={`${book.images[0].fbPath[0]}`} alt="modal-img" />
-                <FaHeart
-                  style={{
-                    marginLeft: '60px',
-                    marginTop: '20px',
-                    scale: '1.2',
-                    color: bookIsLikeData?.isLike ? 'red' : 'black',
+                <S.HeartButton
+                  onClick={() => {
+                    toggleLike();
                   }}
-                  onClick={toggleLike}
-                />
+                  liked={bookIsLikeData?.isLike}
+                  disabled={postLikeStatus === 'loading' || deleteLikeStatus === 'loading'}
+                >
+                  <FaHeart />
+                </S.HeartButton>
               </div>
               <S.ModalContent>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
