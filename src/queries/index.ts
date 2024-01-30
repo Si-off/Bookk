@@ -221,7 +221,7 @@ export const useGetBookLikes = (authorId: number) => {
 
 export const useGetBookIsLike = (
   bookId: number,
-  userId: number | undefined
+  userId: number
 ) => {
   const queryClient = useQueryClient();
   const key = [QueryKeys.USER, "islike", bookId.toString()];

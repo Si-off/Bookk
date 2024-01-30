@@ -7,7 +7,8 @@ import {
   useLogin,
   usePostBookLike,
 } from "queries";
-import { useQuery } from "react-query";
+
+
 import useOnclickOutside from "hooks/useOnclickOutside";
 import { BookInfoType, UserType } from "types";
 import CommentWrite from "components/modal/CommentWrite";
@@ -16,6 +17,7 @@ import { IoIosClose } from "react-icons/io";
 import { useUserStore } from "store/useUserStore";
 import { FaHeart } from "react-icons/fa";
 import { QueryKeys } from "constant";
+import { useQuery } from "@tanstack/react-query";
 
 export const CustomModal = ({
   bookId,
@@ -42,7 +44,7 @@ export const CustomModal = ({
     data: bookIsLike,
     status,
     refetch,
-  } = useGetBookIsLike(bookId, user?.id);
+  } = useGetBookIsLike(bookId, user?.id as number);
   const { mutate: postLike } = usePostBookLike();
   const { mutate: deleteLike } = useDeleteBookLike();
   useEffect(() => {
