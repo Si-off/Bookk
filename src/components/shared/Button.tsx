@@ -4,8 +4,7 @@ import { getStyledColor } from 'utils';
 import * as S from 'styles/AdminStyledTemp';
 
 interface Props extends React.ComponentPropsWithoutRef<'button'> {
-  children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   status?: 'idle' | 'loading' | 'success' | 'error';
   $color?: string;
 }
@@ -14,17 +13,17 @@ interface CssProps {
   $color?: string;
 }
 const Button = (props: Props) => {
-  const { children, onClick, status = 'idle', ...rest } = props;
+  const { onClick, status = 'idle', ...rest } = props;
 
   const handleClick = () => {
     if (status === 'loading') return;
-    onClick();
+    onClick && onClick();
   };
 
   return (
     <StyledButton $variant="primary" onClick={handleClick} $status={status} {...rest}>
       {status === 'loading' && <Spinner />}
-      {children}
+      {rest.children}
     </StyledButton>
   );
 };
