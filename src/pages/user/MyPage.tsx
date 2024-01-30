@@ -1,8 +1,10 @@
-import React from 'react';
-import { styled } from 'styled-components';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
+import React from 'react';
+import { styled } from 'styled-components';
 import { UserType } from 'types';
+
+
 const MyPage = () => {
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
   return (
