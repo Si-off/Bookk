@@ -59,7 +59,7 @@ export const patchBook = async (params: BookPatchReq & { id: number }) => {
 };
 
 export const deleteBook = async (id: number) => {
-  const res = await Axios(`/api2s/${id}`).remove();
+  const res = await Axios(`/api2s/${id}`).remove({ id });
   return res;
 };
 
