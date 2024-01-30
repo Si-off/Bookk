@@ -30,7 +30,7 @@ export const CustomModal = ({
   });
   if (!bookId) return <div>loading...</div>;
   const { isLogin } = useUserStore();
-  const user = useQueryClient().getQueryData<UserType>([QueryKeys.LOGIN]);
+  const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
   const { data: bookIsLikeData, status, refetch } = useGetBookIsLike(bookId, user?.id || 0);
