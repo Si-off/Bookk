@@ -109,8 +109,10 @@ export type UserType = {
 export type BooklistParams = {
   take?: number;
   page?: number;
-  order__createdAt: 'DESC' | 'ASC';
-  where__title__i_like: string;
+  order__createdAt?: 'DESC' | 'ASC';
+  where__title__i_like?: string;
+  order__clicks?: 'DESC';
+  order__likeCount?: 'DESC';
 };
 
 export type ErrorType = {

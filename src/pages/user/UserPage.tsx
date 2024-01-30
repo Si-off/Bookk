@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { styled } from 'styled-components';
-import { getStyledColor, pixelToRem } from 'utils';
+import { getStyledColor } from 'utils';
 import Book from '../../components/user/Book';
 import { useInfinityScroll } from 'queries';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
@@ -15,10 +15,13 @@ const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [searchState, setSearchState] = useState('');
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
-  const [order, setOrder] = useState<'DESC' | 'ASC'>('DESC');
+  const [order, setOrder] = useState<'DESC' | 'ASC' | 'CLICKS' | 'LIKECOUNT'>('DESC');
+
   const { search, setSearch } = useSearchStore();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useInfinityScroll(order, search);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfinityScroll(
+    order,
+    search,
+  );
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
   });
@@ -48,9 +51,7 @@ const UserPage = () => {
     document.body.style.overflow = 'unset';
   };
   const findSelectedBook = () => {
-    return data?.pages
-      .flatMap((page) => page?.data)
-      .find((book) => book?.id === selectedBookId);
+    return data?.pages.flatMap((page) => page?.data).find((book) => book?.id === selectedBookId);
   };
   const selectedBook = findSelectedBook();
   const handleClick = (id: number) => {
@@ -78,7 +79,7 @@ const UserPage = () => {
       <Fragment>
         <S.Search>
           <S.SearchInput
-            placeholder='검색어를 입력하세요'
+            placeholder="검색어를 입력하세요"
             value={searchState}
             onChange={onChangeSearch}
             onKeyDown={onKeyPressSearch}
@@ -99,11 +100,7 @@ const UserPage = () => {
               if (page.data.length - 1 === index) {
                 return (
                   <Fragment key={book.id}>
-                    <Book
-                      ref={targetRef}
-                      {...book}
-                      onClick={() => handleClick(book.id)}
-                    />
+                    <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
                     {modalOpen && (
                       <CustomModal
                         bookId={selectedBookId}
@@ -115,14 +112,8 @@ const UserPage = () => {
                   </Fragment>
                 );
               }
-              return (
-                <Book
-                  key={book.id}
-                  {...book}
-                  onClick={() => handleClick(book.id)}
-                />
-              );
-            })
+              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
+            }),
           )}
       </Layout>
     </Main>

@@ -162,15 +162,31 @@ export const useDeleteComment = (bookId: number) => {
   });
 };
 
-export const useInfinityScroll = (order: 'DESC' | 'ASC', search: string) => {
+export const useInfinityScroll = (
+  order: 'DESC' | 'ASC' | 'CLICKS' | 'LIKECOUNT',
+  search: string,
+) => {
   return useInfiniteQuery({
     queryKey: [QueryKeys.USER, 'books', 'infinity', order, search],
-    queryFn: ({ pageParam = 1 }) =>
-      getBooks({
+    queryFn: ({ pageParam = 1 }) => {
+      const queryParameters: BooklistParams = {
         page: pageParam,
-        order__createdAt: order,
-        where__title__i_like: search,
-      }),
+      };
+      if (search) {
+        queryParameters.where__title__i_like = search;
+      }
+
+      // Set order parameters based on the order value
+      if (order === 'CLICKS') {
+        queryParameters.order__clicks = 'DESC';
+      } else if (order === 'LIKECOUNT') {
+        queryParameters.order__likeCount = 'DESC';
+      } else {
+        queryParameters.order__createdAt = order; // Include only for ASC or DESC
+      }
+
+      return getBooks(queryParameters);
+    },
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage) {
         return;
