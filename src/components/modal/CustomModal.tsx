@@ -98,7 +98,7 @@ export const CustomModal = ({
                   onClick={() => {
                     toggleLike();
                   }}
-                  liked={bookIsLikeData?.isLike}
+                  $liked={bookIsLikeData?.isLike}
                   disabled={postLikeStatus === 'loading' || deleteLikeStatus === 'loading'}
                 >
                   <FaHeart />

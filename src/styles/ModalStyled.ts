@@ -150,7 +150,7 @@ export const CommentSection = styled.div`
   border: 1px solid #888;
   width: 80%;
 `;
-export const HeartButton = styled.button<{ liked: boolean | undefined }>`
+export const HeartButton = styled.button<{ $liked: boolean | undefined }>`
   background: transparent;
   border: none;
   cursor: pointer;
@@ -160,10 +160,10 @@ export const HeartButton = styled.button<{ liked: boolean | undefined }>`
   margin-left: 60px;
   margin-top: 20px;
   transform: scale(1.2);
-  color: ${(props) => (props.liked ? 'red' : 'black')};
+  color: ${(props) => (props.$liked ? 'red' : 'black')};
 
   &:hover {
-    color: ${(props) => (props.liked ? 'darkred' : 'grey')};
+    color: ${(props) => (props.$liked ? 'darkred' : 'grey')};
   }
 
   &:disabled {
