@@ -1,16 +1,12 @@
-import React, { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
-import * as $ from 'styles/AdminStyled';
-import * as S from 'styles/LoginStyled';
+import * as S from 'styles/AdminStyledTemp';
 import { usePatchBook, useDeleteBook, useGetBook } from 'queries';
 import ImageUploader from 'components/shared/ImageUploader';
-import Button from 'components/shared/Button';
 import { ImagePatchReq } from 'types';
 import { postImage, deleteImage, addImage } from 'api';
-
 import Loader from 'components/shared/Loader';
-const BASE_URL = process.env.REACT_APP_SERVER_URL;
+import { Button } from 'components/shared';
 
 const AdminEditItem = () => {
   const { id } = useParams();
@@ -20,6 +16,8 @@ const AdminEditItem = () => {
   }
 
   const navigate = useNavigate();
+
+  /** states */
   const [title, setTitle] = useState('');
   const [patchLoading, setPatchLoading] = useState(false);
   const [content, setContent] = useState('');
@@ -28,7 +26,8 @@ const AdminEditItem = () => {
   const [originalImageId, setOriginalImageId] = useState<number | null>(null);
   const { data: book, isLoading } = useGetBook(numericId);
   const { mutate, status: patchStatus } = usePatchBook();
-  const { mutate: remove, status: removeStatus } = useDeleteBook();
+  const { mutate: remove } = useDeleteBook();
+
   useEffect(() => {
     setTitle(book?.title || '');
     setContent(book?.content || '');
@@ -36,11 +35,13 @@ const AdminEditItem = () => {
       book?.images.map((image) => ({
         id: image.id,
         newOrder: image.order,
-      })) || []
+      })) || [],
     );
     setOriginalImageId(book?.images[0]?.id || null);
   }, [book]);
   // id를 숫자로 변환
+
+  /** fallback */
   if (isLoading || patchLoading) {
     return <Loader />;
   }
@@ -51,7 +52,7 @@ const AdminEditItem = () => {
   const handleChangeTitle = (e: ReactChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-  const handleChangeContent = (e: ReactChangeEvent<HTMLInputElement>) => {
+  const handleChangeContent = (e: ReactChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
   const handleSetImage = async (fileData: File | null) => {
@@ -101,40 +102,42 @@ const AdminEditItem = () => {
   };
 
   return (
-    <$.Container>
-      <S.Wrapper>
-        <S.InputField>
-          <S.Label style={{ color: 'black' }}>도서명</S.Label>
-          <S.Input name='title' placeholder='Title' value={title} onChange={handleChangeTitle} />
-        </S.InputField>
+    <S.Layout>
+      <S.Container>
+        <S.Wrapper>
+          <S.InputField>
+            <S.Label style={{ color: 'black' }}>도서명</S.Label>
+            <S.Input name="title" placeholder="Title" value={title} onChange={handleChangeTitle} />
+          </S.InputField>
+          <S.InputField $marginTop={20}>
+            <S.Label style={{ color: 'black' }}>설명</S.Label>
+            <S.Textarea
+              name="content"
+              placeholder="content"
+              value={content}
+              onChange={handleChangeContent}
+            />
+          </S.InputField>
+        </S.Wrapper>
         <S.InputField $marginTop={20}>
-          <S.Label style={{ color: 'black' }}>설명</S.Label>
-          <S.Input
-            name='content'
-            placeholder='content'
-            value={content}
-            onChange={handleChangeContent}
-          />
+          <S.Label style={{ color: 'black' }}>이미지</S.Label>
+          {images && (
+            <ImageUploader
+              src={book?.images[0]?.fbPath[0]}
+              onChange={(fileData) => handleSetImage(fileData)}
+            />
+          )}
         </S.InputField>
-      </S.Wrapper>
-      <S.InputField $marginTop={20}>
-        <S.Label style={{ color: 'black' }}>이미지</S.Label>
-        {images && (
-          <ImageUploader
-            src={book?.images[0]?.fbPath[0]}
-            onChange={(fileData) => handleSetImage(fileData)}
-          />
-        )}
-      </S.InputField>
-      <S.InputField style={{ display: 'flex', marginTop: 30, gap: 20 }}>
-        <Button onClick={handleFinalUpdate} status={patchStatus}>
-          수정
-        </Button>
-        <Button onClick={handleRemove} color='red'>
-          삭제
-        </Button>
-      </S.InputField>
-    </$.Container>
+        <S.InputField style={{ display: 'flex', marginTop: 30, gap: 20 }}>
+          <Button onClick={handleFinalUpdate} status={patchStatus}>
+            수정
+          </Button>
+          <S.Button onClick={handleRemove} $variant="error">
+            삭제
+          </S.Button>
+        </S.InputField>
+      </S.Container>
+    </S.Layout>
   );
 };
 

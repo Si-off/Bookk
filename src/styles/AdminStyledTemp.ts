@@ -10,6 +10,7 @@ export const Layout = styled.div`
 `;
 
 export const Container = styled.div<{ $hidden?: boolean }>`
+  min-width: 500px;
   border-radius: 4px;
   background-color: #fff;
   padding: 20px 25px;
@@ -36,10 +37,7 @@ export const ContainerTitle = styled.div`
 
 type Variant = 'primary' | 'secondary' | 'success' | 'warning' | 'error';
 
-export const Button = styled.button<{
-  $variant?: Variant;
-  color?: string;
-}>`
+export const Button = styled.button<{ $variant?: Variant; color?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,7 +133,7 @@ export const Input = styled.input`
 export const Textarea = styled.textarea`
   width: 500px;
   max-width: ${pixelToRem(500)};
-  min-height: 200px;
+  min-height: 300px;
   padding: 15px 20px;
   background-color: ${getStyledColor('gray', 500)};
   color: ${getStyledColor('gray', 1200)};
@@ -143,6 +141,7 @@ export const Textarea = styled.textarea`
   border-radius: 20px;
   resize: none;
   outline: none;
+  line-height: 150%;
 
   &:focus {
     border: 3px solid ${getStyledColor('teal', 600)};
