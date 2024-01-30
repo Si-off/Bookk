@@ -1,17 +1,16 @@
 import React from 'react';
-import { useUserStore } from 'store/useUserStore';
 import { styled } from 'styled-components';
-
+import { useQueryClient } from '@tanstack/react-query';
+import { QueryKeys } from 'constant';
+import { UserType } from 'types';
 const MyPage = () => {
-  const { user } = useUserStore();
-
-  console.log(user);
+  const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
   return (
     <Wrapper>
-      <div className='one'>
-        <h1 className='1'>내정보</h1>
-        <div>이메일:{(user as any)?.email}</div>
-        <div>닉네임:{(user as any)?.nickname}</div>
+      <div className="one">
+        <h1 className="1">내정보</h1>
+        <div>이메일:{user?.email}</div>
+        <div>닉네임:{user?.nickname}</div>
         <button style={{ marginRight: '20px' }}>비밀번호 변경</button>
         <button>닉네임 변경</button>
       </div>
