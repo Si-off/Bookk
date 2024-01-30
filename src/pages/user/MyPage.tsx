@@ -14,9 +14,9 @@ import { UserType } from 'types';
 const MyPage = () => {
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
-  const authorId = user?.id;
+  const authorId: number = user?.id || 0;
 
-  const { data: LikesBooks, status, isSuccess,} = useGetBookLikes(authorId || 0);
+  const { data: LikesBooks, status, isSuccess } = useGetBookLikes(authorId);
 
   console.log('LikesBooks', LikesBooks);
 
