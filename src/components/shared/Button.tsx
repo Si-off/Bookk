@@ -3,17 +3,17 @@ import { FaSpinner } from 'react-icons/fa';
 import { getStyledColor } from 'utils';
 import * as S from 'styles/AdminStyledTemp';
 
-interface Props {
+interface Props extends React.ComponentPropsWithoutRef<'button'> {
   children: React.ReactNode;
   onClick: () => void;
-  $status?: 'idle' | 'loading';
-  $color?: any;
+  status?: 'idle' | 'loading' | 'success' | 'error';
+  $color?: string;
 }
 interface CssProps {
-  $status?: 'idle' | 'loading';
-  $color?: any;
+  $status?: 'idle' | 'loading' | 'success' | 'error';
+  $color?: string;
 }
-const Button = (props: any) => {
+const Button = (props: Props) => {
   const { children, onClick, status = 'idle', ...rest } = props;
 
   const handleClick = () => {
@@ -22,7 +22,7 @@ const Button = (props: any) => {
   };
 
   return (
-    <StyledButton variant='primary' onClick={handleClick} $status={status} {...rest}>
+    <StyledButton $variant="primary" onClick={handleClick} $status={status} {...rest}>
       {status === 'loading' && <Spinner />}
       {children}
     </StyledButton>
@@ -37,7 +37,7 @@ const spinAnimation = keyframes`
   }
 `;
 
-const StyledButton = styled(S.Button)<Props>`
+const StyledButton = styled(S.Button)<CssProps>`
   ${({ $status }) =>
     $status === 'loading' &&
     css<CssProps>`
@@ -48,6 +48,11 @@ const StyledButton = styled(S.Button)<Props>`
         background-color: ${({ $color }) => $color && getStyledColor('green', 800)};
       }
     `}
+
+  &:disabled {
+    cursor: default;
+    background-color: ${getStyledColor('gray', 900)};
+  }
 `;
 
 const Spinner = styled(FaSpinner)`

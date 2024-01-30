@@ -26,6 +26,10 @@ export const ContainerHeader = styled.div`
 `;
 
 export const ContainerTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: ${pixelToRem(24)};
   font-weight: 700;
 `;
@@ -33,7 +37,7 @@ export const ContainerTitle = styled.div`
 type Variant = 'primary' | 'secondary' | 'success' | 'warning' | 'error';
 
 export const Button = styled.button<{
-  variant?: Variant;
+  $variant?: Variant;
   color?: string;
 }>`
   display: flex;
@@ -45,8 +49,8 @@ export const Button = styled.button<{
   border-radius: 4px;
   font-weight: 500;
 
-  ${({ variant }) => {
-    switch (variant) {
+  ${({ $variant }) => {
+    switch ($variant) {
       case 'primary':
         return css`
           color: ${getStyledColor('white', 'high')};
@@ -94,11 +98,13 @@ export const Wrapper = styled.div<{ $marginTop?: number; $gap?: number }>`
 export const Label = styled.label`
   font-weight: 400;
   color: ${getStyledColor('gray', 900)};
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 `;
 
 export const InputField = styled.div<{ $marginTop?: number }>`
   width: 100%;
+  display: flex;
+  flex-direction: column;
   margin-top: ${({ $marginTop }) => ($marginTop ? $marginTop + 'px' : '')};
 
   input {
@@ -115,9 +121,10 @@ export const Input = styled.input`
   border: 3px solid rgba(0, 0, 0, 0);
   border-radius: 2px;
   transition: border 0.2s ease;
+  margin: 0;
 
   &:focus {
-    border: 3px solid ${getStyledColor('primary', 600)};
+    border: 3px solid ${getStyledColor('teal', 600)};
   }
 
   &::placeholder {
@@ -127,9 +134,23 @@ export const Input = styled.input`
 
 export const Textarea = styled.textarea`
   width: 500px;
+  max-width: ${pixelToRem(500)};
+  min-height: 200px;
+  padding: 15px 20px;
+  background-color: ${getStyledColor('gray', 500)};
+  color: ${getStyledColor('gray', 1200)};
+  border: 3px solid rgba(0, 0, 0, 0);
+  border-radius: 20px;
   resize: none;
-  border: none;
   outline: none;
+
+  &:focus {
+    border: 3px solid ${getStyledColor('teal', 600)};
+  }
+
+  &::placeholder {
+    color: ${getStyledColor('gray', 900)};
+  }
 `;
 
 export const Table = styled.table`

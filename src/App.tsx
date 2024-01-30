@@ -30,9 +30,9 @@ function App() {
         const accessToken = await getAccessToken();
         accessToken && setAccessToken(accessToken);
         setIsLogin(true);
+        setIsInit(false);
       })();
     }
-    setIsInit(false);
   }, [queryClient, setIsLogin, setIsInit, setAccessToken]);
 
   return (
