@@ -1,25 +1,3 @@
-<<<<<<< HEAD
-import { useEffect, useRef, useState } from "react";
-import * as S from "styles/ModalStyled";
-import {
-  useDeleteBookLike,
-  useGetBookIsLike,
-  useGetComments,
-  useLogin,
-  usePostBookLike,
-} from "queries";
-
-
-import useOnclickOutside from "hooks/useOnclickOutside";
-import { BookInfoType, UserType } from "types";
-import CommentWrite from "components/modal/CommentWrite";
-import CommentToggle from "components/modal/CommentToggle";
-import { IoIosClose } from "react-icons/io";
-import { useUserStore } from "store/useUserStore";
-import { FaHeart } from "react-icons/fa";
-import { QueryKeys } from "constant";
-import { useQuery } from "@tanstack/react-query";
-=======
 import { useEffect, useRef, useState } from 'react';
 import * as S from 'styles/ModalStyled';
 import { useDeleteBookLike, useGetBookIsLike, useGetComments, usePostBookLike } from 'queries';
@@ -33,7 +11,6 @@ import { useUserStore } from 'store/useUserStore';
 import { FaHeart } from 'react-icons/fa';
 import { QueryKeys } from 'constant';
 import { useQueryClient } from '@tanstack/react-query';
->>>>>>> 9981fc23c4b022f62431f3857f7cbc36c9051f02
 
 export const CustomModal = ({
   bookId,
@@ -56,27 +33,10 @@ export const CustomModal = ({
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.LOGIN]);
 
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
-<<<<<<< HEAD
-  const {
-    data: bookIsLike,
-    status,
-    refetch,
-  } = useGetBookIsLike(bookId, user?.id as number);
-  const { mutate: postLike } = usePostBookLike();
-  const { mutate: deleteLike } = useDeleteBookLike();
-  useEffect(() => {
-    if (bookIsLike) {
-      setLiked(true);
-    } else {
-      setLiked(false);
-    }
-  }, [bookIsLike]);
-=======
   const { data: bookIsLikeData, status, refetch } = useGetBookIsLike(bookId, user?.id || 0);
   const { mutate: postLike, status: postLikeStatus } = usePostBookLike();
   const { mutate: deleteLike, status: deleteLikeStatus } = useDeleteBookLike();
 
->>>>>>> 9981fc23c4b022f62431f3857f7cbc36c9051f02
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
