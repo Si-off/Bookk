@@ -9,9 +9,10 @@ const InitData: BookReq = {
 
 const useBookInfo = (initData = InitData) => {
   const [bookInfo, setBookInfo] = useState(initData);
+
   const resetBookInfo = useCallback(() => {
     setBookInfo(InitData);
-  }, []);
+  }, [setBookInfo]);
 
   return { bookInfo, setBookInfo, resetBookInfo };
 };

@@ -10,15 +10,18 @@ const AdminCreateItem = () => {
   const { mutate, status } = usePostBook();
   const { bookInfo, setBookInfo, resetBookInfo } = useBookInfo();
   const [isInvaild, setIsInvalid] = useState(true);
-  console.log(bookInfo);
 
   useEffect(() => {
+    if (!bookInfo.images) return;
     if (
-      bookInfo.title.length !== 0 &&
-      bookInfo.content.length !== 0 &&
-      bookInfo.images?.length !== 0
-    )
+      bookInfo.title.length === 0 ||
+      bookInfo.content.length === 0 ||
+      bookInfo.images.length === 0
+    ) {
+      setIsInvalid(true);
+    } else {
       setIsInvalid(false);
+    }
   }, [bookInfo, setIsInvalid]);
 
   const handleChange = (e: ReactChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,9 +40,7 @@ const AdminCreateItem = () => {
     }
   };
 
-  // TODO: 유효성 검사
   const onClick = async () => {
-    if (!bookInfo.title || !bookInfo.content) return alert('모든 내용을 채워주세요!');
     resetBookInfo();
     mutate({ ...bookInfo });
   };
