@@ -1,33 +1,29 @@
-import { styled, keyframes, css } from "styled-components";
-import { FaSpinner } from "react-icons/fa";
-import { getStyledColor } from "utils";
+import { styled, keyframes, css } from 'styled-components';
+import { FaSpinner } from 'react-icons/fa';
+import { getStyledColor } from 'utils';
+import * as S from 'styles/AdminStyledTemp';
 
 interface Props {
   children: React.ReactNode;
   onClick: () => void;
-  $status?: "idle" | "loading";
+  $status?: 'idle' | 'loading';
   $color?: any;
 }
 interface CssProps {
-  $status?: "idle" | "loading";
+  $status?: 'idle' | 'loading';
   $color?: any;
 }
 const Button = (props: any) => {
-  const { children, onClick, status = "idle", color = "blue", ...rest } = props;
+  const { children, onClick, status = 'idle', ...rest } = props;
 
   const handleClick = () => {
-    if (status === "loading") return;
+    if (status === 'loading') return;
     onClick();
   };
 
   return (
-    <StyledButton
-      onClick={handleClick}
-      $status={status}
-      $color={color}
-      {...rest}
-    >
-      {status === "loading" && <Spinner />}
+    <StyledButton variant='primary' onClick={handleClick} $status={status} {...rest}>
+      {status === 'loading' && <Spinner />}
       {children}
     </StyledButton>
   );
@@ -41,34 +37,15 @@ const spinAnimation = keyframes`
   }
 `;
 
-const StyledButton = styled.button<Props>`
-  display: inline-flex;
-  padding: 8px 16px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 4px;
-  font-weight: 500;
-  color: #fff;
-
-  background-color: ${({ $color }) => $color && getStyledColor($color, 800)};
-  &:hover {
-    background-color: ${({ $color }) => $color && getStyledColor($color, 900)};
-  }
-  &:active {
-    background-color: ${({ $color }) => $color && getStyledColor($color, 1000)};
-  }
-
+const StyledButton = styled(S.Button)<Props>`
   ${({ $status }) =>
-    $status === "loading" &&
+    $status === 'loading' &&
     css<CssProps>`
-      background-color: ${({ $color }) =>
-        $color && getStyledColor("green", 800)};
+      background-color: ${({ $color }) => $color && getStyledColor('green', 800)};
       cursor: none;
       &:hover,
       &:active {
-        background-color: ${({ $color }) =>
-          $color && getStyledColor("green", 800)};
+        background-color: ${({ $color }) => $color && getStyledColor('green', 800)};
       }
     `}
 `;

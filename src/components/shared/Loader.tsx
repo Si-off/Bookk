@@ -42,7 +42,7 @@ const Loader = ({ fill = COLOR }: Props) => {
 export default Loader;
 
 const StyledSVG = styled.svg`
-  position: relative;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

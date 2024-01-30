@@ -1,10 +1,8 @@
-import React, { ChangeEvent as ReactChangeEvent } from 'react';
+import { ChangeEvent as ReactChangeEvent } from 'react';
 import styled from 'styled-components';
-import * as S from 'styles/LoginStyled';
-import * as $ from 'styles/AdminStyled';
+import * as S from 'styles/AdminStyledTemp';
 import { usePostBook } from 'queries';
 import useBookInfo from 'hooks/useBookInfo';
-import { TextChange } from 'typescript';
 import ImageUploader from 'components/shared/ImageUploader';
 import Button from 'components/shared/Button';
 
@@ -12,7 +10,7 @@ const AdminCreateItem = () => {
   const { mutate, status } = usePostBook();
   const { bookInfo, setBookInfo, resetBookInfo } = useBookInfo();
 
-  const handleChange = (e: ReactChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ReactChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     switch (name) {
@@ -35,33 +33,32 @@ const AdminCreateItem = () => {
     mutate({ ...bookInfo });
   };
   return (
-    <Layout>
-      <$.Header>
-        <$.Title>책 등록하기</$.Title>
-      </$.Header>
-      <$.Container>
-        <$.SubTitle>책 등록</$.SubTitle>
+    <S.Layout>
+      <S.Container>
+        <S.ContainerHeader>
+          <S.ContainerTitle>책 등록하기</S.ContainerTitle>
+        </S.ContainerHeader>
         <S.Wrapper>
-          <$.InputField>
-            <$.Label>도서명</$.Label>
-            <$.Input
+          <S.InputField>
+            <S.Label>도서명</S.Label>
+            <S.Input
               name='title'
               placeholder='Title'
               value={bookInfo.title}
               onChange={handleChange}
             />
-          </$.InputField>
-          <$.InputField $marginTop={20}>
-            <$.Label>설명</$.Label>
-            <$.Input
+          </S.InputField>
+          <S.InputField $marginTop={20}>
+            <S.Label>설명</S.Label>
+            <S.Textarea
               name='content'
               placeholder='content'
               value={bookInfo.content}
               onChange={handleChange}
             />
-          </$.InputField>
-          <$.InputField $marginTop={20}>
-            <$.Label>이미지</$.Label>
+          </S.InputField>
+          <S.InputField $marginTop={20}>
+            <S.Label>이미지</S.Label>
             <ImageUploader
               src=''
               onChange={(fileData) =>
@@ -71,27 +68,16 @@ const AdminCreateItem = () => {
                 }))
               }
             />
-          </$.InputField>
+          </S.InputField>
         </S.Wrapper>
         <S.Wrapper $marginTop={40}>
           <Button onClick={onClick} status={status}>
             등록
           </Button>
         </S.Wrapper>
-      </$.Container>
-    </Layout>
+      </S.Container>
+    </S.Layout>
   );
 };
 
 export default AdminCreateItem;
-const Layout = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-width: 1200px;
-  padding: 45px;
-  overflow-x: scroll;
-  background-color: white;
-  height: 100vh;
-`;

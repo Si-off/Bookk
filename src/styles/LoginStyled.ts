@@ -63,7 +63,7 @@ const Layout = styled.div`
 `;
 
 const Label = styled.label`
-  font-weight: pixelToRem(400);
+  font-weight: 400;
   color: ${getStyledColor('white', 'medium')};
   margin-bottom: 20px;
 `;

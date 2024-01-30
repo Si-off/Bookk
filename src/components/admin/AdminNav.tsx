@@ -29,10 +29,9 @@ const AdminNav = () => {
       <Title>BOOKK</Title>
       <ul>
         {tabs.map((tab, index) => (
-          <Item $selected={index === selectedTab}>
+          <Item key={index} $selected={index === selectedTab}>
             <StyledLink
               to={tab.to}
-              key={index}
               $selected={index === selectedTab}
               onClick={() => setSelectedTab(index)}>
               {tab.icon}
@@ -57,7 +56,7 @@ const Title = styled.h1`
 const Nav = styled.nav`
   min-width: ${pixelToRem(200)};
   background-color: #fff;
-  padding: 20px 0 20px 20px;
+  padding: 20px 20px 20px 0px;
 
   ul {
     display: flex;
@@ -67,18 +66,32 @@ const Nav = styled.nav`
 `;
 
 const Item = styled.li<{ $selected: boolean }>`
+  border-radius: 4px;
   ${({ $selected }) =>
-    $selected &&
-    css`
-      border-right: 3px solid red
-
-      &:hover {
-        color: #9c89ff;
-      }
-      &:active {
-        color: #2912a6;
-      }
-    `}
+    $selected
+      ? css`
+          font-weight: 500;
+          color: ${getStyledColor('teal', 900)};
+          background-color: ${getStyledColor('teal', 400)};
+          &:hover {
+            color: ${getStyledColor('teal', 900)};
+            background-color: ${getStyledColor('teal', 500)};
+          }
+          &:active {
+            color: ${getStyledColor('teal', 900)};
+            background-color: ${getStyledColor('teal', 600)};
+          }
+        `
+      : css`
+          color: ${getStyledColor('cool_gray', 900)};
+          &:hover {
+            color: ${getStyledColor('cool_gray', 900)};
+            background-color: ${getStyledColor('cool_gray', 200)};
+          }
+          &:active {
+            background-color: ${getStyledColor('cool_gray', 300)};
+          }
+        `};
 `;
 
 const StyledLink = styled(Link)<{ $selected: boolean }>`
@@ -88,20 +101,23 @@ const StyledLink = styled(Link)<{ $selected: boolean }>`
   padding: 8px 12px;
   border-radius: 4px;
   white-space: nowrap;
-  color: red;
+  color: ${getStyledColor('teal', 900)};
   font-weight: 500;
+  margin-left: 30px;
 
   ${({ $selected }) =>
     $selected
       ? css`
           font-weight: 500;
-          color: red
-
+          color: ${getStyledColor('teal', 900)};
+          background-color: ${getStyledColor('teal', 400)};
           &:hover {
-            color: #9c89ff;
+            color: ${getStyledColor('teal', 900)};
+            background-color: ${getStyledColor('teal', 500)};
           }
           &:active {
-            color: #2912a6;
+            color: ${getStyledColor('teal', 900)};
+            background-color: ${getStyledColor('teal', 600)};
           }
         `
       : css`

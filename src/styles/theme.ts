@@ -231,7 +231,6 @@ export const styledOptions = {
   background: {
     dark: '#121212',
   },
-  admin: {},
 } as const;
 
 const theme: DefaultTheme = { ...styledOptions };
