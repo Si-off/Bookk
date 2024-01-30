@@ -203,14 +203,7 @@ export const useGetBookLikes = (authorId: number) => {
   });
 };
 
-<<<<<<< HEAD
-export const useGetBookIsLike = (
-  bookId: number,
-  userId: number
-) => {
-=======
 export const useGetBookIsLike = (bookId: number, userId: number) => {
->>>>>>> 9981fc23c4b022f62431f3857f7cbc36c9051f02
   const queryClient = useQueryClient();
   const key = [QueryKeys.USER, 'islike', bookId.toString()];
   const isUserIdValid = userId !== null && userId > 0;
