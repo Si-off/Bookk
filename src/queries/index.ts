@@ -111,11 +111,11 @@ export const useLogin = () => {
     onSuccess: (data) => {
       if (!data) return;
       getState().setIsLogin(true);
+      getState().setUser(data?.userInfo);
       getState().setAccessToken(data.accessToken);
       queryClient.setQueryData([QueryKeys.USER], data.userInfo);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
       navigate("/user");
-      getState().setUser(data.userInfo);
     },
   });
 };

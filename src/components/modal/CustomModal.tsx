@@ -55,15 +55,14 @@ export const CustomModal = ({
   };
 
   const [liked, setLiked] = useState(false);
-
   const toggleLike = () => {
     if (!isLogin) {
       alert("로그인이 필요합니다.");
       return;
     }
     if (bookId) {
-      if (bookIsLike) {
-        deleteLike({ bookId, likeId: user?.id });
+      if (bookIsLike?.isLike) {
+        deleteLike({ bookId, likeId: bookIsLike?.likeId });
       } else {
         postLike(bookId);
       }

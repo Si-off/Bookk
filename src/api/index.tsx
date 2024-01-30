@@ -10,7 +10,7 @@ import {
   CommentPostRes,
   PatchCommentReq,
   BookTakelistRes,
-  BookisLike,
+  BookisLikeRes,
 } from "types";
 
 export const getBooks = async (queries?: BooklistParams) => {
@@ -127,7 +127,7 @@ export const getBookIsLike = async ({
 }) => {
   const res = await new Axios(
     `/api2s/${bookId}/${userId}/is-like`
-  ).get<BookisLike>();
+  ).get<BookisLikeRes>();
   return res;
 };
 
