@@ -99,7 +99,7 @@ export const useLogin = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationKey: [QueryKeys.LOGIN],
+    mutationKey: [QueryKeys.USER_DATA],
     mutationFn: login,
     onSuccess: (data) => {
       if (!data) return;
@@ -113,7 +113,7 @@ export const useLogin = () => {
 
 export const useGetUser = (flag: boolean) => {
   return useQuery({
-    queryKey: [QueryKeys.USER],
+    queryKey: [QueryKeys.USER_DATA],
     queryFn: getUser,
     enabled: !!flag,
   });
