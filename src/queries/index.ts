@@ -219,12 +219,16 @@ export const useGetBookLikes = (authorId: number) => {
   });
 };
 
-export const useGetBookIsLike = (bookId: number, userId: number) => {
+export const useGetBookIsLike = (
+  bookId: number,
+  userId: number | undefined
+) => {
   const queryClient = useQueryClient();
   const key = [QueryKeys.USER, "islike", bookId.toString()];
 
   return useQuery({
     queryKey: key,
+    enabled: !!userId,
     queryFn: () => getBookIsLike({ bookId, userId }),
     select: (res) => res,
     onSuccess: () => {
