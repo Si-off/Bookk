@@ -1,14 +1,14 @@
-import { AuthorType } from 'types';
+import { UserType } from 'types';
 import { create } from 'zustand';
 
 interface UserStore {
-  user: AuthorType | null;
+  user: UserType | null;
   accessToken: string;
   isLogin: boolean;
   isInit: boolean;
   setIsLogin: (state: boolean) => void;
   setIsInit: (state: boolean) => void;
-  setUser: (user: any) => void;
+  setUser: (user: UserType | null) => void;
   setAccessToken: (token: string) => void;
 }
 
