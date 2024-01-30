@@ -8,15 +8,6 @@ export type ImagesType = {
   fbPath: string[];
 };
 
-export type AuthorType = {
-  id: number;
-  nickname: string;
-  name: string;
-  email: string;
-  followerCount: number;
-  followeeCount: number;
-};
-
 export type BookInfoType = {
   id: number;
   updatedAt: string;
@@ -28,7 +19,7 @@ export type BookInfoType = {
   reply2Count: number;
   isSecret: boolean;
   images: ImagesType[];
-  author: AuthorType;
+  author: UserType;
   api2cate: string;
 };
 
@@ -118,7 +109,7 @@ export type UserType = {
 export type BooklistParams = {
   take?: number;
   page?: number;
-  order__createdAt: "DESC" | "ASC";
+  order__createdAt: 'DESC' | 'ASC';
   where__title__i_like: string;
 };
 
