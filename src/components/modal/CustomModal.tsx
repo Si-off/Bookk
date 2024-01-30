@@ -4,16 +4,18 @@ import {
   useDeleteBookLike,
   useGetBookIsLike,
   useGetComments,
-  useGetUser,
+  useLogin,
   usePostBookLike,
 } from "queries";
+import { useQuery } from "react-query";
 import useOnclickOutside from "hooks/useOnclickOutside";
-import { BookInfoType } from "types";
+import { BookInfoType, UserType } from "types";
 import CommentWrite from "components/modal/CommentWrite";
 import CommentToggle from "components/modal/CommentToggle";
 import { IoIosClose } from "react-icons/io";
 import { useUserStore } from "store/useUserStore";
 import { FaHeart } from "react-icons/fa";
+import { QueryKeys } from "constant";
 
 export const CustomModal = ({
   bookId,
@@ -26,18 +28,30 @@ export const CustomModal = ({
   setModalOpen: (open: boolean) => void;
   showScroll: () => void;
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   useOnclickOutside(ref, () => {
     setModalOpen(false);
     showScroll();
   });
   if (!bookId) return <div>loading...</div>;
-  const { user, isLogin } = useUserStore();
+  const [liked, setLiked] = useState(false);
+  const { isLogin, user } = useUserStore();
 
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
-  const { data: bookIsLike, status } = useGetBookIsLike(bookId, user?.id || 0);
+  const {
+    data: bookIsLike,
+    status,
+    refetch,
+  } = useGetBookIsLike(bookId, user?.id);
   const { mutate: postLike } = usePostBookLike();
   const { mutate: deleteLike } = useDeleteBookLike();
+  useEffect(() => {
+    if (bookIsLike) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [bookIsLike]);
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
@@ -54,27 +68,21 @@ export const CustomModal = ({
     }
   };
 
-  const [liked, setLiked] = useState(false);
   const toggleLike = () => {
     if (!isLogin) {
       alert("로그인이 필요합니다.");
       return;
     }
-    if (bookId) {
-      if (bookIsLike?.isLike) {
-        deleteLike({ bookId, likeId: bookIsLike?.likeId });
-      } else {
-        postLike(bookId);
-      }
+
+    if (!liked) {
+      postLike(bookId);
+      refetch();
+    } else {
+      deleteLike({ bookId, likeId: bookIsLike?.likeId });
+      refetch();
     }
   };
-  useEffect(() => {
-    if (bookIsLike) {
-      setLiked(true);
-    } else {
-      setLiked(false);
-    }
-  }, [bookIsLike]);
+
   if (status === "error") return <div>error...</div>;
   return (
     <S.Presentation>

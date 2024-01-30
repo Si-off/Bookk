@@ -123,8 +123,9 @@ export const getBookIsLike = async ({
   userId,
 }: {
   bookId: number;
-  userId: number;
+  userId: number | undefined;
 }) => {
+  if (!userId) return;
   const res = await new Axios(
     `/api2s/${bookId}/${userId}/is-like`
   ).get<BookisLikeRes>();
