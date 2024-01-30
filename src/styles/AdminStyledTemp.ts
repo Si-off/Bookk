@@ -9,13 +9,13 @@ export const Layout = styled.div`
   justify-content: center;
 `;
 
-export const Container = styled.div<{ hidden?: boolean }>`
+export const Container = styled.div<{ $hidden?: boolean }>`
   border-radius: 4px;
   background-color: #fff;
   padding: 20px 25px;
 
-  ${({ hidden }) =>
-    hidden &&
+  ${({ $hidden }) =>
+    $hidden &&
     css`
       visibility: 'hidden';
     `}
@@ -108,7 +108,7 @@ export const InputField = styled.div<{ $marginTop?: number }>`
 
 export const Input = styled.input`
   width: 100%;
-  max-width: ${pixelToRem(380)};
+  max-width: ${pixelToRem(500)};
   padding: 15px 20px;
   background-color: ${getStyledColor('gray', 500)};
   color: ${getStyledColor('gray', 1200)};
@@ -125,7 +125,12 @@ export const Input = styled.input`
   }
 `;
 
-export const Textarea = styled.textarea``;
+export const Textarea = styled.textarea`
+  width: 500px;
+  resize: none;
+  border: none;
+  outline: none;
+`;
 
 export const Table = styled.table`
   border-radius: 4px;

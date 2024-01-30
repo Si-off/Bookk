@@ -4,29 +4,16 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { UserType } from 'types';
 
-// queryClient.setQueryData([QueryKeys.USER], data.userInfo);
-
-// queryClient.setQueryData(
-//   Querykey,
-//   (oldData) => oldData ? {
-//     ...oldData,
-//     title: 'my new post title'
-//   } : oldData
-// )
 
 const MyPage = () => {
-  const user = useQueryClient().getQueryData<UserType>([QueryKeys.LOGIN]);
-
-  console.log('user', user)
-
-
+  const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
   return (
     <Wrapper>
-      <div className='one'>
-        <h1 className='1'>내정보</h1>
+      <div className="one">
+        <h1 className="1">내정보</h1>
         <div>이메일:{user?.email}</div>
         <div>닉네임:{user?.nickname}</div>
-        <button style={{ marginRight: '20px' }}>이름 변경</button>
+        <button style={{ marginRight: '20px' }}>비밀번호 변경</button>
         <button>닉네임 변경</button>
       </div>
     </Wrapper>

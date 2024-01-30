@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
 import * as S from '../../styles/LoginStyled';
 import { useLogin } from 'queries';
-import { getStyledColor } from 'utils';
-import { styled } from 'styled-components';
 import Loader from 'components/shared/Loader';
 
 const LoginPage = () => {
@@ -63,23 +61,23 @@ const LoginPage = () => {
         <S.Title>로그인</S.Title>
         <S.Wrapper $gap={25}>
           <S.InputField>
-            <S.Label htmlFor='email'>이메일</S.Label>
+            <S.Label htmlFor="email">이메일</S.Label>
             <S.Input
-              id='email'
-              type='email'
-              placeholder='이메일을 입력해주세요.'
-              name='email'
+              id="email"
+              type="email"
+              placeholder="이메일을 입력해주세요."
+              name="email"
               value={email}
               onChange={handleChange}
             />
           </S.InputField>
           <S.InputField>
-            <S.Label htmlFor='password'>비밀번호</S.Label>
+            <S.Label htmlFor="password">비밀번호</S.Label>
             <S.Input
-              id='password'
-              type='password'
-              placeholder='비밀번호를 입력해주세요.'
-              name='password'
+              id="password"
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              name="password"
               value={password}
               onChange={handleChange}
             />
@@ -95,7 +93,7 @@ const LoginPage = () => {
 
           <div>
             <S.RegistText>아직 회원이 아니신가요?</S.RegistText>
-            <S.StyledLink to='/signup'>회원가입</S.StyledLink>
+            <S.StyledLink to="/signup">회원가입</S.StyledLink>
           </div>
         </S.Wrapper>
       </S.Layout>
