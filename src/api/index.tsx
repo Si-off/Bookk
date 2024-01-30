@@ -1,4 +1,5 @@
-import Axios from "api/axios";
+import { getAxiosInstance as Axios } from './axios/index';
+
 import {
   BookReq,
   BooklistParams,
@@ -11,22 +12,21 @@ import {
   PatchCommentReq,
   BookTakelistRes,
   BookisLikeRes,
-} from "types";
+} from 'types';
 
 export const getBooks = async (queries?: BooklistParams) => {
   let res;
   if (queries) {
-    res = await new Axios("/api2s").get<BookTakelistRes>(queries);
+    res = await Axios('/api2s').get<BookTakelistRes>(queries);
   } else {
-    res = await new Axios("/api2s").get<BooklistRes>(queries);
+    res = await Axios('/api2s').get<BooklistRes>(queries);
   }
 
   return res;
 };
 
 export const getNextBooks = async (queries: BooklistParams) => {
-  const res = await new Axios("/api2s").get<BooklistRes>(queries);
-
+  const res = await Axios('/api2s').get<BooklistRes>(queries);
   return res;
 };
 
@@ -35,13 +35,13 @@ export const postBooks = async (params: BookReq) => {
     const fileName = await postImage(params.images[0]);
     if (fileName) params.images[0] = fileName;
   }
-  const res = await new Axios("/api2s").post(params);
+  const res = await Axios('/api2s').post(params);
 
   return res;
 };
 
 export const getBook = async (id: number) => {
-  const res = await new Axios(`/api2s/${id}`).get<BookRes>();
+  const res = await Axios(`/api2s/${id}`).get<BookRes>();
 
   return res;
 };
@@ -53,87 +53,70 @@ export const patchBook = async (params: BookPatchReq & { id: number }) => {
   // }
   const { id, ...rest } = params;
 
-  const res = await new Axios(`/api2s/${id}`).patch(rest);
+  const res = await Axios(`/api2s/${id}`).patch(rest);
 
   return res;
 };
 
 export const deleteBook = async (id: number) => {
-  const res = await new Axios(`/api2s/${id}`).delete();
+  const res = await Axios(`/api2s/${id}`).remove();
   return res;
 };
 
-export const postImage = async (
-  imageFile: File
-): Promise<string | undefined> => {
+export const postImage = async (imageFile: File): Promise<string | undefined> => {
   const formData = new FormData();
-  formData.append("image", imageFile);
+  formData.append('image', imageFile);
 
-  const res = await new Axios("/fb/image/temp").post<{
+  const res = await Axios('/fb/image/temp').post<{
     tempFilePath: string[];
   }>(formData);
   return res?.tempFilePath[0];
 };
 
 export const deleteImage = async (bookId: number, imageId: number) => {
-  const res = await new Axios(
-    `/api2s/${bookId}/delete-image/${imageId}`
-  ).delete();
+  const res = await Axios(`/api2s/${bookId}/delete-image/${imageId}`).remove();
   return res;
 };
 
 export const addImage = async (bookId: number, images: string[]) => {
-  const res = await new Axios(
-    `/api2s/${bookId}/add-image`
-  ).post<BookAddImageRes>({
+  const res = await Axios(`/api2s/${bookId}/add-image`).post<BookAddImageRes>({
     images: images,
   });
   return res;
 };
 export const getComments = async (bookId: number) => {
-  const res = await new Axios(`/api2s/${bookId}/reply2s`).get<CommentGetRes>();
+  const res = await Axios(`/api2s/${bookId}/reply2s`).get<CommentGetRes>();
   return res;
 };
 export const postComment = async (bookId: number, comment: string) => {
-  const res = await new Axios(`/api2s/${bookId}/reply2s`).post<CommentPostRes>({
+  const res = await Axios(`/api2s/${bookId}/reply2s`).post<CommentPostRes>({
     reply2: comment,
   });
   return res;
 };
 export const patchComment = async (params: PatchCommentReq) => {
   const { bookId, comment, commentId } = params;
-  const res = await new Axios(`/api2s/${bookId}/reply2s/${commentId}`).patch({
+  const res = await Axios(`/api2s/${bookId}/reply2s/${commentId}`).patch({
     reply2: comment,
   });
   return res;
 };
 export const deleteComment = async (bookId: number, commentId: number) => {
-  const res = await new Axios(`/api2s/${bookId}/reply2s/${commentId}`).delete();
+  const res = await Axios(`/api2s/${bookId}/reply2s/${commentId}`).remove();
   return res;
 };
 export const getBooksLike = async (authorId: number) => {
-  const res = await new Axios(
-    `/users/${authorId}/like2s?take=10&order__updatedAt=DESC`
-  ).get();
+  const res = await Axios(`/users/${authorId}/like2s?take=10&order__updatedAt=DESC`).get();
   return res;
 };
 
-export const getBookIsLike = async ({
-  bookId,
-  userId,
-}: {
-  bookId: number;
-  userId: number | undefined;
-}) => {
-  if (!userId) return;
-  const res = await new Axios(
-    `/api2s/${bookId}/${userId}/is-like`
-  ).get<BookisLikeRes>();
+export const getBookIsLike = async ({ bookId, userId }: { bookId: number; userId: number }) => {
+  const res = await Axios(`/api2s/${bookId}/${userId}/is-like`).get<BookisLikeRes>();
   return res;
 };
 
 export const postBookLike = async (bookId: number) => {
-  const res = await new Axios(`/api2s/${bookId}/like2s`).post();
+  const res = await Axios(`/api2s/${bookId}/like2s`).post();
   return res;
 };
 
@@ -145,6 +128,6 @@ export const deleteBookLike = async ({
   likeId: number | undefined;
 }) => {
   if (!likeId) return;
-  const res = await new Axios(`/api2s/${bookId}/like2s/${likeId}`).delete();
+  const res = await Axios(`/api2s/${bookId}/like2s/${likeId}`).remove();
   return res;
 };

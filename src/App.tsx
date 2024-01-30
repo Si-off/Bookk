@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import Navigation from './components/layout/Navigation';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import CustomAxiosInstance from 'api/axios';
 import secureLocalStorage from 'react-secure-storage';
 import { QueryKeys, StorageKeys } from 'constant';
 import { useUserStore } from 'store/useUserStore';
 import { useQueryClient } from '@tanstack/react-query';
-import { getUser } from 'api/auth';
+import { getAccessToken, getUser } from 'api/auth';
 import {
   AdminManage,
   AdminCreateItem,
@@ -20,12 +19,14 @@ import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
 function App() {
   const { isLogin, setIsLogin, setIsInit } = useUserStore();
   const queryClient = useQueryClient();
+  const { setAccessToken } = useUserStore();
 
   useEffect(() => {
     const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
     if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
       (async () => {
-        await CustomAxiosInstance.init();
+        const accessToken = await getAccessToken();
+        accessToken && setAccessToken(accessToken);
         await queryClient.fetchQuery({
           queryKey: [QueryKeys.LOGIN],
           queryFn: getUser,
@@ -34,7 +35,7 @@ function App() {
       setIsLogin(true);
     }
     setIsInit(false);
-  }, []);
+  }, [queryClient, setIsLogin, setIsInit, setAccessToken]);
 
   return (
     <BrowserRouter>
