@@ -29,8 +29,8 @@ function App() {
       (async () => {
         const accessToken = await getAccessToken();
         accessToken && setAccessToken(accessToken);
+        setIsLogin(true);
       })();
-      setIsLogin(true);
     }
     setIsInit(false);
   }, [queryClient, setIsLogin, setIsInit, setAccessToken]);
