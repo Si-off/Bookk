@@ -16,8 +16,7 @@ import {
 } from 'api';
 import { BooklistParams } from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
-import { login, getUser } from 'api/auth';
-import CustomAxiosInstance from 'api/axios';
+import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
@@ -96,8 +95,7 @@ export const useDeleteBook = () => {
 };
 
 export const useLogin = () => {
-  const { getState } = useUserStore;
-  const queryClient = useQueryClient();
+  const { setIsLogin, setAccessToken } = useUserStore.getState();
   const navigate = useNavigate();
 
   return useMutation({
@@ -105,28 +103,19 @@ export const useLogin = () => {
     mutationFn: login,
     onSuccess: (data) => {
       if (!data) return;
-      getState().setIsLogin(true);
-      getState().setUser(data?.userInfo);
-      getState().setAccessToken(data.accessToken);
-      queryClient.setQueryData([QueryKeys.USER], data.userInfo);
+      setIsLogin(true);
+      setAccessToken(data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
       navigate('/user');
     },
   });
 };
 
-export const useGetUser = (token: string) => {
-  const { getState } = useUserStore;
-
+export const useGetUser = (flag: boolean) => {
   return useQuery({
     queryKey: [QueryKeys.USER],
     queryFn: getUser,
-    enabled: !!token,
-    onSuccess: (data) => {
-      if (!data) return;
-      getState().setIsLogin(true);
-      getState().setUser(data.userInfo);
-    },
+    enabled: !!flag,
   });
 };
 
