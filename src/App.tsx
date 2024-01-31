@@ -12,6 +12,7 @@ import {
   AdminEditItem,
   AdminMain,
   AdminDashboard,
+  AdminManageUsers,
 } from 'pages/admin';
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
@@ -50,7 +51,8 @@ function App() {
           <Route path="/admin" element={<AdminMain />}>
             <Route path="" element={<AdminDashboard />} />
             <Route path="create" element={<AdminCreateItem />} />
-            <Route path="manage" element={<AdminManage />} />
+            <Route path="manage/books" element={<AdminManage />} />
+            <Route path="manage/users" element={<AdminManageUsers />} />
             <Route path="edit/:id" element={<AdminEditItem />} />
           </Route>
         </Route>
