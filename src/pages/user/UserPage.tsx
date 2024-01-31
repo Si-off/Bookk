@@ -76,6 +76,9 @@ const UserPage = () => {
 
   return (
     <Main>
+      <Stars />
+      <Stars2 />
+      <Stars3 />
       <S.WrapperSearch>
         <S.Search>
           <S.SearchInput
@@ -89,34 +92,32 @@ const UserPage = () => {
         </S.Search>
         <Dropdown order={order} setOrder={setOrder} />
       </S.WrapperSearch>
-
-      <Stars />
-      <Stars2 />
-      <Stars3 />
-      <Layout>
-        <TotheTop onClick={scrollToTop}>Top</TotheTop>
-        {status === 'success' &&
-          data?.pages.map((page) =>
-            page?.data.map((book, index) => {
-              if (page.data.length - 1 === index) {
-                return (
-                  <Fragment key={book.id}>
-                    <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
-                    {modalOpen && (
-                      <CustomModal
-                        bookId={selectedBookId}
-                        book={selectedBook}
-                        setModalOpen={setModalOpen}
-                        showScroll={showScroll}
-                      ></CustomModal>
-                    )}
-                  </Fragment>
-                );
-              }
-              return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
-            }),
-          )}
-      </Layout>
+      <LayoutContainer>
+        <Layout>
+          <TotheTop onClick={scrollToTop}>Top</TotheTop>
+          {status === 'success' &&
+            data?.pages.map((page) =>
+              page?.data.map((book, index) => {
+                if (page.data.length - 1 === index) {
+                  return (
+                    <Fragment key={book.id}>
+                      <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
+                      {modalOpen && (
+                        <CustomModal
+                          bookId={selectedBookId}
+                          book={selectedBook}
+                          setModalOpen={setModalOpen}
+                          showScroll={showScroll}
+                        ></CustomModal>
+                      )}
+                    </Fragment>
+                  );
+                }
+                return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
+              }),
+            )}
+        </Layout>
+      </LayoutContainer>
     </Main>
   );
 };
@@ -124,15 +125,19 @@ const UserPage = () => {
 export default UserPage;
 
 const Main = styled.main`
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding-top: 10%;
   position: relative;
+`;
+const LayoutContainer = styled.div`
+  display: flex;
 `;
 
 const Layout = styled.div`
   width: 1200px;
+  margin: 0 auto;
   background-color: ${getStyledColor('background', 'dark')};
   display: grid;
   grid-gap: 5px;
