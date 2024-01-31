@@ -26,11 +26,12 @@ const NavigationItem = () => {
       )}
       {isLogin && (
         <>
-          {data?.role === 'MANAGER' && (
-            <LinkStyle to="/admin">
-              <Text>관리자</Text>
-            </LinkStyle>
-          )}
+          {data?.role === 'ADMIN' ||
+            ('MANAGER' && (
+              <LinkStyle to="/admin">
+                <Text>관리자</Text>
+              </LinkStyle>
+            ))}
 
           <LinkStyle to="/user">
             <Text>유저</Text>

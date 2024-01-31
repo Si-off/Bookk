@@ -104,7 +104,7 @@ export type UserType = {
   followerCount: number;
   followeeCount: number;
   valid_email: boolean;
-  role: 'MANAGER' | 'USER';
+  role: 'ADMIN' | 'MANAGER' | 'USER';
   profileImage: [];
 };
 
