@@ -11,6 +11,7 @@ export const Layout = styled.div`
 
 export const Container = styled.div<{ $hidden?: boolean }>`
   min-width: 500px;
+  max-height: 100vh;
   border-radius: 4px;
   background-color: #fff;
   padding: 20px 25px;
@@ -133,7 +134,7 @@ export const Input = styled.input`
 export const Textarea = styled.textarea`
   width: 500px;
   max-width: ${pixelToRem(500)};
-  min-height: 300px;
+  min-height: 200px;
   padding: 15px 20px;
   background-color: ${getStyledColor('gray', 500)};
   color: ${getStyledColor('gray', 1200)};
@@ -149,6 +150,10 @@ export const Textarea = styled.textarea`
 
   &::placeholder {
     color: ${getStyledColor('gray', 900)};
+  }
+
+  &::-webkit-scrollbar {
+    overflow: hidden;
   }
 `;
 
