@@ -1,22 +1,35 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
 import { useGetBookLikes } from 'queries';
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { UserType } from 'types';
-
-// const {
-//   data: books,
-//   status,
-//   isSuccess,
-// } = useGetBooks({ take: 4, page: currentPage });
+import { getStyledColor } from 'utils';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { Book } from 'components/user';
 
 const MyPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const authorId: number = user?.id || 0;
 
-  const { data: LikesBooks, status, isSuccess } = useGetBookLikes(authorId);
+  const {
+    data: LikesBooks,
+    status,
+    isSuccess,
+  } = useGetBookLikes({ authorId: authorId, take: 4, page: currentPage });
+
+  const handlePageClick = (pageNum: number) => {
+    if (status !== 'success') return;
+
+    const totalPages = Math.ceil(LikesBooks.total / 4);
+
+    if (pageNum < 1 || pageNum > totalPages) return;
+
+    setCurrentPage(pageNum);
+  };
 
   console.log('LikesBooks', LikesBooks);
 
@@ -28,6 +41,23 @@ const MyPage = () => {
         <div>닉네임:{user?.nickname}</div>
         <button style={{ marginRight: '20px' }}>비밀번호 변경</button>
         <button>닉네임 변경</button>
+      </div>
+      <div className="two">
+        <h2>내가 좋아요 한 책</h2>
+        <Layout>
+          <ArrowButton>
+            <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
+          </ArrowButton>
+          <BookWrapper $isSuccess={isSuccess}>
+            {status === 'success' &&
+              LikesBooks.data.map((book) => {
+                return <Book {...book} key={book.id} />;
+              })}
+          </BookWrapper>
+          <ArrowButton>
+            <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
+          </ArrowButton>
+        </Layout>
       </div>
     </Wrapper>
   );
@@ -57,4 +87,36 @@ const Wrapper = styled.div`
       color: black;
     }
   }
+
+  .two {
+    grid-column: 2 / -2;
+    grid-row: 2;
+    margin-top: 20px;
+    color: white;
+  }
+`;
+
+const Layout = styled.div`
+  height: 100vh;
+  background-color: ${getStyledColor('cool_gray', 1200)};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const BookWrapper = styled.div<{ $isSuccess?: boolean }>`
+  display: flex;
+  width: 70%;
+  transition: opacity 1s ease;
+  opacity: ${({ $isSuccess }) => ($isSuccess ? 1 : 0)};
+`;
+
+const ArrowButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  cursor: pointer;
+  margin: 0 50px;
 `;

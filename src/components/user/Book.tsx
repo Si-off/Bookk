@@ -9,10 +9,10 @@ interface Props extends BookInfoType {
 
 const Book = (
   { title, images, onClick }: Props,
-  forwardedRef: React.ForwardedRef<HTMLDivElement>
+  forwardedRef: React.ForwardedRef<HTMLDivElement>,
 ) => {
   const [isShow, setIsShow] = useState(false);
-  const imageUrl = images[0]?.fbPath[0];
+  const imageUrl = images && images.length > 0 ? images[0]?.fbPath[0] : null;
 
   useEffect(() => {
     setIsShow(true);
@@ -21,7 +21,7 @@ const Book = (
   return (
     <Container ref={forwardedRef} $isShow={isShow}>
       <Inner onClick={onClick}>
-        {images && <Image src={imageUrl} />}
+        {imageUrl && <Image src={imageUrl} />}
         <Title>{title}</Title>
       </Inner>
     </Container>
@@ -52,7 +52,9 @@ const Image = styled.img`
   height: ${pixelToRem(300)};
   border-radius: 4px;
   object-fit: cover;
-  box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.2), 0px 3px 14px 0px rgba(0, 0, 0, 0.12),
+  box-shadow:
+    0px 5px 5px 0px rgba(0, 0, 0, 0.2),
+    0px 3px 14px 0px rgba(0, 0, 0, 0.12),
     0px 8px 10px 0px rgba(0, 0, 0, 0.14);
 `;
 

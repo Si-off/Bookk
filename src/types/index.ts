@@ -117,6 +117,12 @@ export type BooklistParams = {
   order__likeCount?: 'DESC';
 };
 
+export type LikesBooklistParams = {
+  authorId: number;
+  take: number;
+  page: number;
+};
+
 export type ErrorType = {
   message: string;
 };
