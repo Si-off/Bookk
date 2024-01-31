@@ -76,7 +76,7 @@ const UserPage = () => {
 
   return (
     <Main>
-      <Fragment>
+      <S.WrapperSearch>
         <S.Search>
           <S.SearchInput
             placeholder="검색어를 입력하세요"
@@ -87,8 +87,9 @@ const UserPage = () => {
           <S.SearchButton onClick={onClickSearch}>검색</S.SearchButton>
           <S.ResetButton onClick={onClickReset}>초기화</S.ResetButton>
         </S.Search>
-      </Fragment>
-      <Dropdown order={order} setOrder={setOrder} />
+        <Dropdown order={order} setOrder={setOrder} />
+      </S.WrapperSearch>
+
       <Stars />
       <Stars2 />
       <Stars3 />
@@ -124,8 +125,10 @@ export default UserPage;
 
 const Main = styled.main`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding-top: 10%;
+  position: relative;
 `;
 
 const Layout = styled.div`
