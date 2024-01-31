@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NavigationItem from './NavigationItem';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { getStyledColor } from 'utils';
 
 const HEIGHT = 56;
@@ -29,12 +29,15 @@ const Navigation = () => {
   };
 
   return (
-    <NavigationWrapper $isVisible={isVisible} $height={HEIGHT}>
-      <Logo>
-        <Title onClick={logoClick}>BOOKK</Title>
-      </Logo>
-      <NavigationItem />
-    </NavigationWrapper>
+    <>
+      <NavigationWrapper $isVisible={isVisible} $height={HEIGHT}>
+        <Logo>
+          <Title onClick={logoClick}>BOOKK</Title>
+        </Logo>
+        <NavigationItem />
+      </NavigationWrapper>
+      <Outlet />
+    </>
   );
 };
 

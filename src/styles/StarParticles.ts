@@ -2,12 +2,12 @@ import styled, { css, keyframes } from 'styled-components';
 
 const multipleBoxShadow = (n: number) => {
   let value = `${Math.floor(Math.random() * 2000)}px ${Math.floor(
-    Math.random() * 2000
+    Math.random() * 2000,
   )}px rgba(255, 255, 255, 0.5)`;
 
   for (let i = 2; i <= n; i++) {
     value += `, ${Math.floor(Math.random() * 2000)}px ${Math.floor(
-      Math.random() * 2000
+      Math.random() * 2000,
     )}px rgba(255, 255, 255, 0.5)`;
   }
 
@@ -15,8 +15,10 @@ const multipleBoxShadow = (n: number) => {
 };
 
 const animStar = keyframes`
+
   from {
-    transform: translateY(0px);
+    transform: translateY(0vh);
+
   }
   to {
     transform: translateY(-100vh);

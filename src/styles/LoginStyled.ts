@@ -12,6 +12,7 @@ interface InputFieldProps {
 
 const Body = styled.div`
   background-color: #282828;
+  width: 100%;
   height: 100vh;
 `;
 
@@ -37,6 +38,7 @@ const Layout = styled.div`
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: ${pixelToRem(430)};
+  min-height: ${pixelToRem(200)}; /* 최소 높이 설정 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,11 +48,24 @@ const Layout = styled.div`
   border-radius: 4px;
   box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2), 0px 9px 46px 0px rgba(0, 0, 0, 0.12),
     0px 24px 38px 0px rgba(0, 0, 0, 0.14);
+  overflow: auto; /* 스크롤 가능하게 설정 */
+
+  /* 노트북 화면 크기에 대한 미디어 쿼리 */
+  @media (max-width: 1440px) {
+    max-width: ${pixelToRem(400)};
+    padding: 30px 36px;
+  }
+
+  @media (max-width: 1024px) {
+    max-width: ${pixelToRem(360)};
+    padding: 20px 24px;
+  }
 `;
 
 const Label = styled.label`
-  font-weight: 300;
+  font-weight: 400;
   color: ${getStyledColor('white', 'medium')};
+  margin-bottom: 20px;
 `;
 
 const InputField = styled.div<InputFieldProps>`

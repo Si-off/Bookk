@@ -1,16 +1,12 @@
-import React, { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
-import * as $ from 'styles/AdminStyled';
-import * as S from 'styles/LoginStyled';
+import * as S from 'styles/AdminStyledTemp';
 import { usePatchBook, useDeleteBook, useGetBook } from 'queries';
-import ImageUploader from 'components/ImageUploader';
-import Button from 'components/Button';
+import ImageUploader from 'components/shared/ImageUploader';
 import { ImagePatchReq } from 'types';
 import { postImage, deleteImage, addImage } from 'api';
-
-import Loader from 'components/Loader';
-const BASE_URL = process.env.REACT_APP_SERVER_URL;
+import Loader from 'components/shared/Loader';
+import { Button } from 'components/shared';
 
 const AdminEditItem = () => {
   const { id } = useParams();
@@ -20,6 +16,8 @@ const AdminEditItem = () => {
   }
 
   const navigate = useNavigate();
+
+  /** states */
   const [title, setTitle] = useState('');
   const [patchLoading, setPatchLoading] = useState(false);
   const [content, setContent] = useState('');
@@ -28,7 +26,8 @@ const AdminEditItem = () => {
   const [originalImageId, setOriginalImageId] = useState<number | null>(null);
   const { data: book, isLoading } = useGetBook(numericId);
   const { mutate, status: patchStatus } = usePatchBook();
-  const { mutate: remove, status: removeStatus } = useDeleteBook();
+  const { mutate: remove } = useDeleteBook();
+
   useEffect(() => {
     setTitle(book?.title || '');
     setContent(book?.content || '');
@@ -36,11 +35,13 @@ const AdminEditItem = () => {
       book?.images.map((image) => ({
         id: image.id,
         newOrder: image.order,
-      })) || []
+      })) || [],
     );
     setOriginalImageId(book?.images[0]?.id || null);
   }, [book]);
   // id를 숫자로 변환
+
+  /** fallback */
   if (isLoading || patchLoading) {
     return <Loader />;
   }
@@ -51,7 +52,7 @@ const AdminEditItem = () => {
   const handleChangeTitle = (e: ReactChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-  const handleChangeContent = (e: ReactChangeEvent<HTMLInputElement>) => {
+  const handleChangeContent = (e: ReactChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
   const handleSetImage = async (fileData: File | null) => {
@@ -101,25 +102,25 @@ const AdminEditItem = () => {
   };
 
   return (
-    <Layout>
-      <$.Container>
+    <S.Layout>
+      <S.Container>
         <S.Wrapper>
           <S.InputField>
-            <S.Label>도서명</S.Label>
-            <S.Input name='title' placeholder='Title' value={title} onChange={handleChangeTitle} />
+            <S.Label style={{ color: 'black' }}>도서명</S.Label>
+            <S.Input name="title" placeholder="Title" value={title} onChange={handleChangeTitle} />
           </S.InputField>
           <S.InputField $marginTop={20}>
-            <S.Label>설명</S.Label>
-            <S.Input
-              name='content'
-              placeholder='content'
+            <S.Label style={{ color: 'black' }}>설명</S.Label>
+            <S.Textarea
+              name="content"
+              placeholder="content"
               value={content}
               onChange={handleChangeContent}
             />
           </S.InputField>
         </S.Wrapper>
         <S.InputField $marginTop={20}>
-          <S.Label>이미지</S.Label>
+          <S.Label style={{ color: 'black' }}>이미지</S.Label>
           {images && (
             <ImageUploader
               src={book?.images[0]?.fbPath[0]}
@@ -131,24 +132,16 @@ const AdminEditItem = () => {
           <Button onClick={handleFinalUpdate} status={patchStatus}>
             수정
           </Button>
-          <Button onClick={handleRemove} color='red'>
+          <S.Button onClick={handleRemove} $variant="error">
             삭제
-          </Button>
+          </S.Button>
         </S.InputField>
-      </$.Container>
-    </Layout>
+      </S.Container>
+    </S.Layout>
   );
 };
 
 export default AdminEditItem;
-const Layout = styled.div`
-  min-width: 1200px;
-  padding: 45px;
-  overflow-x: scroll;
-  background-color: white;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-`;
+
 //setImage때 postImage로 이미지 경로를 받은 뒤에 이미지 id를 일단 바꾼다. 취소 버튼을 누르면 해당 이미지를 deleteImage을 해야함
 //최종 수정버튼을 누를 때 deleteImage(기존 이미지id), addImage하고 patchbook을 한다.

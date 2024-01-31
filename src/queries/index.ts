@@ -1,9 +1,4 @@
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import {
   getBooks,
   postBooks,
@@ -14,17 +9,20 @@ import {
   patchComment,
   deleteComment,
   getComments,
-} from "api";
-import { BooklistParams } from "types";
-import { QueryKeys, StorageKeys } from "constant";
-import { login, getUser } from "api/auth";
-import CustomAxiosInstance from "api/axios";
-import secureLocalStorage from "react-secure-storage";
-import { useNavigate } from "react-router-dom";
-import { useUserStore } from "store/useUserStore";
+  getBooksLike,
+  postBookLike,
+  deleteBookLike,
+  getBookIsLike,
+} from 'api';
+import { BooklistParams } from 'types';
+import { QueryKeys, StorageKeys } from 'constant';
+import { getUser, login } from 'api/auth';
+import secureLocalStorage from 'react-secure-storage';
+import { useNavigate } from 'react-router-dom';
+import { useUserStore } from 'store/useUserStore';
 
 export const useGetBooks = (queries?: BooklistParams) => {
-  const key = [QueryKeys.USER, "books"];
+  const key = [QueryKeys.USER, 'books'];
   if (queries?.page) key.push(queries.page.toString());
 
   return useQuery({
@@ -37,7 +35,7 @@ export const useGetBooks = (queries?: BooklistParams) => {
 };
 
 export const useGetBooksAdmin = (queries: BooklistParams) => {
-  const key = [QueryKeys.ADMIN, "books"];
+  const key = [QueryKeys.ADMIN, 'books'];
 
   if (queries?.page) key.push(queries.page.toString());
 
@@ -48,7 +46,7 @@ export const useGetBooksAdmin = (queries: BooklistParams) => {
 };
 
 export const useGetBook = (id: number) => {
-  const key = [QueryKeys.ADMIN, "books", id.toString()];
+  const key = [QueryKeys.ADMIN, 'books', id.toString()];
 
   return useQuery({
     queryKey: key,
@@ -61,11 +59,11 @@ export const usePostBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QueryKeys.ADMIN, "books"],
+    mutationKey: [QueryKeys.ADMIN, 'books'],
     mutationFn: postBooks,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.ADMIN, "books"]);
-      queryClient.invalidateQueries([QueryKeys.USER, "books"]);
+      queryClient.invalidateQueries([QueryKeys.ADMIN, 'books']);
+      queryClient.invalidateQueries([QueryKeys.USER, 'books']);
     },
   });
 };
@@ -74,11 +72,11 @@ export const usePatchBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QueryKeys.ADMIN, "books"],
+    mutationKey: [QueryKeys.ADMIN, 'books'],
     mutationFn: patchBook,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.ADMIN, "books"]);
-      queryClient.invalidateQueries([QueryKeys.USER, "books"]);
+      queryClient.invalidateQueries([QueryKeys.ADMIN, 'books']);
+      queryClient.invalidateQueries([QueryKeys.USER, 'books']);
     },
   });
 };
@@ -87,50 +85,42 @@ export const useDeleteBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QueryKeys.ADMIN, "books"],
+    mutationKey: [QueryKeys.ADMIN, 'books'],
     mutationFn: deleteBook,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.ADMIN, "books"]);
-      queryClient.invalidateQueries([QueryKeys.USER, "books"]);
+      queryClient.invalidateQueries([QueryKeys.ADMIN, 'books']);
+      queryClient.invalidateQueries([QueryKeys.USER, 'books']);
     },
   });
 };
 
 export const useLogin = () => {
-  const { getState } = useUserStore;
-  const queryClient = useQueryClient();
+  const { setIsLogin, setAccessToken } = useUserStore.getState();
   const navigate = useNavigate();
 
   return useMutation({
-    mutationKey: [QueryKeys.LOGIN],
+    mutationKey: [QueryKeys.USER_DATA],
     mutationFn: login,
     onSuccess: (data) => {
       if (!data) return;
-      getState().setIsLogin(true);
-      queryClient.setQueryData([QueryKeys.USER], data.userInfo);
-      CustomAxiosInstance.setAccessToken(data.accessToken);
+      setIsLogin(true);
+      setAccessToken(data.accessToken);
       secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
-      navigate("/user");
+      navigate('/user');
     },
   });
 };
 
-export const useGetUser = (token: string) => {
-  const { getState } = useUserStore;
-
+export const useGetUser = (flag: boolean) => {
   return useQuery({
-    queryKey: [QueryKeys.USER],
+    queryKey: [QueryKeys.USER_DATA],
     queryFn: getUser,
-    enabled: !!token,
-    onSuccess: (data) => {
-      getState().setIsLogin(true);
-      getState().setUser(data?.userInfo);
-    },
+    enabled: !!flag,
   });
 };
 
 export const useGetComments = (bookId: number) => {
-  const key = [QueryKeys.USER, "comments", bookId.toString()];
+  const key = [QueryKeys.USER, 'comments', bookId.toString()];
 
   return useQuery({
     queryKey: key,
@@ -142,14 +132,10 @@ export const usePatchComment = (bookId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QueryKeys.USER, "comments", bookId.toString()],
+    mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: patchComment,
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        QueryKeys.USER,
-        "comments",
-        bookId.toString(),
-      ]);
+      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
   });
 };
@@ -157,14 +143,10 @@ export const usePostComment = (bookId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QueryKeys.USER, "comments", bookId.toString()],
+    mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: (comment: string) => postComment(bookId, comment),
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        QueryKeys.USER,
-        "comments",
-        bookId.toString(),
-      ]);
+      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
   });
 };
@@ -172,23 +154,39 @@ export const usePostComment = (bookId: number) => {
 export const useDeleteComment = (bookId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [QueryKeys.USER, "comments", bookId.toString()],
+    mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: (commentId: number) => deleteComment(bookId, commentId),
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        QueryKeys.USER,
-        "comments",
-        bookId.toString(),
-      ]);
+      queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
   });
 };
 
-export const useInfinityScroll = (order: "DESC" | "ASC") => {
+export const useInfinityScroll = (
+  order: 'DESC' | 'ASC' | 'CLICKS' | 'LIKECOUNT',
+  search: string,
+) => {
   return useInfiniteQuery({
-    queryKey: [QueryKeys.USER, "books", "infinity", order],
-    queryFn: ({ pageParam = 1 }) =>
-      getBooks({ page: pageParam, order__createdAt: order }),
+    queryKey: [QueryKeys.USER, 'books', 'infinity', order, search],
+    queryFn: ({ pageParam = 1 }) => {
+      const queryParameters: BooklistParams = {
+        page: pageParam,
+      };
+      if (search) {
+        queryParameters.where__title__i_like = search;
+      }
+
+      // Set order parameters based on the order value
+      if (order === 'CLICKS') {
+        queryParameters.order__clicks = 'DESC';
+      } else if (order === 'LIKECOUNT') {
+        queryParameters.order__likeCount = 'DESC';
+      } else {
+        queryParameters.order__createdAt = order; // Include only for ASC or DESC
+      }
+
+      return getBooks(queryParameters);
+    },
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage) {
         return;
@@ -196,6 +194,55 @@ export const useInfinityScroll = (order: "DESC" | "ASC") => {
       if (pages.length < lastPage.total / 10) {
         return pages.length + 1;
       } else return undefined;
+    },
+  });
+};
+
+export const useGetBookLikes = (authorId: number) => {
+  const key = [QueryKeys.USER, 'likes', authorId.toString()];
+
+  return useQuery({
+    queryKey: key,
+    queryFn: () => getBooksLike(authorId),
+    select: (res) => res,
+  });
+};
+
+export const useGetBookIsLike = (bookId: number, userId: number) => {
+  const queryClient = useQueryClient();
+  const key = [QueryKeys.USER, 'islike', bookId.toString()];
+  const isUserIdValid = userId !== null && userId > 0;
+  return useQuery({
+    queryKey: key,
+    enabled: isUserIdValid,
+    queryFn: () => getBookIsLike({ bookId, userId }),
+    select: (res) => res,
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'books']);
+    },
+  });
+};
+
+export const usePostBookLike = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [QueryKeys.USER, 'likes'],
+    mutationFn: postBookLike,
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'likes']);
+    },
+  });
+};
+
+export const useDeleteBookLike = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [QueryKeys.USER, 'likes'],
+    mutationFn: deleteBookLike,
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'likes']);
     },
   });
 };

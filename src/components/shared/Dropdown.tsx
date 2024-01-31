@@ -1,4 +1,4 @@
-import useOnclickOutside from 'pages/hooks/useOnclickOutside';
+import useOnclickOutside from 'hooks/useOnclickOutside';
 import React, { useCallback, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { getStyledColor, pixelToRem } from 'utils';
@@ -6,16 +6,18 @@ import { getStyledColor, pixelToRem } from 'utils';
 const DropdownObject: { [key: string]: string } = {
   DESC: '최신순',
   ASC: '오래된순',
+  CLICKS: '조회수순',
+  LIKECOUNT: '좋아요순',
 };
 
 interface DropdownProps {
   order: string;
-  setOrder: React.Dispatch<React.SetStateAction<'DESC' | 'ASC'>>;
+  setOrder: React.Dispatch<React.SetStateAction<'DESC' | 'ASC' | 'CLICKS' | 'LIKECOUNT'>>;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ order, setOrder }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<string | null>('최신순');
+  const [selectedItem, setSelectedItem] = useState<string | null>(DropdownObject[order]);
   const ref = useRef<HTMLDivElement | null>(null);
 
   const handleOutsideClick = useCallback(() => {
@@ -27,25 +29,23 @@ const Dropdown: React.FC<DropdownProps> = ({ order, setOrder }) => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleItemClick = (item: string) => {
-    setSelectedItem(item);
-    setOrder(item === '최신순' ? 'DESC' : 'ASC');
+    setSelectedItem(DropdownObject[item]);
+    setOrder(item as 'DESC' | 'ASC' | 'CLICKS' | 'LIKECOUNT');
     setIsOpen(false);
   };
 
   return (
     <S.Container ref={ref}>
-      <S.Wrapper>
-        <S.Button onClick={toggleDropdown}>{selectedItem ? selectedItem : '최신순'}</S.Button>
-        {isOpen && (
-          <S.List>
-            {Object.keys(DropdownObject).map((key) => (
-              <S.Item key={key} onClick={() => handleItemClick(DropdownObject[key])}>
-                {DropdownObject[key]}
-              </S.Item>
-            ))}
-          </S.List>
-        )}
-      </S.Wrapper>
+      <S.Button onClick={toggleDropdown}>{selectedItem}</S.Button>
+      {isOpen && (
+        <S.List>
+          {Object.keys(DropdownObject).map((key) => (
+            <S.Item key={key} onClick={() => handleItemClick(key)}>
+              {DropdownObject[key]}
+            </S.Item>
+          ))}
+        </S.List>
+      )}
     </S.Container>
   );
 };
@@ -65,13 +65,9 @@ const Show = keyframes`
 
 const S = {
   Container: styled.div`
-    position: absolute;
-    top: 8%;
-    right: 2%;
-  `,
-  Wrapper: styled.div`
     position: relative;
   `,
+
   Button: styled.button`
     position: relative;
     width: ${pixelToRem(100)};
@@ -80,7 +76,9 @@ const S = {
     background-color: ${getStyledColor('white', 'high')};
     font-weight: 700;
 
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
 
     &:focus {
       color: ${getStyledColor('white', 'high')};
@@ -102,7 +100,10 @@ const S = {
     width: ${pixelToRem(100)};
     padding: 14px 20px;
     text-align: center;
-    transition: background-color 0.07s ease, color 0.07s ease;
+    transition:
+      background-color 0.07s ease,
+      color 0.07s ease;
+    cursor: pointer;
     &:hover {
       color: ${getStyledColor('white', 'high')};
       background-color: ${getStyledColor('primary', 800)};

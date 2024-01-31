@@ -1,58 +1,60 @@
 import { useEffect } from 'react';
 import Navigation from './components/layout/Navigation';
-import AdminManage from './pages/adminpage/AdminManage';
-import AdminCreateItem from './pages/adminpage/AdminCreateItem';
-import AdminEditItem from './pages/adminpage/AdminEditItem';
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-} from 'react-router-dom';
-import UserPage from './pages/userpage/UserPage';
-import { LoginPage, MainPage, SignupPage } from 'pages';
-import CustomAxiosInstance from 'api/axios';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
-import { QueryKeys, StorageKeys } from 'constant';
+import { StorageKeys } from 'constant';
 import { useUserStore } from 'store/useUserStore';
-import PrivateRoutes from 'pages/PrivateRoutes';
 import { useQueryClient } from '@tanstack/react-query';
-import { getUser } from 'api/auth';
-import './common.css';
+import { getAccessToken } from 'api/auth';
+import {
+  AdminManage,
+  AdminCreateItem,
+  AdminEditItem,
+  AdminMain,
+  AdminDashboard,
+  AdminManageUsers,
+} from 'pages/admin';
+import { PrivateRoutes } from 'pages';
+import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
+import { useGetUser } from 'queries';
 
 function App() {
-  const { isLogin, setIsLogin, setIsInit } = useUserStore();
+  const { isLogin, setIsLogin, setIsInit, setAccessToken } = useUserStore();
   const queryClient = useQueryClient();
+
+  useGetUser(isLogin);
 
   useEffect(() => {
     const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
     if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
       (async () => {
-        await CustomAxiosInstance.init();
-        await queryClient.fetchQuery({
-          queryKey: [QueryKeys.LOGIN],
-          queryFn: getUser,
-        });
+        const accessToken = await getAccessToken();
+        accessToken && setAccessToken(accessToken);
+        setIsLogin(true);
+        setIsInit(false);
       })();
-      setIsLogin(true);
     }
-    setIsInit(false);
-  }, []);
+  }, [queryClient, setIsLogin, setIsInit, setAccessToken]);
 
   return (
     <BrowserRouter>
-      <Navigation />
       <Routes>
-        <Route path='/' element={<UserPage />} />
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/signup' element={<SignupPage />} />
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route element={<Navigation />}>
+          <Route path="/" element={<UserPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Route>
 
         <Route element={<PrivateRoutes />}>
-          <Route path='/admin' element={<AdminManage />} />
-          <Route path='/admin/create' element={<AdminCreateItem />} />
-          <Route path='/admin/edit/:id' element={<AdminEditItem />} />
+          <Route path="/admin" element={<AdminMain />}>
+            <Route path="" element={<AdminDashboard />} />
+            <Route path="create" element={<AdminCreateItem />} />
+            <Route path="manage/books" element={<AdminManage />} />
+            <Route path="manage/users" element={<AdminManageUsers />} />
+            <Route path="edit/:id" element={<AdminEditItem />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
