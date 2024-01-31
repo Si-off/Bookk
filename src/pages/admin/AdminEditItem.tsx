@@ -109,16 +109,17 @@ const AdminEditItem = () => {
 
   return (
     <Layout>
-      <S.Container>
-        <S.Wrapper>
-          <div>생성자</div>
+      <ContainerWrap>
+        <S.SubContainer style={{ gridArea: 'data' }}>
           <div>생성일</div>
-          <div>조회수</div>
-          <div>좋아요</div>
-          <div>리뷰수</div>
-        </S.Wrapper>
-      </S.Container>
-      <S.Container style={{ alignSelf: 'flex-start' }}>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>생성일</S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>조회수</S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>좋아요</S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>리뷰수</S.SubContainer>
+      </ContainerWrap>
+
+      <S.Container style={{ alignSelf: 'flex-start', gridArea: 'b' }}>
         <S.ContainerHeader>
           <S.ContainerTitle>책 수정하기</S.ContainerTitle>
         </S.ContainerHeader>
@@ -170,9 +171,17 @@ const AdminEditItem = () => {
 export default AdminEditItem;
 
 const Layout = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas:
+    'data b'
+    'data b';
+  width: 100%;
+  height: 100%;
   gap: 30px;
+`;
+
+const ContainerWrap = styled.div`
+  gap: 20px;
 `;
 
 //setImage때 postImage로 이미지 경로를 받은 뒤에 이미지 id를 일단 바꾼다. 취소 버튼을 누르면 해당 이미지를 deleteImage을 해야함
