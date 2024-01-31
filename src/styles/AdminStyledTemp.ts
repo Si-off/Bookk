@@ -158,24 +158,29 @@ export const Textarea = styled.textarea`
 `;
 
 export const Table = styled.table`
+  width: ${pixelToRem(1500)};
+  min-width: ${pixelToRem(900)};
   border-radius: 4px;
   overflow: hidden;
   border-collapse: collapse;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
 `;
 export const Theader = styled.thead`
+  height: 40px;
   font-weight: 700;
   background-color: ${getStyledColor('teal', 900)};
   color: ${getStyledColor('white', 'high')};
 `;
-export const Tbody = styled.tbody``;
+export const Tbody = styled.tbody`
+  height: 430px;
+`;
 export const Tcolumn = styled.th`
   font-size: ${pixelToRem(16)};
   text-align: center;
   padding: 10px 15px;
 `;
 export const Trow = styled.tr`
-  max-height: 50px;
+  height: 45px;
   td {
     background-color: ${getStyledColor('gray', 100)};
   }
@@ -184,7 +189,7 @@ export const Trow = styled.tr`
   }
 `;
 export const Tcell = styled.td`
-  max-height: 50px;
+  height: inherit;
   font-size: ${pixelToRem(14)};
   text-align: center;
   padding: 10px 25px;
