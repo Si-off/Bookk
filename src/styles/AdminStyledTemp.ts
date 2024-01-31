@@ -9,18 +9,17 @@ export const Layout = styled.div`
   justify-content: center;
 `;
 
-export const Container = styled.div<{ $hidden?: boolean }>`
+export const Container = styled.div`
   min-width: 500px;
-  max-height: 100vh;
   border-radius: 4px;
   background-color: #fff;
   padding: 20px 25px;
+`;
 
-  ${({ $hidden }) =>
-    $hidden &&
-    css`
-      visibility: 'hidden';
-    `}
+export const SubContainer = styled.div`
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 20px 25px;
 `;
 
 export const ContainerHeader = styled.div`

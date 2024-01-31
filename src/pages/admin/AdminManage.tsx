@@ -107,7 +107,7 @@ const AdminManage = () => {
 
   return (
     <S.Layout>
-      <S.Container $hidden={booksLoading}>
+      <S.Container>
         <S.Table>
           <S.Theader>
             <S.Trow>
