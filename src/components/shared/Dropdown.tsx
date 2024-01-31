@@ -36,18 +36,16 @@ const Dropdown: React.FC<DropdownProps> = ({ order, setOrder }) => {
 
   return (
     <S.Container ref={ref}>
-      <S.Wrapper>
-        <S.Button onClick={toggleDropdown}>{selectedItem}</S.Button>
-        {isOpen && (
-          <S.List>
-            {Object.keys(DropdownObject).map((key) => (
-              <S.Item key={key} onClick={() => handleItemClick(key)}>
-                {DropdownObject[key]}
-              </S.Item>
-            ))}
-          </S.List>
-        )}
-      </S.Wrapper>
+      <S.Button onClick={toggleDropdown}>{selectedItem}</S.Button>
+      {isOpen && (
+        <S.List>
+          {Object.keys(DropdownObject).map((key) => (
+            <S.Item key={key} onClick={() => handleItemClick(key)}>
+              {DropdownObject[key]}
+            </S.Item>
+          ))}
+        </S.List>
+      )}
     </S.Container>
   );
 };
@@ -67,14 +65,9 @@ const Show = keyframes`
 
 const S = {
   Container: styled.div`
-    position: absolute;
-    top: 15%;
-    right: 2%;
-    z-index: 1;
-  `,
-  Wrapper: styled.div`
     position: relative;
   `,
+
   Button: styled.button`
     position: relative;
     width: ${pixelToRem(100)};
