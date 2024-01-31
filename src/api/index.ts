@@ -12,6 +12,7 @@ import {
   PatchCommentReq,
   BookTakelistRes,
   BookisLikeRes,
+  LikesBooklistParams,
 } from 'types';
 
 export const getBooks = async (queries?: BooklistParams) => {
@@ -105,8 +106,11 @@ export const deleteComment = async (bookId: number, commentId: number) => {
   const res = await Axios(`/api2s/${bookId}/reply2s/${commentId}`).remove();
   return res;
 };
-export const getBooksLike = async (authorId: number) => {
-  const res = await Axios(`/users/${authorId}/like2s?take=10&order__updatedAt=DESC`).get();
+export const getBooksLike = async (params: LikesBooklistParams) => {
+  const { authorId, take, page } = params;
+  const res = await Axios(
+    `/users/${authorId}/like2s?take=${take}&page=${page}&order__updatedAt=DESC`,
+  ).get();
   return res;
 };
 

@@ -14,7 +14,7 @@ import {
   deleteBookLike,
   getBookIsLike,
 } from 'api';
-import { BooklistParams } from 'types';
+import { BookRes, BooklistParams, BooklistRes, LikesBooklistParams } from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
 import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
@@ -198,13 +198,30 @@ export const useInfinityScroll = (
   });
 };
 
-export const useGetBookLikes = (authorId: number) => {
-  const key = [QueryKeys.USER, 'likes', authorId.toString()];
+export const useGetBookLikes = (queries: LikesBooklistParams) => {
+  const queryClient = useQueryClient();
+  const key = [QueryKeys.USER, 'likes', queries.authorId.toString(), queries.page.toString()];
+  if (queries) key.push(queries.page.toString());
 
   return useQuery({
     queryKey: key,
-    queryFn: () => getBooksLike(authorId),
-    select: (res) => res,
+    queryFn: () => getBooksLike(queries),
+    onSuccess: async (res: BooklistRes) => {
+      if (!queries) return;
+      if (res.total < queries.take * queries.page) return;
+
+      await queryClient.prefetchQuery({
+        queryKey: [
+          QueryKeys.USER,
+          'likes',
+          queries.authorId.toString(),
+          (queries.page + 1).toString(),
+        ],
+        queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
+        staleTime: 1000 * 60 * 3,
+        cacheTime: 1000 * 60 * 5,
+      });
+    },
   });
 };
 
