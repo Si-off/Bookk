@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { FaHome, FaBook, FaListAlt } from 'react-icons/fa';
+import { FaHome, FaBook, FaListAlt, FaAddressBook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { pixelToRem, getStyledColor } from 'utils';
@@ -16,9 +16,14 @@ const tabs = [
     icon: <FaBook />,
   },
   {
-    to: 'manage',
+    to: 'manage/books',
     name: '책 관리',
     icon: <FaListAlt />,
+  },
+  {
+    to: 'manage/users',
+    name: '사용자 관리',
+    icon: <FaAddressBook />,
   },
 ] as const;
 
@@ -33,7 +38,8 @@ const AdminNav = () => {
             <StyledLink
               to={tab.to}
               $selected={index === selectedTab}
-              onClick={() => setSelectedTab(index)}>
+              onClick={() => setSelectedTab(index)}
+            >
               {tab.icon}
               {tab.name}
             </StyledLink>

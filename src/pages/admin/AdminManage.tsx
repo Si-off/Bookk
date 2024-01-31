@@ -15,6 +15,8 @@ import { CustomModal } from 'components/modal/CustomModal';
 import { QueryKeys } from 'constant';
 import Loader from 'components/shared/Loader';
 
+const TAKE = 10;
+
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,7 +27,7 @@ const AdminManage = () => {
     status,
     isLoading: booksLoading,
   } = useGetBooksAdmin({
-    take: 10,
+    take: TAKE,
     page: currentPage,
     order__createdAt: 'DESC',
     where__title__i_like: '',
@@ -40,7 +42,7 @@ const AdminManage = () => {
         queryKey: key,
         queryFn: () =>
           getNextBooks({
-            take: 10,
+            take: TAKE,
             page: currentPage + 1,
             order__createdAt: 'DESC',
             where__title__i_like: '',
@@ -123,23 +125,22 @@ const AdminManage = () => {
           <S.Tbody>
             {status === 'success' &&
               books.data.map((book, index) => {
-                const { id, title, createdAt, likeCount, clicks, reply2Count, author } = book;
                 return (
-                  <Fragment key={id}>
+                  <Fragment key={book.id}>
                     <S.Trow>
-                      <S.Tcell>{(currentPage - 1) * 10 + index + 1}</S.Tcell>
-                      <S.Tcell>{id}</S.Tcell>
-                      <S.Tcell>
-                        <button onClick={() => handleClick(id)}>{title}</button>
+                      <S.Tcell width={30}>{(currentPage - 1) * 10 + index + 1}</S.Tcell>
+                      <S.Tcell width={50}>{book.id}</S.Tcell>
+                      <S.Tcell width={300}>
+                        <button onClick={() => handleClick(book.id)}>{book.title}</button>
                       </S.Tcell>
-                      <S.Tcell>{author.name}</S.Tcell>
-                      <S.Tcell>{clicks}</S.Tcell>
-                      <S.Tcell>{likeCount}</S.Tcell>
-                      <S.Tcell>{reply2Count}</S.Tcell>
-                      <S.Tcell>{getDateStr(createdAt)}</S.Tcell>
+                      <S.Tcell width={120}>{book.author.name}</S.Tcell>
+                      <S.Tcell>{book.clicks}</S.Tcell>
+                      <S.Tcell>{book.likeCount}</S.Tcell>
+                      <S.Tcell>{book.reply2Count}</S.Tcell>
+                      <S.Tcell>{getDateStr(book.createdAt)}</S.Tcell>
                       <S.Tcell>
-                        <EditIcon onClick={() => handleEdit(id)} />
-                        <TrashIcon onClick={() => handleRemove(id)} />
+                        <EditIcon onClick={() => handleEdit(book.id)} />
+                        <TrashIcon onClick={() => handleRemove(book.id)} />
                       </S.Tcell>
                     </S.Trow>
                     {modalOpen && (
