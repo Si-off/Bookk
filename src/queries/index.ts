@@ -14,7 +14,7 @@ import {
   deleteBookLike,
   getBookIsLike,
 } from 'api';
-import { BooklistParams, BooklistRes, LikesBooklistParams } from 'types';
+import { BooklistParams, LikesBooklistParams, MyFavorites } from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
 import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
@@ -209,23 +209,23 @@ export const useInfinityScroll = (
 
 export const useGetBookLikes = (queries: LikesBooklistParams) => {
   const queryClient = useQueryClient();
-  const key = [QueryKeys.USER, 'likes', queries.authorId.toString(), queries.page.toString()];
+  const { isLogin } = useUserStore.getState();
+
+  // TODO 작성자 id까지 쿼리키로 넣을 필요 없어보입니다.
+  const key = [QueryKeys.USER, 'likes', queries.page.toString()];
   if (queries) key.push(queries.page.toString());
 
   return useQuery({
     queryKey: key,
     queryFn: () => getBooksLike(queries),
-    onSuccess: async (res: BooklistRes) => {
+    // TODO 로그인 체크, authorID 존재여부 체크 필요 => 자동로그인하면서 accessToken 받아오는 시간 필요
+    enabled: isLogin && !!queries.authorId,
+    onSuccess: async (res: MyFavorites) => {
       if (!queries) return;
       if (res.total < queries.take * queries.page) return;
 
       await queryClient.prefetchQuery({
-        queryKey: [
-          QueryKeys.USER,
-          'likes',
-          queries.authorId.toString(),
-          (queries.page + 1).toString(),
-        ],
+        queryKey: [QueryKeys.USER, 'likes', (queries.page + 1).toString()],
         queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
         staleTime: 1000 * 60 * 3,
         cacheTime: 1000 * 60 * 5,

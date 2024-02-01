@@ -1,10 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
 import { useGetBookLikes } from 'queries';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { UserType } from 'types';
-import { getStyledColor } from 'utils';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Book } from 'components/user';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
@@ -14,6 +13,7 @@ const MyPage = () => {
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const authorId: number = user?.id || 0;
+  console.log(authorId);
 
   const {
     data: LikesBooks,
@@ -22,7 +22,9 @@ const MyPage = () => {
   } = useGetBookLikes({ authorId: authorId, take: 4, page: currentPage });
 
   const handlePageClick = (pageNum: number) => {
-    if (status !== 'success') return;
+    // TODO 타입 가드 잘못작성함
+    // if (status !== 'success') return;
+    if (!LikesBooks) return;
 
     const totalPages = Math.ceil(LikesBooks.total / 4);
 
@@ -53,9 +55,10 @@ const MyPage = () => {
           </ArrowButton>
           <BookWrapper $isSuccess={isSuccess}>
             {status === 'success' &&
-              LikesBooks.data.map((book) => {
-                const { api2, ...book } = book;
-                return <Book {...api2} {...book} key={book.id} />;
+              LikesBooks.data.map((index) => {
+                const { id, title, images, ...spread } = index.api2;
+
+                return <Book key={id} id={id} images={images} title={title} {...spread} />;
               })}
           </BookWrapper>
           <ArrowButton>
