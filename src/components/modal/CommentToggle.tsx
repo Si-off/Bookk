@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import { CommentGetRes, CommentType, UserType } from 'types';
 import styled from 'styled-components';
 import * as S from 'styles/CommentStyled';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
 import { useDeleteComment, usePatchComment } from 'queries';
+import { Button } from 'components/shared';
 
 interface CommentToggleProps {
   comments: CommentGetRes | undefined;
@@ -14,8 +14,8 @@ interface CommentToggleProps {
 const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
   // const [comment, setComment] = useState<string>();
-  const { mutate: deleteComment } = useDeleteComment(bookId);
-  const { mutate: patchComment } = usePatchComment(bookId);
+  const { mutate: deleteComment, status: deleteStatus } = useDeleteComment(bookId);
+  const { mutate: patchComment, status: patchStatus } = usePatchComment(bookId);
   const handleChangeClick = (commentId: number) => {
     const newComment = prompt('댓글을 수정하세요');
     if (!newComment) return;
@@ -52,8 +52,12 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
 
             {user?.id === reply?.author?.id && (
               <S.CommentButtonContainer>
-                <S.CommentButton onClick={() => handleChangeClick(reply.id)}>수정</S.CommentButton>
-                <S.CommentButton onClick={() => handleDeleteClick(reply.id)}>삭제</S.CommentButton>
+                <Button onClick={() => handleChangeClick(reply.id)} status={patchStatus}>
+                  수정
+                </Button>
+                <Button onClick={() => handleDeleteClick(reply.id)} status={deleteStatus}>
+                  삭제
+                </Button>
               </S.CommentButtonContainer>
             )}
           </S.CommentItemContainer>
