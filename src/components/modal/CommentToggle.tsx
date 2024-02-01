@@ -11,7 +11,7 @@ interface CommentToggleProps {
 const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
   if (bookId === undefined) return null;
   const user = useQueryClient().getQueryData([QueryKeys.USER_DATA]);
-  console.log(user, 'user');
+
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();

@@ -11,6 +11,8 @@ import { useUserStore } from 'store/useUserStore';
 import { FaHeart } from 'react-icons/fa';
 import { QueryKeys } from 'constant';
 import { useQueryClient } from '@tanstack/react-query';
+import NotFoundComment from 'components/shared/NotFoundComment';
+import { Loader } from 'components/shared';
 
 export const CustomModal = ({
   bookId,
@@ -117,7 +119,13 @@ export const CustomModal = ({
                 <S.ModalIntroduce>{book?.content}</S.ModalIntroduce>
                 <S.CommentContainer>
                   <S.ModalSubject>한줄리뷰</S.ModalSubject>
-                  <CommentToggle comments={comments} bookId={book?.id} />
+                  {commentStatus === 'loading' ? (
+                    <Loader custom={true} />
+                  ) : (comments?.data ?? []).length > 0 ? (
+                    <CommentToggle comments={comments} bookId={book?.id} />
+                  ) : (
+                    <NotFoundComment />
+                  )}
                   <CommentWrite bookId={book?.id} />
                 </S.CommentContainer>
               </S.ModalContent>
