@@ -203,4 +203,5 @@ export type PatchCommentReq = {
 export type BookisLikeRes = {
   isLike: boolean;
   likeId: number;
+  likeCount: number;
 };
