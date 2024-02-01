@@ -206,8 +206,14 @@ export type BookisLikeRes = {
   likeCount: number;
 };
 
-export type MyLikeList = {
-  api2: Omit<BookInfoType, 'author' | 'api2cate'>;
-  createAt: string;
-  id: string | number;
+export type MyFavorites = {
+  data: {
+    api2: BookInfoType;
+    id: number;
+    likeCount: number;
+    like2: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+  total: number;
 };
