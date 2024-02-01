@@ -173,18 +173,24 @@ export type CommentPostRes = {
     profileImg: string[];
   };
 };
-export type CommentGetRes = {
-  data: Array<{
+export type CommentType = {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  reply2: string;
+  likeCount: number;
+  author: {
     id: number;
-    updatedAt: string;
-    createdAt: string;
-    reply2: string;
-    likeCount: number;
-    author: {
-      id: number;
-      nickname: string;
-    };
-  }>;
+    nickname: string;
+  };
+};
+export type CommentGetRes = {
+  data: Array<CommentType>;
+  cursor: {
+    after: number;
+  };
+  count: number;
+  next: string;
   total: number;
 };
 

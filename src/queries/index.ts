@@ -134,7 +134,15 @@ export const usePatchComment = (bookId: number) => {
 
   return useMutation({
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
-    mutationFn: patchComment,
+    mutationFn: ({
+      bookId,
+      commentId,
+      comment,
+    }: {
+      bookId: number;
+      commentId: number;
+      comment: string;
+    }) => patchComment({ bookId, commentId, comment }),
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },

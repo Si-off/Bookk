@@ -1,17 +1,33 @@
-import { CommentGetRes } from 'types';
+import React, { useState } from 'react';
+import { CommentGetRes, CommentType, UserType } from 'types';
 import styled from 'styled-components';
 import * as S from 'styles/CommentStyled';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
+import { useDeleteComment, usePatchComment } from 'queries';
 
 interface CommentToggleProps {
   comments: CommentGetRes | undefined;
-  bookId: number | undefined;
+  bookId: number;
 }
-const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
-  if (bookId === undefined) return null;
-  const user = useQueryClient().getQueryData([QueryKeys.USER_DATA]);
 
+const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
+  const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
+  // const [comment, setComment] = useState<string>();
+  const { mutate: deleteComment } = useDeleteComment(bookId);
+  const { mutate: patchComment } = usePatchComment(bookId);
+  const handleChangeClick = (commentId: number) => {
+    const newComment = prompt('댓글을 수정하세요');
+    if (!newComment) return;
+    patchComment({ bookId, commentId, comment: newComment });
+  };
+  const handleDeleteClick = (commentId: number) => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      deleteComment(commentId);
+    } else {
+      return;
+    }
+  };
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
@@ -23,7 +39,7 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
 
   return (
     <S.CommentContainer>
-      {comments?.data?.map((reply: any, index: any) => {
+      {comments?.data?.map((reply: CommentType, index: number) => {
         return (
           <S.CommentItemContainer key={reply.id} $index={index}>
             <div>
@@ -34,12 +50,12 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
               </span>
             </div>
 
-            {/* {user?.nickname === reply?.author?.nickname && (
-                <S.CommentButtonContainer>
-                  <S.CommentButton>수정</S.CommentButton>
-                  <S.CommentButton>삭제</S.CommentButton>
-                </S.CommentButtonContainer>
-              )} */}
+            {user?.id === reply?.author?.id && (
+              <S.CommentButtonContainer>
+                <S.CommentButton onClick={() => handleChangeClick(reply.id)}>수정</S.CommentButton>
+                <S.CommentButton onClick={() => handleDeleteClick(reply.id)}>삭제</S.CommentButton>
+              </S.CommentButtonContainer>
+            )}
           </S.CommentItemContainer>
         );
       })}
