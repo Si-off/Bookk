@@ -10,6 +10,7 @@ import Dropdown from 'components/shared/Dropdown';
 import Loader from 'components/shared/Loader';
 import * as S from 'styles/SearchStyled';
 import { useSearchStore } from 'store/useSearchStore';
+import NotFound from 'pages/NotFound';
 
 const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -95,7 +96,7 @@ const UserPage = () => {
       <LayoutContainer>
         <Layout>
           <TotheTop onClick={scrollToTop}>Top</TotheTop>
-          {status === 'success' &&
+          {status === 'success' && data?.pages.some((page) => (page?.data ?? []).length > 0) ? (
             data?.pages.map((page) =>
               page?.data.map((book, index) => {
                 if (page.data.length - 1 === index) {
@@ -115,7 +116,10 @@ const UserPage = () => {
                 }
                 return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
               }),
-            )}
+            )
+          ) : (
+            <NotFound search={search} />
+          )}
         </Layout>
       </LayoutContainer>
     </Main>
