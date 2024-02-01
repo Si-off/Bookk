@@ -52,9 +52,9 @@ function App() {
             <Route path="/admin" element={<AdminMain />}>
               <Route path="" element={<AdminDashboard />} />
               <Route path="create" element={<AdminCreateItem />} />
-              <Route path="manage/books" element={<AdminManage />} />
-              <Route path="manage/users" element={<AdminManageUsers />} />
-              <Route path="edit/:id" element={<AdminEditItem />} />
+              <Route path="books" element={<AdminManage />} />
+              <Route path="books/detail/:id" element={<AdminEditItem />} />
+              <Route path="users" element={<AdminManageUsers />} />
             </Route>
           </Route>
         </Routes>
