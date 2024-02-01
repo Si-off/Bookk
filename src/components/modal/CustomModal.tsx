@@ -109,7 +109,9 @@ export const CustomModal = ({
               <S.ModalContent>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
                 <S.ModalOverview>클릭수: {book?.clicks}</S.ModalOverview>
-                <S.ModalOverview>좋아요: {bookIsLikeData?.likeCount}</S.ModalOverview>
+                <S.ModalOverview>
+                  좋아요: {bookIsLikeData?.likeCount ? bookIsLikeData?.likeCount : book?.likeCount}
+                </S.ModalOverview>
                 <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
                 <S.ModalDetails>
                   등록날짜: {'  '}

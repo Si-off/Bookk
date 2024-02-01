@@ -7,7 +7,7 @@ import { UserType } from 'types';
 import { getStyledColor } from 'utils';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Book } from 'components/user';
-
+import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -35,6 +35,9 @@ const MyPage = () => {
 
   return (
     <Wrapper>
+      <Stars />
+      <Stars2 />
+      <Stars3 />
       <div className="one">
         <h1 className="1">내정보</h1>
         <div>이메일:{user?.email}</div>
@@ -72,7 +75,6 @@ const Wrapper = styled.div`
   color: rgba(31, 31, 31, 0.7);
   font-weight: 900;
   padding-top: 80px;
-
   .one {
     grid-column: 2 / -2;
     grid-row: 1;

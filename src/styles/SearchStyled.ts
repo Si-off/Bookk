@@ -39,6 +39,12 @@ export const SearchButton = styled.button`
     background-color: ${getStyledColor('orange', 600)};
     color: ${getStyledColor('orange', 400)};
   }
+  &:disabled {
+    background-color: ${getStyledColor('cool_gray', 400)};
+    color: ${getStyledColor('cool_gray', 200)};
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 `;
 export const ResetButton = styled.button`
   width: 100px;
@@ -51,5 +57,11 @@ export const ResetButton = styled.button`
   &:hover {
     background-color: ${getStyledColor('red', 600)};
     color: ${getStyledColor('red', 400)};
+  }
+  &:disabled {
+    background-color: ${getStyledColor('cool_gray', 400)};
+    color: ${getStyledColor('cool_gray', 200)};
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 `;

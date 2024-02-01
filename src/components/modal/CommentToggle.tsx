@@ -16,9 +16,9 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
   // const [comment, setComment] = useState<string>();
   const { mutate: deleteComment, status: deleteStatus } = useDeleteComment(bookId);
   const { mutate: patchComment, status: patchStatus } = usePatchComment(bookId);
-  const handleChangeClick = (commentId: number) => {
-    const newComment = prompt('댓글을 수정하세요');
-    if (!newComment) return;
+  const handleChangeClick = (commentId: number, oldComment: string) => {
+    const newComment = prompt('댓글을 수정하세요', oldComment);
+    if (!newComment || newComment === oldComment) return;
     patchComment({ bookId, commentId, comment: newComment });
   };
   const handleDeleteClick = (commentId: number) => {
@@ -52,10 +52,18 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
 
             {user?.id === reply?.author?.id && (
               <S.CommentButtonContainer>
-                <Button onClick={() => handleChangeClick(reply.id)} status={patchStatus}>
+                <Button
+                  onClick={() => handleChangeClick(reply.id, reply.reply2)}
+                  status={patchStatus}
+                  disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
+                >
                   수정
                 </Button>
-                <Button onClick={() => handleDeleteClick(reply.id)} status={deleteStatus}>
+                <Button
+                  onClick={() => handleDeleteClick(reply.id)}
+                  status={deleteStatus}
+                  disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
+                >
                   삭제
                 </Button>
               </S.CommentButtonContainer>
