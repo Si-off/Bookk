@@ -156,7 +156,6 @@ const Layout = styled.div`
   grid-auto-flow: dense;
   grid-auto-rows: minmax(500px, auto);
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  position: relative;
 `;
 
 const LoaderContainer = styled.div`
