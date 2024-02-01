@@ -9,7 +9,7 @@ export const login = async (user: LoginParams) => {
 
   const res = await Axios('/auth/login/email').post<LoginResponse>(
     {},
-    { headers: { Authorization: `Basic ${auth}` } }
+    { headers: { Authorization: `Basic ${auth}` } },
   );
   return res;
 };
@@ -39,7 +39,7 @@ export const getAccessToken = async () => {
   const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
   const res = await Axios('/auth/token/access').post<{ accessToken: string }>(
     {},
-    { headers: { Authorization: `Bearer ${refreshToken}` } }
+    { headers: { Authorization: `Bearer ${refreshToken}` } },
   );
   return res?.accessToken;
 };
