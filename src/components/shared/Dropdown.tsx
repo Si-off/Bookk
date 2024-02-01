@@ -104,6 +104,7 @@ const S = {
       background-color 0.07s ease,
       color 0.07s ease;
     cursor: pointer;
+    background-color: ${getStyledColor('white', 'high')};
     &:hover {
       color: ${getStyledColor('white', 'high')};
       background-color: ${getStyledColor('primary', 800)};
