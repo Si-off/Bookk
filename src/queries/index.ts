@@ -35,7 +35,7 @@ export const useGetBooks = (queries?: BooklistParams) => {
 };
 
 export const useGetBooksAdmin = (queries: BooklistParams) => {
-  const key = [QueryKeys.ADMIN, 'books'];
+  const key = [QueryKeys.USER, 'books'];
 
   if (queries?.page) key.push(queries.page.toString());
 
@@ -121,11 +121,12 @@ export const useGetUser = (flag: boolean) => {
 
 export const useGetComments = (bookId: number) => {
   const key = [QueryKeys.USER, 'comments', bookId.toString()];
-
+  const isBookIdValid = bookId !== null && bookId > 0;
   return useQuery({
     queryKey: key,
     queryFn: () => getComments(bookId),
     select: (res) => res,
+    enabled: isBookIdValid,
   });
 };
 export const usePatchComment = (bookId: number) => {
@@ -226,7 +227,6 @@ export const useGetBookLikes = (queries: LikesBooklistParams) => {
 };
 
 export const useGetBookIsLike = (bookId: number, userId: number) => {
-  const queryClient = useQueryClient();
   const key = [QueryKeys.USER, 'islike', bookId.toString()];
   const isUserIdValid = userId !== null && userId > 0;
   return useQuery({
@@ -234,9 +234,6 @@ export const useGetBookIsLike = (bookId: number, userId: number) => {
     enabled: isUserIdValid,
     queryFn: () => getBookIsLike({ bookId, userId }),
     select: (res) => res,
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'books']);
-    },
   });
 };
 
