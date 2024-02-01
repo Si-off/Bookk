@@ -12,21 +12,19 @@ import { BookInfoType } from 'types';
 import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
-import { QueryKeys } from 'constant';
 import Loader from 'components/shared/Loader';
-
-const TAKE = 10;
+import { QueryKeys, TAKE } from 'constant';
 
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
-  const {
-    data: books,
-    status,
-    isLoading: booksLoading,
-  } = useGetBooksAdmin({
+  const { setSelectedBook } = useSelectedBook();
+  const { mutate: remove } = useDeleteBook();
+
+  const { data: books, status } = useGetBooksAdmin({
     take: TAKE,
     page: currentPage,
     order__createdAt: 'DESC',
@@ -50,11 +48,6 @@ const AdminManage = () => {
       });
     }
   }, [currentPage]);
-
-  const { setSelectedBook } = useSelectedBook();
-  const { mutate: remove } = useDeleteBook();
-
-  const navigate = useNavigate();
 
   const unshowScroll = () => {
     document.body.style.overflow = 'hidden';
@@ -96,11 +89,11 @@ const AdminManage = () => {
     setCurrentPage(pageNum);
   };
 
-  if (booksLoading || !books) {
+  if (status === 'loading' || !books) {
     return (
       <S.Layout>
-        {booksLoading && <Loader />}
-        {!booksLoading && !books && <div>데이터가 없습니다.</div>}
+        {status === 'loading' && <Loader />}
+        {status === 'loading' && !books && <div>데이터가 없습니다.</div>}
       </S.Layout>
     );
   }

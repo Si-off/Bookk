@@ -1,9 +1,12 @@
 import { AdminNav } from 'components/admin';
+import { TAKE } from 'constant';
+import { useGetBooksAdmin } from 'queries';
 import { Outlet } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { getStyledColor, pixelToRem } from 'utils';
 
 const AdminMain = () => {
+  useGetBooksAdmin({ take: TAKE, page: 1 });
   return (
     <Layout>
       <AdminNav />

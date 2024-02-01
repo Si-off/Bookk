@@ -14,7 +14,7 @@ import {
   deleteBookLike,
   getBookIsLike,
 } from 'api';
-import { BookRes, BooklistParams, BooklistRes, LikesBooklistParams } from 'types';
+import { BooklistParams, BooklistRes, LikesBooklistParams } from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
 import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
@@ -35,7 +35,7 @@ export const useGetBooks = (queries?: BooklistParams) => {
 };
 
 export const useGetBooksAdmin = (queries: BooklistParams) => {
-  const key = [QueryKeys.USER, 'books'];
+  const key = [QueryKeys.ADMIN, 'books'];
 
   if (queries?.page) key.push(queries.page.toString());
 
