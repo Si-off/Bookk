@@ -95,40 +95,41 @@ const UserPage = () => {
         </S.Search>
         <Dropdown order={order} setOrder={setOrder} status={status} />
       </S.WrapperSearch>
-      (
+
       <LayoutContainer>
-        <Layout>
-          <TotheTop onClick={scrollToTop}>Top</TotheTop>
-          {status === 'loading' ? (
-            <LoaderContainer>
-              <Loader />
-            </LoaderContainer>
-          ) : data?.pages.some((page) => (page?.data ?? []).length > 0) ? (
-            data?.pages.map((page) =>
-              page?.data.map((book, index) => {
-                if (page.data.length - 1 === index) {
-                  return (
-                    <Fragment key={book.id}>
-                      <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
-                      {modalOpen && (
-                        <CustomModal
-                          bookId={selectedBookId}
-                          book={selectedBook}
-                          setModalOpen={setModalOpen}
-                          showScroll={showScroll}
-                        ></CustomModal>
-                      )}
-                    </Fragment>
-                  );
-                }
-                return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
-              }),
-            )
-          ) : (
-            <NotFound search={search} />
-          )}
-        </Layout>
-        )
+        {status === 'loading' ? (
+          <LoaderContainer>
+            <Loader />
+          </LoaderContainer>
+        ) : (
+          <Layout>
+            <TotheTop onClick={scrollToTop}>Top</TotheTop>
+            {data?.pages.some((page) => (page?.data ?? []).length > 0) ? (
+              data?.pages.map((page) =>
+                page?.data.map((book, index) => {
+                  if (page.data.length - 1 === index) {
+                    return (
+                      <Fragment key={book.id}>
+                        <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
+                        {modalOpen && (
+                          <CustomModal
+                            bookId={selectedBookId}
+                            book={selectedBook}
+                            setModalOpen={setModalOpen}
+                            showScroll={showScroll}
+                          ></CustomModal>
+                        )}
+                      </Fragment>
+                    );
+                  }
+                  return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
+                }),
+              )
+            ) : (
+              <NotFound search={search} />
+            )}
+          </Layout>
+        )}
       </LayoutContainer>
     </Main>
   );
@@ -159,10 +160,11 @@ const Layout = styled.div`
 `;
 
 const LoaderContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%);
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: relative;
 `;
 
 const TotheTop = styled.button`
