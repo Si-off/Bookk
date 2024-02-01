@@ -51,7 +51,8 @@ const MyPage = () => {
           <BookWrapper $isSuccess={isSuccess}>
             {status === 'success' &&
               LikesBooks.data.map((book) => {
-                return <Book {...book} key={book.id} />;
+                const { api2, ...book } = book;
+                return <Book {...api2} {...book} key={book.id} />;
               })}
           </BookWrapper>
           <ArrowButton>

@@ -205,3 +205,9 @@ export type BookisLikeRes = {
   likeId: number;
   likeCount: number;
 };
+
+export type MyLikeList = {
+  api2: Omit<BookInfoType, 'author' | 'api2cate'>;
+  createAt: string;
+  id: string | number;
+};
