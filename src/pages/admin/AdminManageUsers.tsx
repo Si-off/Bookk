@@ -1,11 +1,14 @@
-import { TAKE } from 'constant';
+import { useQueryClient } from '@tanstack/react-query';
+import { QueryKeys } from 'constant';
 import useAdminManage from 'hooks/useAdminManage';
 import { useDeleteUser, useGetUserlist } from 'queries/users';
 import { Fragment } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import * as S from 'styles/AdminStyledTemp';
+import { UserType } from 'types';
 
 const AdminManageUsers = () => {
+  const queryClient = useQueryClient();
   const { data: users, status: usersStatus, isLoading } = useGetUserlist();
   const { mutate } = useDeleteUser();
   const { currentPage, setCurrentPage, handleEdit, handleNextPage } = useAdminManage();
@@ -14,8 +17,12 @@ const AdminManageUsers = () => {
     return <div>loading</div>;
   }
 
-  const handleRemove = (id: number) => {
-    mutate(id);
+  const handleRemove = (id: number, role: string) => {
+    if (queryClient.getQueryData<UserType>([QueryKeys.USER_DATA])?.role === role) {
+      console.error('권한이 같습니다.');
+    }
+    console.log('delete ' + id);
+    // mutate(id);
   };
 
   return (
@@ -49,7 +56,7 @@ const AdminManageUsers = () => {
                       <S.Tcell>{user.role}</S.Tcell>
                       <S.Tcell>
                         <S.EditIcon onClick={() => handleEdit('UserType', user.id)} />
-                        <S.TrashIcon onClick={() => handleRemove(user.id)} />
+                        <S.TrashIcon onClick={() => handleRemove(user.id, user.role)} />
                       </S.Tcell>
                     </S.Trow>
                   </Fragment>
