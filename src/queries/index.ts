@@ -42,6 +42,8 @@ export const useGetBooksAdmin = (queries: BooklistParams) => {
   return useQuery({
     queryKey: key,
     queryFn: () => getBooks(queries),
+    staleTime: 1000 * 60 * 3,
+    cacheTime: 1000 * 60 * 5,
   });
 };
 
