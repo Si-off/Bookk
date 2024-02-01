@@ -49,8 +49,7 @@ const StyledButton = styled(S.Button)<CssProps>`
     `}
 
   &:disabled {
-    cursor: default;
-    background-color: ${getStyledColor('gray', 900)};
+    cursor: not-allowed;
   }
 `;
 

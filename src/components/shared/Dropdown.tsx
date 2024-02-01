@@ -13,9 +13,10 @@ const DropdownObject: { [key: string]: string } = {
 interface DropdownProps {
   order: string;
   setOrder: React.Dispatch<React.SetStateAction<'DESC' | 'ASC' | 'CLICKS' | 'LIKECOUNT'>>;
+  status: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ order, setOrder }) => {
+const Dropdown: React.FC<DropdownProps> = ({ order, setOrder, status }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(DropdownObject[order]);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -36,7 +37,9 @@ const Dropdown: React.FC<DropdownProps> = ({ order, setOrder }) => {
 
   return (
     <S.Container ref={ref}>
-      <S.Button onClick={toggleDropdown}>{selectedItem}</S.Button>
+      <S.Button onClick={toggleDropdown} disabled={status === 'loading'}>
+        {selectedItem}
+      </S.Button>
       {isOpen && (
         <S.List>
           {Object.keys(DropdownObject).map((key) => (
@@ -83,6 +86,12 @@ const S = {
     &:focus {
       color: ${getStyledColor('white', 'high')};
       background-color: ${getStyledColor('primary', 600)};
+    }
+    &:disabled {
+      background-color: ${getStyledColor('cool_gray', 400)};
+      color: ${getStyledColor('cool_gray', 200)};
+      cursor: not-allowed;
+      opacity: 0.7;
     }
   `,
   List: styled.ul`

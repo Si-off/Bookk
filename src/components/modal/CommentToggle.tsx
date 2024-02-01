@@ -52,10 +52,18 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
 
             {user?.id === reply?.author?.id && (
               <S.CommentButtonContainer>
-                <Button onClick={() => handleChangeClick(reply.id)} status={patchStatus}>
+                <Button
+                  onClick={() => handleChangeClick(reply.id)}
+                  status={patchStatus}
+                  disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
+                >
                   수정
                 </Button>
-                <Button onClick={() => handleDeleteClick(reply.id)} status={deleteStatus}>
+                <Button
+                  onClick={() => handleDeleteClick(reply.id)}
+                  status={deleteStatus}
+                  disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
+                >
                   삭제
                 </Button>
               </S.CommentButtonContainer>

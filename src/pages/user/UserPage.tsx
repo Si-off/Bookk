@@ -68,12 +68,10 @@ const UserPage = () => {
     });
   };
 
-  if (status === 'loading')
-    return (
-      <LoaderContainer>
-        <Loader />
-      </LoaderContainer>
-    );
+  // if (status === 'loading')
+  //   return (
+
+  //   );
 
   return (
     <Main>
@@ -88,15 +86,24 @@ const UserPage = () => {
             onChange={onChangeSearch}
             onKeyDown={onKeyPressSearch}
           />
-          <S.SearchButton onClick={onClickSearch}>검색</S.SearchButton>
-          <S.ResetButton onClick={onClickReset}>초기화</S.ResetButton>
+          <S.SearchButton onClick={onClickSearch} disabled={status === 'loading'}>
+            검색
+          </S.SearchButton>
+          <S.ResetButton onClick={onClickReset} disabled={status === 'loading'}>
+            초기화
+          </S.ResetButton>
         </S.Search>
-        <Dropdown order={order} setOrder={setOrder} />
+        <Dropdown order={order} setOrder={setOrder} status={status} />
       </S.WrapperSearch>
+      (
       <LayoutContainer>
         <Layout>
           <TotheTop onClick={scrollToTop}>Top</TotheTop>
-          {status === 'success' && data?.pages.some((page) => (page?.data ?? []).length > 0) ? (
+          {status === 'loading' ? (
+            <LoaderContainer>
+              <Loader />
+            </LoaderContainer>
+          ) : data?.pages.some((page) => (page?.data ?? []).length > 0) ? (
             data?.pages.map((page) =>
               page?.data.map((book, index) => {
                 if (page.data.length - 1 === index) {
@@ -121,6 +128,7 @@ const UserPage = () => {
             <NotFound search={search} />
           )}
         </Layout>
+        )
       </LayoutContainer>
     </Main>
   );
@@ -148,6 +156,7 @@ const Layout = styled.div`
   grid-auto-flow: dense;
   grid-auto-rows: minmax(500px, auto);
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  position: relative;
 `;
 
 const LoaderContainer = styled.div`
