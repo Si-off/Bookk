@@ -6,7 +6,7 @@ import { getStyledColor, pixelToRem } from 'utils';
 const DropdownObject: { [key: string]: string } = {
   DESC: '최신순',
   ASC: '오래된순',
-  CLICKS: '조회수순',
+  CLICKS: '조회순',
   LIKECOUNT: '좋아요순',
 };
 
