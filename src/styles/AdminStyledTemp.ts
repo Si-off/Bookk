@@ -10,7 +10,6 @@ export const Layout = styled.div`
 `;
 
 export const Container = styled.div`
-  min-width: 500px;
   border-radius: 4px;
   background-color: #fff;
   padding: 20px 25px;
@@ -157,8 +156,9 @@ export const Textarea = styled.textarea`
 `;
 
 export const Table = styled.table`
-  width: ${pixelToRem(1500)};
-  min-width: ${pixelToRem(900)};
+  max-width: ${pixelToRem(1500)};
+  min-width: ${pixelToRem(100)};
+  width: 100%;
   border-radius: 4px;
   overflow: hidden;
   border-collapse: collapse;

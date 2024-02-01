@@ -93,7 +93,7 @@ const AdminManage = () => {
     return (
       <S.Layout>
         {status === 'loading' && <Loader />}
-        {status === 'loading' && !books && <div>데이터가 없습니다.</div>}
+        {status === 'success' && !books && <div>데이터가 없습니다.</div>}
       </S.Layout>
     );
   }

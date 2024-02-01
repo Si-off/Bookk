@@ -8,6 +8,7 @@ import { postImage, deleteImage, addImage } from 'api';
 import Loader from 'components/shared/Loader';
 import { Button } from 'components/shared';
 import { styled } from 'styled-components';
+import { getDateStr } from 'utils';
 
 const AdminEditItem = () => {
   const { id } = useParams();
@@ -20,7 +21,6 @@ const AdminEditItem = () => {
   if (!id) {
     navigate(-1);
   }
-  const { data: comments } = useGetComments(parseInt(id as string));
 
   /** states */
   const [title, setTitle] = useState('');
@@ -32,7 +32,6 @@ const AdminEditItem = () => {
   const { data: book, isLoading } = useGetBook(numericId);
   const { mutate, status: patchStatus } = usePatchBook();
   const { mutate: remove } = useDeleteBook();
-  console.log(comments);
 
   useEffect(() => {
     setTitle(book?.title || '');
@@ -112,11 +111,24 @@ const AdminEditItem = () => {
       <ContainerWrap>
         <S.SubContainer style={{ gridArea: 'data' }}>
           <div>생성일</div>
+          <div>{getDateStr(book.createdAt)}</div>
         </S.SubContainer>
-        <S.SubContainer style={{ gridArea: 'data' }}>생성일</S.SubContainer>
-        <S.SubContainer style={{ gridArea: 'data' }}>조회수</S.SubContainer>
-        <S.SubContainer style={{ gridArea: 'data' }}>좋아요</S.SubContainer>
-        <S.SubContainer style={{ gridArea: 'data' }}>리뷰수</S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <div>생성자</div>
+          <div>{book.author.name}</div>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <div>조회수</div>
+          <div>{book.clicks}</div>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <div>좋아요</div>
+          <div>{book.likeCount}</div>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <div>리뷰수</div>
+          <div>{book.reply2Count}</div>
+        </S.SubContainer>
       </ContainerWrap>
 
       <S.Container style={{ alignSelf: 'flex-start', gridArea: 'b' }}>
