@@ -36,7 +36,7 @@ const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
       ) : (
         <S.textArea
           placeholder={isLogin ? '한줄리뷰를 작성하세요!' : '로그인 후 작성 가능합니다.'}
-          name='reply5'
+          name="reply5"
           value={comment}
           onChange={onChangeComment}
         />
@@ -44,7 +44,12 @@ const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
       {status === 'error' && <div>{'에러가 발생했습니다.'}</div>}
       <S.buttonContainer>
         {isLogin && (
-          <Button onClick={onHandleClick} color={'blue'} status={status}>
+          <Button
+            onClick={onHandleClick}
+            color={'blue'}
+            status={status}
+            disabled={status === 'loading'}
+          >
             댓글등록
           </Button>
         )}

@@ -27,7 +27,7 @@ const injectInterceptors = (instance: AxiosInstance): AxiosInstance => {
     (error: AxiosError) => {
       console.error(error);
       return Promise.reject(error);
-    }
+    },
   );
 
   instance.interceptors.response.use(
@@ -65,7 +65,7 @@ const injectInterceptors = (instance: AxiosInstance): AxiosInstance => {
         }
       }
       return Promise.reject(error);
-    }
+    },
   );
 
   return instance;

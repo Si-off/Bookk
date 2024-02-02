@@ -1,15 +1,22 @@
-import { useState, useRef } from "react";
-import { styled } from "styled-components";
-import { FaFileExcel, FaFileCirclePlus } from "react-icons/fa6";
-import ImagePreview from "./ImagePreview";
-import { pixelToRem, getStyledColor } from "utils";
+import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import { styled } from 'styled-components';
+import { FaFileExcel, FaFileCirclePlus } from 'react-icons/fa6';
+import ImagePreview from './ImagePreview';
+import { pixelToRem, getStyledColor } from 'utils';
+
+export type ImageUploaderImperativeHandle = {
+  handleCancel: () => void;
+};
 interface Props {
   src: string;
   onChange: (file: File | null) => void;
 }
 
-const ImageUploader = ({ onChange, src = "" }: Props) => {
-  const ref = useRef<HTMLInputElement>(null);
+const ImageUploader = (
+  { onChange, src = '' }: Props,
+  forwardedRef?: React.ForwardedRef<ImageUploaderImperativeHandle>,
+) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(src);
   const [fileData, setFileData] = useState<{
     name: string;
@@ -20,7 +27,7 @@ const ImageUploader = ({ onChange, src = "" }: Props) => {
   // 프리뷰 이미지 변경
   const previewChange = (imageFile: File) => {
     if (!imageFile) {
-      setPreviewUrl("");
+      setPreviewUrl('');
       return;
     }
     const reader = new FileReader();
@@ -33,23 +40,27 @@ const ImageUploader = ({ onChange, src = "" }: Props) => {
 
   // 데이터 단위 변환
   const formatBytes = (bytes: number): string => {
-    if (bytes === 0) return "0 KB";
-    const sizes = ["Bytes", "KB", "MB"];
+    if (bytes === 0) return '0 KB';
+    const sizes = ['Bytes', 'KB', 'MB'];
 
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
 
-    return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i];
+    return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   // input value 초기화
   const handleCancel = async () => {
-    if (ref.current) {
-      ref.current.value = "";
+    if (inputRef.current) {
+      inputRef.current.value = '';
     }
-    setPreviewUrl("");
+    setPreviewUrl('');
     setFileData(null);
     onChange(null);
   };
+
+  useImperativeHandle(forwardedRef, () => ({
+    handleCancel: () => handleCancel(),
+  }));
 
   // input data onChange
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,11 +73,11 @@ const ImageUploader = ({ onChange, src = "" }: Props) => {
     onChange(imageFile);
     previewChange(imageFile);
     const { name, size } = imageFile;
-    let newName = "";
-    let newType = "";
+    let newName = '';
+    let newType = '';
 
     const newSize = formatBytes(size);
-    const lastDotIndex = name.lastIndexOf(".");
+    const lastDotIndex = name.lastIndexOf('.');
 
     if (lastDotIndex !== -1) {
       newName = name.substring(0, lastDotIndex);
@@ -97,7 +108,7 @@ const ImageUploader = ({ onChange, src = "" }: Props) => {
           <Input
             id="fileInput"
             type="file"
-            ref={ref}
+            ref={inputRef}
             onChange={handleOnChange}
             accept="image/jpg, image/jpeg, image/png"
           />
@@ -108,7 +119,7 @@ const ImageUploader = ({ onChange, src = "" }: Props) => {
   );
 };
 
-export default ImageUploader;
+export default forwardRef(ImageUploader);
 
 const Upload = styled.div`
   display: flex;
@@ -126,12 +137,12 @@ const Cancle = styled(FaFileExcel)`
   align-self: flex-end;
   cursor: pointer;
   transition: color 0.15s ease;
-  color: ${getStyledColor("cool_gray", 700)};
+  color: ${getStyledColor('cool_gray', 700)};
   &:hover {
-    color: ${getStyledColor("red", 900)};
+    color: ${getStyledColor('red', 900)};
   }
   &:active {
-    color: ${getStyledColor("red", 1000)};
+    color: ${getStyledColor('red', 1000)};
   }
 `;
 
@@ -159,7 +170,7 @@ const Name = styled.div`
 `;
 
 const Size = styled.div`
-  color: ${getStyledColor("cool_gray", 700)};
+  color: ${getStyledColor('cool_gray', 700)};
   font-size: ${pixelToRem(12)};
 `;
 
@@ -174,6 +185,6 @@ const Type = styled.div`
   font-weight: 700;
   text-transform: uppercase;
   border-radius: 2px;
-  color: ${getStyledColor("cool_gray", 900)};
-  background-color: ${getStyledColor("cool_gray", 400)};
+  color: ${getStyledColor('cool_gray', 900)};
+  background-color: ${getStyledColor('cool_gray', 400)};
 `;

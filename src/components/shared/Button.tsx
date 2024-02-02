@@ -40,17 +40,16 @@ const StyledButton = styled(S.Button)<CssProps>`
   ${({ $status }) =>
     $status === 'loading' &&
     css<CssProps>`
-      background-color: ${({ $color }) => $color && getStyledColor('green', 800)};
+      background-color: ${({ $color }) => $color || getStyledColor('green', 800)};
       cursor: none;
       &:hover,
       &:active {
-        background-color: ${({ $color }) => $color && getStyledColor('green', 800)};
+        background-color: ${({ $color }) => $color || getStyledColor('green', 800)};
       }
     `}
 
   &:disabled {
-    cursor: default;
-    background-color: ${getStyledColor('gray', 900)};
+    cursor: not-allowed;
   }
 `;
 

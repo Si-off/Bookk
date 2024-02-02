@@ -1,21 +1,22 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
 import { useGetBookLikes } from 'queries';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { UserType } from 'types';
-import { getStyledColor } from 'utils';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Book } from 'components/user';
+<<<<<<< HEAD
 import * as S from '../../styles/SearchStyled';
 
+=======
+import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
+>>>>>>> 87a326cf43bbe23e0973aa17d43210fca21522d4
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const authorId: number = user?.id || 0;
-
   const {
     data: LikesBooks,
     status,
@@ -36,13 +37,19 @@ const MyPage = () => {
 
   return (
     <Wrapper>
+      <Stars />
+      <Stars2 />
+      <Stars3 />
+
       <div className="one">
         <h1 className="1">내정보</h1>
+
         <div>이메일:{user?.email}</div>
         <div style={{ marginBottom: '20px' }}>닉네임:{user?.nickname}</div>
         <S.SearchButton style={{ marginRight: '20px' }}>비밀번호 변경</S.SearchButton>
         <S.SearchButton>닉네임 변경</S.SearchButton>
       </div>
+
       <div className="two">
         <h2>내가 좋아요 한 책</h2>
         <Layout>
@@ -51,8 +58,10 @@ const MyPage = () => {
           </ArrowButton>
           <BookWrapper $isSuccess={isSuccess}>
             {status === 'success' &&
-              LikesBooks.data.map((book) => {
-                return <Book {...book} key={book.id} />;
+              LikesBooks.data.map((index) => {
+                const { id, title, images, ...spread } = index.api2;
+
+                return <Book key={id} id={id} images={images} title={title} {...spread} />;
               })}
           </BookWrapper>
           <ArrowButton>
@@ -72,7 +81,6 @@ const Wrapper = styled.div`
   color: rgba(31, 31, 31, 0.7);
   font-weight: 900;
   padding-top: 80px;
-
   .one {
     grid-column: 2 / -2;
     grid-row: 1;

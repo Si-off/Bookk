@@ -16,12 +16,12 @@ const tabs = [
     icon: <FaBook />,
   },
   {
-    to: 'manage/books',
+    to: 'books',
     name: '책 관리',
     icon: <FaListAlt />,
   },
   {
-    to: 'manage/users',
+    to: 'users',
     name: '사용자 관리',
     icon: <FaAddressBook />,
   },

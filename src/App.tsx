@@ -17,6 +17,7 @@ import {
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
 import { useGetUser } from 'queries';
+import { getToken } from 'utils/getToken';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit, setAccessToken } = useUserStore();
@@ -25,7 +26,8 @@ function App() {
   useGetUser(isLogin);
 
   useEffect(() => {
-    const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+    const refreshToken = getToken('refreshToken');
+
     if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
       (async () => {
         const accessToken = await getAccessToken();
@@ -52,9 +54,9 @@ function App() {
             <Route path="/admin" element={<AdminMain />}>
               <Route path="" element={<AdminDashboard />} />
               <Route path="create" element={<AdminCreateItem />} />
-              <Route path="manage/books" element={<AdminManage />} />
-              <Route path="manage/users" element={<AdminManageUsers />} />
-              <Route path="edit/:id" element={<AdminEditItem />} />
+              <Route path="books" element={<AdminManage />} />
+              <Route path="books/detail/:id" element={<AdminEditItem />} />
+              <Route path="users" element={<AdminManageUsers />} />
             </Route>
           </Route>
         </Routes>

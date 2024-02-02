@@ -1,17 +1,33 @@
-import { CommentGetRes } from 'types';
+import { CommentGetRes, CommentType, UserType } from 'types';
 import styled from 'styled-components';
 import * as S from 'styles/CommentStyled';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
+import { useDeleteComment, usePatchComment } from 'queries';
+import { Button } from 'components/shared';
 
 interface CommentToggleProps {
   comments: CommentGetRes | undefined;
-  bookId: number | undefined;
+  bookId: number;
 }
+
 const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
-  if (bookId === undefined) return null;
-  const user = useQueryClient().getQueryData([QueryKeys.USER_DATA]);
-  console.log(user, 'user');
+  const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
+  // const [comment, setComment] = useState<string>();
+  const { mutate: deleteComment, status: deleteStatus } = useDeleteComment(bookId);
+  const { mutate: patchComment, status: patchStatus } = usePatchComment(bookId);
+  const handleChangeClick = (commentId: number, oldComment: string) => {
+    const newComment = prompt('댓글을 수정하세요', oldComment);
+    if (!newComment || newComment === oldComment) return;
+    patchComment({ bookId, commentId, comment: newComment });
+  };
+  const handleDeleteClick = (commentId: number) => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      deleteComment(commentId);
+    } else {
+      return;
+    }
+  };
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
     const year = dateObject.getFullYear();
@@ -23,7 +39,7 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
 
   return (
     <S.CommentContainer>
-      {comments?.data?.map((reply: any, index: any) => {
+      {comments?.data?.map((reply: CommentType, index: number) => {
         return (
           <S.CommentItemContainer key={reply.id} $index={index}>
             <div>
@@ -34,12 +50,24 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
               </span>
             </div>
 
-            {/* {user?.nickname === reply?.author?.nickname && (
-                <S.CommentButtonContainer>
-                  <S.CommentButton>수정</S.CommentButton>
-                  <S.CommentButton>삭제</S.CommentButton>
-                </S.CommentButtonContainer>
-              )} */}
+            {user?.id === reply?.author?.id && (
+              <S.CommentButtonContainer>
+                <Button
+                  onClick={() => handleChangeClick(reply.id, reply.reply2)}
+                  status={patchStatus}
+                  disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
+                >
+                  수정
+                </Button>
+                <Button
+                  onClick={() => handleDeleteClick(reply.id)}
+                  status={deleteStatus}
+                  disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
+                >
+                  삭제
+                </Button>
+              </S.CommentButtonContainer>
+            )}
           </S.CommentItemContainer>
         );
       })}

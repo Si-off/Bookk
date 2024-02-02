@@ -13,6 +13,7 @@ import {
   BookTakelistRes,
   BookisLikeRes,
   LikesBooklistParams,
+  MyFavorites,
 } from 'types';
 
 export const getBooks = async (queries?: BooklistParams) => {
@@ -108,9 +109,10 @@ export const deleteComment = async (bookId: number, commentId: number) => {
 };
 export const getBooksLike = async (params: LikesBooklistParams) => {
   const { authorId, take, page } = params;
+
   const res = await Axios(
     `/users/${authorId}/like2s?take=${take}&page=${page}&order__updatedAt=DESC`,
-  ).get();
+  ).get<MyFavorites>();
   return res;
 };
 
