@@ -1,12 +1,14 @@
 import { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as S from 'styles/AdminStyledTemp';
-import { usePatchBook, useDeleteBook, useGetBook } from 'queries';
+import { usePatchBook, useDeleteBook, useGetBook, useGetComments } from 'queries';
 import ImageUploader from 'components/shared/ImageUploader';
 import { ImagePatchReq } from 'types';
 import { postImage, deleteImage, addImage } from 'api';
 import Loader from 'components/shared/Loader';
 import { Button } from 'components/shared';
+import { styled } from 'styled-components';
+import { getDateStr } from 'utils';
 
 const AdminEditItem = () => {
   const { id } = useParams();
@@ -16,6 +18,9 @@ const AdminEditItem = () => {
   }
 
   const navigate = useNavigate();
+  if (!id) {
+    navigate(-1);
+  }
 
   /** states */
   const [title, setTitle] = useState('');
@@ -102,8 +107,34 @@ const AdminEditItem = () => {
   };
 
   return (
-    <S.Layout>
-      <S.Container>
+    <Layout>
+      <ContainerWrap>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <Text>생성일</Text>
+          <Data>{getDateStr(book.createdAt)}</Data>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <Text>생성자</Text>
+          <Data>{book.author.name}</Data>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <Text>조회수</Text>
+          <Data>{book.clicks}</Data>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <Text>좋아요</Text>
+          <Data>{book.likeCount}</Data>
+        </S.SubContainer>
+        <S.SubContainer style={{ gridArea: 'data' }}>
+          <Text>리뷰수</Text>
+          <Data>{book.reply2Count}</Data>
+        </S.SubContainer>
+      </ContainerWrap>
+
+      <S.Container style={{ alignSelf: 'flex-start', gridArea: 'contain' }}>
+        <S.ContainerHeader>
+          <S.ContainerTitle>책 수정하기</S.ContainerTitle>
+        </S.ContainerHeader>
         <S.Wrapper>
           <S.InputField>
             <S.Label style={{ color: 'black' }}>도서명</S.Label>
@@ -128,7 +159,15 @@ const AdminEditItem = () => {
             />
           )}
         </S.InputField>
-        <S.InputField style={{ display: 'flex', marginTop: 30, gap: 20 }}>
+        <S.InputField
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginTop: 30,
+            gap: 20,
+          }}
+        >
           <Button onClick={handleFinalUpdate} status={patchStatus}>
             수정
           </Button>
@@ -137,11 +176,34 @@ const AdminEditItem = () => {
           </S.Button>
         </S.InputField>
       </S.Container>
-    </S.Layout>
+    </Layout>
   );
 };
 
 export default AdminEditItem;
+
+const Layout = styled.div`
+  display: grid;
+  grid-template-areas: 'data contain';
+  width: 100%;
+  height: 100%;
+  gap: 30px;
+`;
+
+const ContainerWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const Text = styled.div`
+  font-weight: 500;
+`;
+
+const Data = styled.div`
+  margin-top: 8px;
+  font-size: 14px;
+`;
 
 //setImage때 postImage로 이미지 경로를 받은 뒤에 이미지 id를 일단 바꾼다. 취소 버튼을 누르면 해당 이미지를 deleteImage을 해야함
 //최종 수정버튼을 누를 때 deleteImage(기존 이미지id), addImage하고 patchbook을 한다.

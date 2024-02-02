@@ -1,33 +1,28 @@
 import { Fragment, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { FaPenToSquare, FaRegTrashCan, FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import * as S from 'styles/AdminStyledTemp';
-
 import { useDeleteBook, useGetBooksAdmin } from 'queries';
-import { getStyledColor } from 'utils';
 import { useSelectedBook } from 'store/useSelectedBooks';
 import { getDateStr } from 'utils';
 import { BookInfoType } from 'types';
 import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
-import { QueryKeys } from 'constant';
 import Loader from 'components/shared/Loader';
-
-const TAKE = 10;
+import { QueryKeys } from 'constant';
 
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
-  const {
-    data: books,
-    status,
-    isLoading: booksLoading,
-  } = useGetBooksAdmin({
-    take: TAKE,
+  const { setSelectedBook } = useSelectedBook();
+  const { mutate: remove } = useDeleteBook(currentPage);
+
+  const { data: books, status } = useGetBooksAdmin({
+    take: 10,
     page: currentPage,
     order__createdAt: 'DESC',
     where__title__i_like: '',
@@ -42,7 +37,7 @@ const AdminManage = () => {
         queryKey: key,
         queryFn: () =>
           getNextBooks({
-            take: TAKE,
+            take: 10,
             page: currentPage + 1,
             order__createdAt: 'DESC',
             where__title__i_like: '',
@@ -50,11 +45,6 @@ const AdminManage = () => {
       });
     }
   }, [currentPage]);
-
-  const { setSelectedBook } = useSelectedBook();
-  const { mutate: remove } = useDeleteBook();
-
-  const navigate = useNavigate();
 
   const unshowScroll = () => {
     document.body.style.overflow = 'hidden';
@@ -79,7 +69,7 @@ const AdminManage = () => {
     const { images, title, content } = selectedBook;
 
     setSelectedBook({ title, content, images });
-    navigate(`/admin/edit/${id}`);
+    navigate(`/admin/books/detail/${id}`);
   };
 
   const handleRemove = (id: number) => {
@@ -96,18 +86,18 @@ const AdminManage = () => {
     setCurrentPage(pageNum);
   };
 
-  if (booksLoading || !books) {
+  if (status === 'loading' || !books) {
     return (
       <S.Layout>
-        {booksLoading && <Loader />}
-        {!booksLoading && !books && <div>데이터가 없습니다.</div>}
+        {status === 'loading' && <Loader />}
+        {status === 'success' && !books && <div>데이터가 없습니다.</div>}
       </S.Layout>
     );
   }
 
   return (
     <S.Layout>
-      <S.Container $hidden={booksLoading}>
+      <S.Container>
         <S.Table>
           <S.Theader>
             <S.Trow>
@@ -139,8 +129,8 @@ const AdminManage = () => {
                       <S.Tcell>{book.reply2Count}</S.Tcell>
                       <S.Tcell>{getDateStr(book.createdAt)}</S.Tcell>
                       <S.Tcell>
-                        <EditIcon onClick={() => handleEdit(book.id)} />
-                        <TrashIcon onClick={() => handleRemove(book.id)} />
+                        <S.EditIcon onClick={() => handleEdit(book.id)} />
+                        <S.TrashIcon onClick={() => handleRemove(book.id)} />
                       </S.Tcell>
                     </S.Trow>
                     {modalOpen && (
@@ -163,21 +153,21 @@ const AdminManage = () => {
             marginTop: '16px',
           }}
         >
-          <Pagination>
-            <PButton>
+          <S.Pagination>
+            <S.PaginationButton>
               <FaAngleLeft onClick={() => handlePageClick(currentPage - 1)} />
-            </PButton>
+            </S.PaginationButton>
             <div>
               {Array.from({ length: Math.ceil(books?.total / 10) }, (_, index) => (
-                <PNumber key={index} onClick={() => handlePageClick(index + 1)}>
+                <S.PaginationNumber key={index} onClick={() => handlePageClick(index + 1)}>
                   {index + 1}
-                </PNumber>
+                </S.PaginationNumber>
               ))}
             </div>
-            <PButton>
+            <S.PaginationButton>
               <FaAngleRight onClick={() => handlePageClick(currentPage + 1)} />
-            </PButton>
-          </Pagination>
+            </S.PaginationButton>
+          </S.Pagination>
         </div>
       </S.Container>
     </S.Layout>
@@ -185,59 +175,3 @@ const AdminManage = () => {
 };
 
 export default AdminManage;
-const EditIcon = styled(FaPenToSquare)`
-  font-size: 20px;
-  transition: color 0.15s ease;
-  color: ${getStyledColor('cool_gray', 700)};
-  &:hover {
-    color: ${getStyledColor('blue', 900)};
-  }
-  &:active {
-    color: ${getStyledColor('blue', 1000)};
-  }
-  margin-right: 20px;
-  cursor: pointer;
-`;
-
-const TrashIcon = styled(FaRegTrashCan)`
-  font-size: 20px;
-  transition: color 0.15s ease;
-  color: ${getStyledColor('cool_gray', 700)};
-  &:hover {
-    color: ${getStyledColor('red', 900)};
-  }
-  &:active {
-    color: ${getStyledColor('red', 1000)};
-  }
-  cursor: pointer;
-`;
-
-const Pagination = styled.nav`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-`;
-
-const PNumber = styled.button`
-  padding: 8px 12px;
-  background-color: #fff;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    color: ${getStyledColor('white', 'high')};
-    background-color: ${getStyledColor('teal', 900)};
-  }
-
-  &:active {
-    color: ${getStyledColor('white', 'high')};
-    background-color: ${getStyledColor('teal', 1000)};
-  }
-`;
-
-const PButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  background-color: #fff;
-`;

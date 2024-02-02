@@ -104,7 +104,7 @@ export type UserType = {
   followerCount: number;
   followeeCount: number;
   valid_email: boolean;
-  role: 'MANAGER' | 'USER';
+  role: 'ADMIN' | 'MANAGER' | 'USER';
   profileImage: [];
 };
 
@@ -115,6 +115,12 @@ export type BooklistParams = {
   where__title__i_like?: string;
   order__clicks?: 'DESC';
   order__likeCount?: 'DESC';
+};
+
+export type LikesBooklistParams = {
+  authorId: number;
+  take: number;
+  page: number;
 };
 
 export type ErrorType = {
@@ -167,18 +173,24 @@ export type CommentPostRes = {
     profileImg: string[];
   };
 };
-export type CommentGetRes = {
-  data: Array<{
+export type CommentType = {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  reply2: string;
+  likeCount: number;
+  author: {
     id: number;
-    updatedAt: string;
-    createdAt: string;
-    reply2: string;
-    likeCount: number;
-    author: {
-      id: number;
-      nickname: string;
-    };
-  }>;
+    nickname: string;
+  };
+};
+export type CommentGetRes = {
+  data: Array<CommentType>;
+  cursor: {
+    after: number;
+  };
+  count: number;
+  next: string;
   total: number;
 };
 
@@ -191,4 +203,17 @@ export type PatchCommentReq = {
 export type BookisLikeRes = {
   isLike: boolean;
   likeId: number;
+  likeCount: number;
+};
+
+export type MyFavorites = {
+  data: {
+    api2: BookInfoType;
+    id: number;
+    likeCount: number;
+    like2: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+  total: number;
 };

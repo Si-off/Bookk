@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { pixelToRem, getStyledColor } from 'utils';
 export const fadeIn = keyframes`
   from {
@@ -150,7 +150,19 @@ export const CommentSection = styled.div`
   border: 1px solid #888;
   width: 80%;
 `;
-export const HeartButton = styled.button<{ $liked: boolean | undefined }>`
+export const pulseAnimation = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+export const HeartButton = styled.button<{ $liked: boolean | undefined; $status: string }>`
   background: transparent;
   border: none;
   cursor: pointer;
@@ -173,5 +185,11 @@ export const HeartButton = styled.button<{ $liked: boolean | undefined }>`
 
   svg {
     font-size: 24px; // Adjust the size of the FaHeart icon
+    animation: ${(props) =>
+      props.$status === 'loading'
+        ? css`
+            ${pulseAnimation} 0.5s infinite
+          `
+        : 'none'};
   }
 `;

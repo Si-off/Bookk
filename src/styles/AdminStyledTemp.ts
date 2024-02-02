@@ -1,3 +1,4 @@
+import { FaPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
 import styled, { css } from 'styled-components';
 import { getStyledColor, pixelToRem } from 'utils';
 
@@ -9,18 +10,16 @@ export const Layout = styled.div`
   justify-content: center;
 `;
 
-export const Container = styled.div<{ $hidden?: boolean }>`
-  min-width: 500px;
-  max-height: 100vh;
+export const Container = styled.div`
   border-radius: 4px;
   background-color: #fff;
   padding: 20px 25px;
+`;
 
-  ${({ $hidden }) =>
-    $hidden &&
-    css`
-      visibility: 'hidden';
-    `}
+export const SubContainer = styled.div`
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 20px 25px;
 `;
 
 export const ContainerHeader = styled.div`
@@ -158,8 +157,9 @@ export const Textarea = styled.textarea`
 `;
 
 export const Table = styled.table`
-  width: ${pixelToRem(1500)};
-  min-width: ${pixelToRem(900)};
+  max-width: ${pixelToRem(1500)};
+  min-width: ${pixelToRem(100)};
+  width: 100%;
   border-radius: 4px;
   overflow: hidden;
   border-collapse: collapse;
@@ -199,4 +199,61 @@ export const Tcell = styled.td`
   & button {
     background-color: inherit;
   }
+`;
+
+export const EditIcon = styled(FaPenToSquare)`
+  font-size: 20px;
+  transition: color 0.15s ease;
+  color: ${getStyledColor('cool_gray', 700)};
+  &:hover {
+    color: ${getStyledColor('blue', 900)};
+  }
+  &:active {
+    color: ${getStyledColor('blue', 1000)};
+  }
+  margin-right: 20px;
+  cursor: pointer;
+`;
+
+export const TrashIcon = styled(FaRegTrashCan)`
+  font-size: 20px;
+  transition: color 0.15s ease;
+  color: ${getStyledColor('cool_gray', 700)};
+  &:hover {
+    color: ${getStyledColor('red', 900)};
+  }
+  &:active {
+    color: ${getStyledColor('red', 1000)};
+  }
+  cursor: pointer;
+`;
+
+export const Pagination = styled.nav`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+`;
+
+export const PaginationNumber = styled.button`
+  padding: 8px 12px;
+  background-color: #fff;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    color: ${getStyledColor('white', 'high')};
+    background-color: ${getStyledColor('teal', 900)};
+  }
+
+  &:active {
+    color: ${getStyledColor('white', 'high')};
+    background-color: ${getStyledColor('teal', 1000)};
+  }
+`;
+
+export const PaginationButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  background-color: #fff;
 `;

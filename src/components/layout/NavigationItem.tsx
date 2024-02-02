@@ -4,8 +4,8 @@ import { logout } from 'api/auth';
 import { useUserStore } from 'store/useUserStore';
 import { getStyledColor, pixelToRem } from 'utils';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys } from 'constant';
 import { UserType } from 'types';
+import { QueryKeys } from 'constant';
 
 const NavigationItem = () => {
   const { isLogin } = useUserStore();
@@ -26,7 +26,7 @@ const NavigationItem = () => {
       )}
       {isLogin && (
         <>
-          {data?.role === 'MANAGER' && (
+          {(data?.role === 'ADMIN' || 'MANAGER') && (
             <LinkStyle to="/admin">
               <Text>관리자</Text>
             </LinkStyle>

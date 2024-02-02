@@ -10,6 +10,7 @@ import Dropdown from 'components/shared/Dropdown';
 import Loader from 'components/shared/Loader';
 import * as S from 'styles/SearchStyled';
 import { useSearchStore } from 'store/useSearchStore';
+import NotFound from 'pages/NotFound';
 
 const UserPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -67,12 +68,10 @@ const UserPage = () => {
     });
   };
 
-  if (status === 'loading')
-    return (
-      <LoaderContainer>
-        <Loader />
-      </LoaderContainer>
-    );
+  // if (status === 'loading')
+  //   return (
+
+  //   );
 
   return (
     <Main>
@@ -87,36 +86,50 @@ const UserPage = () => {
             onChange={onChangeSearch}
             onKeyDown={onKeyPressSearch}
           />
-          <S.SearchButton onClick={onClickSearch}>검색</S.SearchButton>
-          <S.ResetButton onClick={onClickReset}>초기화</S.ResetButton>
+          <S.SearchButton onClick={onClickSearch} disabled={status === 'loading'}>
+            검색
+          </S.SearchButton>
+          <S.ResetButton onClick={onClickReset} disabled={status === 'loading'}>
+            초기화
+          </S.ResetButton>
         </S.Search>
-        <Dropdown order={order} setOrder={setOrder} />
+        <Dropdown order={order} setOrder={setOrder} status={status} />
       </S.WrapperSearch>
+
       <LayoutContainer>
-        <Layout>
-          <TotheTop onClick={scrollToTop}>Top</TotheTop>
-          {status === 'success' &&
-            data?.pages.map((page) =>
-              page?.data.map((book, index) => {
-                if (page.data.length - 1 === index) {
-                  return (
-                    <Fragment key={book.id}>
-                      <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
-                      {modalOpen && (
-                        <CustomModal
-                          bookId={selectedBookId}
-                          book={selectedBook}
-                          setModalOpen={setModalOpen}
-                          showScroll={showScroll}
-                        ></CustomModal>
-                      )}
-                    </Fragment>
-                  );
-                }
-                return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
-              }),
+        {status === 'loading' ? (
+          <LoaderContainer>
+            <Loader />
+          </LoaderContainer>
+        ) : (
+          <Layout>
+            <TotheTop onClick={scrollToTop}>Top</TotheTop>
+            {data?.pages.some((page) => (page?.data ?? []).length > 0) ? (
+              data?.pages.map((page) =>
+                page?.data.map((book, index) => {
+                  if (page.data.length - 1 === index) {
+                    return (
+                      <Fragment key={book.id}>
+                        <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
+                        {modalOpen && (
+                          <CustomModal
+                            bookId={selectedBookId}
+                            book={selectedBook}
+                            setModalOpen={setModalOpen}
+                            showScroll={showScroll}
+                          ></CustomModal>
+                        )}
+                      </Fragment>
+                    );
+                  }
+                  return <Book key={book.id} {...book} onClick={() => handleClick(book.id)} />;
+                }),
+              )
+            ) : (
+              <NotFound search={search} />
             )}
-        </Layout>
+          </Layout>
+        )}
       </LayoutContainer>
     </Main>
   );
@@ -147,10 +160,11 @@ const Layout = styled.div`
 `;
 
 const LoaderContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%);
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: relative;
 `;
 
 const TotheTop = styled.button`

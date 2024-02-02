@@ -63,7 +63,7 @@ export const CommentButtonContainer = styled.div`
   gap: 10px;
 `;
 
-export const CommentButton = styled.button`
+export const CommentButton = styled.button<{ onClick: (commentId: number) => void }>`
   padding: 5px 10px;
   border-radius: 5px;
   background-color: ${getStyledColor('purple', 300)};

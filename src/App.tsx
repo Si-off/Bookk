@@ -37,27 +37,29 @@ function App() {
   }, [queryClient, setIsLogin, setIsInit, setAccessToken]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Navigation />}>
-          <Route path="/" element={<UserPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Route>
-
-        <Route element={<PrivateRoutes />}>
-          <Route path="/admin" element={<AdminMain />}>
-            <Route path="" element={<AdminDashboard />} />
-            <Route path="create" element={<AdminCreateItem />} />
-            <Route path="manage/books" element={<AdminManage />} />
-            <Route path="manage/users" element={<AdminManageUsers />} />
-            <Route path="edit/:id" element={<AdminEditItem />} />
+    <div style={{ width: '100%', height: '100%' }}>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Navigation />}>
+            <Route path="/" element={<UserPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+
+          <Route element={<PrivateRoutes />}>
+            <Route path="/admin" element={<AdminMain />}>
+              <Route path="" element={<AdminDashboard />} />
+              <Route path="create" element={<AdminCreateItem />} />
+              <Route path="books" element={<AdminManage />} />
+              <Route path="books/detail/:id" element={<AdminEditItem />} />
+              <Route path="users" element={<AdminManageUsers />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

@@ -3,7 +3,7 @@ import * as S from 'styles/ModalStyled';
 import { useDeleteBookLike, useGetBookIsLike, useGetComments, usePostBookLike } from 'queries';
 
 import useOnclickOutside from 'hooks/useOnclickOutside';
-import { BookInfoType, UserType } from 'types';
+import { BookInfoType, UserType, BookisLikeRes } from 'types';
 import CommentWrite from 'components/modal/CommentWrite';
 import CommentToggle from 'components/modal/CommentToggle';
 import { IoIosClose } from 'react-icons/io';
@@ -11,6 +11,8 @@ import { useUserStore } from 'store/useUserStore';
 import { FaHeart } from 'react-icons/fa';
 import { QueryKeys } from 'constant';
 import { useQueryClient } from '@tanstack/react-query';
+import NotFoundComment from 'components/shared/NotFoundComment';
+import { Loader } from 'components/shared';
 
 export const CustomModal = ({
   bookId,
@@ -34,8 +36,10 @@ export const CustomModal = ({
 
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
   const { data: bookIsLikeData, status, refetch } = useGetBookIsLike(bookId, user?.id || 0);
-  const { mutate: postLike, status: postLikeStatus } = usePostBookLike();
-  const { mutate: deleteLike, status: deleteLikeStatus } = useDeleteBookLike();
+  const { mutate: postLike, status: postLikeStatus } = usePostBookLike({
+    bookId: bookId,
+  });
+  const { mutate: deleteLike, status: deleteLikeStatus } = useDeleteBookLike({ bookId: bookId });
 
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
@@ -99,7 +103,12 @@ export const CustomModal = ({
                     toggleLike();
                   }}
                   $liked={bookIsLikeData?.isLike}
-                  disabled={postLikeStatus === 'loading' || deleteLikeStatus === 'loading'}
+                  $status={status}
+                  disabled={
+                    postLikeStatus === 'loading' ||
+                    deleteLikeStatus === 'loading' ||
+                    status === 'loading'
+                  }
                 >
                   <FaHeart />
                 </S.HeartButton>
@@ -107,7 +116,9 @@ export const CustomModal = ({
               <S.ModalContent>
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
                 <S.ModalOverview>클릭수: {book?.clicks}</S.ModalOverview>
-                <S.ModalOverview>좋아요: {book?.likeCount}</S.ModalOverview>
+                <S.ModalOverview>
+                  좋아요: {bookIsLikeData?.likeCount ? bookIsLikeData?.likeCount : book?.likeCount}
+                </S.ModalOverview>
                 <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
                 <S.ModalDetails>
                   등록날짜: {'  '}
@@ -117,7 +128,13 @@ export const CustomModal = ({
                 <S.ModalIntroduce>{book?.content}</S.ModalIntroduce>
                 <S.CommentContainer>
                   <S.ModalSubject>한줄리뷰</S.ModalSubject>
-                  <CommentToggle comments={comments} bookId={book?.id} />
+                  {commentStatus === 'loading' ? (
+                    <Loader custom={true} />
+                  ) : (comments?.data ?? []).length > 0 ? (
+                    <CommentToggle comments={comments} bookId={book?.id} />
+                  ) : (
+                    <NotFoundComment />
+                  )}
                   <CommentWrite bookId={book?.id} />
                 </S.CommentContainer>
               </S.ModalContent>

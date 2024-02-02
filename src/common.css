@@ -6,6 +6,17 @@
   margin: 0;
 }
 
+html {
+  width: 100%;
+  height: 100%;
+}
+body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #121212;
+}
+
 @font-face {
   font-family: 'Noto Sans KR';
   font-weight: 300;
@@ -27,11 +38,6 @@
   font-family: 'Noto Sans KR';
   font-weight: 700;
   src: url(../public/fonts/NotoSansKR-Bold.woff2) format('woff2');
-}
-
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background-color: #121212;
 }
 
 a {
