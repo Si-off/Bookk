@@ -292,7 +292,7 @@ export const usePostBookLike = ({ bookId }: { bookId: number }) => {
           return {
             ...old,
             isLike: !old.isLike,
-            likeCount: old.isLike ? old.likeCount - 1 : old.likeCount + 1,
+            likeCount: old.likeCount + 1,
           };
         },
       );
@@ -323,7 +323,7 @@ export const useDeleteBookLike = ({ bookId }: { bookId: number }) => {
           return {
             ...old,
             isLike: !old.isLike,
-            likeCount: old.isLike ? old.likeCount - 1 : old.likeCount + 1,
+            likeCount: old.likeCount - 1,
           };
         },
       );
