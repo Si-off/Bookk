@@ -105,7 +105,7 @@ export type UserType = {
   followeeCount: number;
   valid_email: boolean;
   role: 'ADMIN' | 'MANAGER' | 'USER';
-  profileImage: [];
+  profileImg: Array<string>;
 };
 
 export type BooklistParams = {

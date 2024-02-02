@@ -9,12 +9,9 @@ import { Book } from 'components/user';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const authorId: number = user?.id || 0;
-  console.log(authorId);
-
   const {
     data: LikesBooks,
     status,
@@ -38,13 +35,16 @@ const MyPage = () => {
       <Stars />
       <Stars2 />
       <Stars3 />
+
       <div className="one">
         <h1 className="1">내정보</h1>
+
         <div>이메일:{user?.email}</div>
         <div>닉네임:{user?.nickname}</div>
         <button style={{ marginRight: '20px' }}>비밀번호 변경</button>
         <button>닉네임 변경</button>
       </div>
+
       <div className="two">
         <h2>내가 좋아요 한 책</h2>
         <Layout>

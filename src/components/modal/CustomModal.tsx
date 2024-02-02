@@ -31,7 +31,7 @@ export const CustomModal = ({
     showScroll();
   });
   if (!bookId) return <div>loading...</div>;
-  const { isLogin } = useUserStore();
+  const { isLogin } = useUserStore.getState();
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
@@ -99,9 +99,7 @@ export const CustomModal = ({
               <div>
                 <S.ModalPosterImg src={`${book.images[0].fbPath[0]}`} alt="modal-img" />
                 <S.HeartButton
-                  onClick={() => {
-                    toggleLike();
-                  }}
+                  onClick={toggleLike}
                   $liked={bookIsLikeData?.isLike}
                   $status={status}
                   disabled={

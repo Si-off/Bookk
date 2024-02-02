@@ -153,6 +153,7 @@ export const CommentSection = styled.div`
 export const pulseAnimation = keyframes`
   0% {
     transform: scale(1);
+
   }
   50% {
     transform: scale(1.1);
@@ -173,7 +174,6 @@ export const HeartButton = styled.button<{ $liked: boolean | undefined; $status:
   margin-top: 20px;
   transform: scale(1.2);
   color: ${(props) => (props.$liked ? 'red' : 'black')};
-
   &:hover {
     color: ${(props) => (props.$liked ? 'darkred' : 'grey')};
   }
@@ -185,10 +185,15 @@ export const HeartButton = styled.button<{ $liked: boolean | undefined; $status:
 
   svg {
     font-size: 24px; // Adjust the size of the FaHeart icon
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.1);
+      transition: transform 0.2s;
+    }
     animation: ${(props) =>
       props.$status === 'loading'
         ? css`
-            ${pulseAnimation} 0.5s infinite
+            ${pulseAnimation} 1s 2
           `
         : 'none'};
   }
