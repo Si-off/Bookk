@@ -19,7 +19,7 @@ const AdminManage = () => {
   const navigate = useNavigate();
 
   const { setSelectedBook } = useSelectedBook();
-  const { mutate: remove } = useDeleteBook();
+  const { mutate: remove } = useDeleteBook(currentPage);
 
   const { data: books, status } = useGetBooksAdmin({
     take: 10,
