@@ -179,11 +179,15 @@ export const usePatchComment = (bookId: number) => {
 export const usePostComment = (bookId: number) => {
   const queryClient = useQueryClient();
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
-  if (!user) return;
+
   return useMutation({
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
-    mutationFn: (comment: string) => postComment(bookId, comment),
+    mutationFn: (comment: string) => {
+      return postComment(bookId, comment);
+    },
     onMutate: async (comment: string) => {
+      if (!user) throw new Error('User not found');
+
       await queryClient.cancelQueries([QueryKeys.USER, 'comments', bookId.toString()]);
       const previousComments = queryClient.getQueryData<CommentGetRes>([
         QueryKeys.USER,
