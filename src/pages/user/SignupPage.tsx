@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import secureLocalStorage from 'react-secure-storage';
 import { useUserStore } from 'store/useUserStore';
 import { signUp } from 'api/auth';
 import * as S from 'styles/LoginStyled';
 import { getStyledColor } from 'utils';
 import useTimer from 'hooks/useTimer';
 import formatTime from 'utils/formatTime';
+import { setToken } from 'utils/getToken';
 
 const SignupPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -36,7 +36,7 @@ const SignupPage = () => {
     onSuccess: (data) => {
       if (!data) return;
       setIsLogin(true);
-      secureLocalStorage.setItem('refreshToken', data.refreshToken);
+      setToken('refreshToken', data.refreshToken);
       navigate('/user');
     },
   });

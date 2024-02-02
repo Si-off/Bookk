@@ -3,6 +3,7 @@ import Axios from '../axios';
 import secureLocalStorage from 'react-secure-storage';
 import { useUserStore } from 'store/useUserStore';
 import { LoginResponse, SignUpRes, SignUpReq, LoginParams } from 'types';
+import { getToken } from 'utils/getToken';
 
 export const login = async (user: LoginParams) => {
   const auth = btoa(`${user.email}:${user.password}`);
@@ -36,7 +37,7 @@ export const getUser = async () => {
 };
 
 export const getAccessToken = async () => {
-  const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+  const refreshToken = getToken('refreshToken');
   const res = await Axios('/auth/token/access').post<{ accessToken: string }>(
     {},
     { headers: { Authorization: `Bearer ${refreshToken}` } },
