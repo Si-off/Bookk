@@ -7,6 +7,8 @@ import { useUserStore } from 'store/useUserStore';
 import { signUp } from 'api/auth';
 import * as S from 'styles/LoginStyled';
 import { getStyledColor } from 'utils';
+import useTimer from 'hooks/useTimer';
+import formatTime from 'utils/formatTime';
 
 const SignupPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -17,6 +19,7 @@ const SignupPage = () => {
   const [code, setCode] = useState<string>('');
 
   const [isVerify, setIsVerify] = useState<boolean>(false);
+  const { timer, setTimer } = useTimer('sec');
 
   const navigate = useNavigate();
 
@@ -59,10 +62,16 @@ const SignupPage = () => {
       body: JSON.stringify({ email }),
     });
     const data = await res.json();
-    alert(`${data.message} \n ${data.expirationTime}`);
 
-    // TODO: 요청 성공 시 true로 변경
-    setIsVerify(true);
+    if (data.statusCode === 404) {
+      alert(`${data.message}`);
+    } else {
+      alert(`${data.message} \n ${data.expirationTime}`);
+
+      // TODO: 요청 성공 시 true로 변경
+      setIsVerify(true);
+      setTimer(600);
+    }
   };
 
   const handleVerifyCode = async () => {
@@ -104,11 +113,14 @@ const SignupPage = () => {
               <S.InputField>
                 <S.Label>인증번호</S.Label>
                 <S.Input
-                  type="text"
+                  type="number"
                   placeholder="인증번호를 입력해주세요."
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
+                  maxLength={4}
+                  onWheel={(e) => e.currentTarget.blur()}
                 />
+                <div style={{ position: 'absolute', color: '#fff' }}>{formatTime(timer)}</div>
               </S.InputField>
               <AuthButton onClick={handleVerifyCode}>확인</AuthButton>
             </EmailField>
@@ -121,6 +133,7 @@ const SignupPage = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              maxLength={20}
             />
           </S.InputField>
           <S.InputField>
@@ -130,6 +143,7 @@ const SignupPage = () => {
               placeholder="Password Confirm"
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
+              maxLength={20}
             />
           </S.InputField>
 
@@ -140,6 +154,7 @@ const SignupPage = () => {
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              maxLength={5}
             />
           </S.InputField>
           <S.InputField>
@@ -149,6 +164,7 @@ const SignupPage = () => {
               placeholder="Nick Name"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
+              maxLength={10}
             />
           </S.InputField>
         </S.Wrapper>
