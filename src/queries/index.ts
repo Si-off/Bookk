@@ -277,9 +277,7 @@ export const usePostBookLike = ({ bookId }: { bookId: number }) => {
   return useMutation({
     mutationKey: [QueryKeys.USER, 'likes', bookId.toString()],
     mutationFn: postBookLike,
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
-    },
+
     onMutate: async () => {
       await queryClient.cancelQueries([QueryKeys.USER, 'likes', bookId.toString()]);
 
@@ -308,9 +306,7 @@ export const useDeleteBookLike = ({ bookId }: { bookId: number }) => {
   return useMutation({
     mutationKey: [QueryKeys.USER, 'likes', bookId.toString()],
     mutationFn: deleteBookLike,
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
-    },
+
     onMutate: async () => {
       await queryClient.cancelQueries([QueryKeys.USER, 'likes', bookId.toString()]);
 

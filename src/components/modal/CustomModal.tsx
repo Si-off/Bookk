@@ -62,20 +62,11 @@ export const CustomModal = ({
       alert('로그인이 필요합니다.');
       return;
     }
-    const onSuccessLike = () => {
-      refetch();
-    };
+
     if (bookIsLikeData?.isLike === false) {
-      postLike(bookId, {
-        onSettled: onSuccessLike,
-      });
+      postLike(bookId);
     } else {
-      deleteLike(
-        { bookId, likeId: bookIsLikeData?.likeId },
-        {
-          onSettled: onSuccessLike,
-        },
-      );
+      deleteLike({ bookId, likeId: bookIsLikeData?.likeId });
     }
   };
 
