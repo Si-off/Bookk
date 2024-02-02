@@ -1,8 +1,7 @@
 import qs from 'qs';
 import { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import secureLocalStorage from 'react-secure-storage';
-import { StorageKeys } from 'constant';
 import { useUserStore } from 'store/useUserStore';
+import { getToken, removeToken } from 'utils/getToken';
 
 const injectInterceptors = (instance: AxiosInstance): AxiosInstance => {
   instance.defaults.paramsSerializer = (params) => {
@@ -40,7 +39,7 @@ const injectInterceptors = (instance: AxiosInstance): AxiosInstance => {
       if (response?.status === 401 || response?.status === 404) {
         if (!isRefreshing) {
           const { accessToken } = useUserStore.getState();
-          const token = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+          const token = getToken('refreshToken');
           const refreshToken = token as string;
 
           isRefreshing = true;
@@ -58,7 +57,7 @@ const injectInterceptors = (instance: AxiosInstance): AxiosInstance => {
           } catch (refreshError) {
             isRefreshing = false;
             alert('다시 로그인 해주세요.');
-            secureLocalStorage.removeItem(StorageKeys.REFRESH_TOKEN);
+            removeToken('refreshToken');
             window.location.replace('/user');
             return Promise.reject(refreshError);
           }
