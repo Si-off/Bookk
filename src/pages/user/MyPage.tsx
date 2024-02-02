@@ -7,6 +7,7 @@ import { UserType } from 'types';
 import { getStyledColor } from 'utils';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Book } from 'components/user';
+import * as S from '../../styles/SearchStyled';
 
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,9 +39,9 @@ const MyPage = () => {
       <div className="one">
         <h1 className="1">내정보</h1>
         <div>이메일:{user?.email}</div>
-        <div>닉네임:{user?.nickname}</div>
-        <button style={{ marginRight: '20px' }}>비밀번호 변경</button>
-        <button>닉네임 변경</button>
+        <div style={{ marginBottom: '20px' }}>닉네임:{user?.nickname}</div>
+        <S.SearchButton style={{ marginRight: '20px' }}>비밀번호 변경</S.SearchButton>
+        <S.SearchButton>닉네임 변경</S.SearchButton>
       </div>
       <div className="two">
         <h2>내가 좋아요 한 책</h2>
