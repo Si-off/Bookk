@@ -12,6 +12,7 @@
     "@types/node": "^16.18.74",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.5",
+    "crypto-js": "^4.2.0",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
