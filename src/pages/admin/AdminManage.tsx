@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
 import { CustomModal } from 'components/modal/CustomModal';
 import Loader from 'components/shared/Loader';
-import { QueryKeys, TAKE } from 'constant';
+import { QueryKeys } from 'constant';
 
 const AdminManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,10 +19,10 @@ const AdminManage = () => {
   const navigate = useNavigate();
 
   const { setSelectedBook } = useSelectedBook();
-  const { mutate: remove } = useDeleteBook();
+  const { mutate: remove } = useDeleteBook(currentPage);
 
   const { data: books, status } = useGetBooksAdmin({
-    take: TAKE,
+    take: 10,
     page: currentPage,
     order__createdAt: 'DESC',
     where__title__i_like: '',
@@ -37,7 +37,7 @@ const AdminManage = () => {
         queryKey: key,
         queryFn: () =>
           getNextBooks({
-            take: TAKE,
+            take: 10,
             page: currentPage + 1,
             order__createdAt: 'DESC',
             where__title__i_like: '',
