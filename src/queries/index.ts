@@ -42,6 +42,8 @@ export const useGetBooksAdmin = (queries: BooklistParams) => {
   return useQuery({
     queryKey: key,
     queryFn: () => getBooks(queries),
+    staleTime: 1000 * 60 * 3,
+    cacheTime: 1000 * 60 * 5,
   });
 };
 
@@ -211,14 +213,12 @@ export const useGetBookLikes = (queries: LikesBooklistParams) => {
   const queryClient = useQueryClient();
   const { isLogin } = useUserStore.getState();
 
-  // TODO 작성자 id까지 쿼리키로 넣을 필요 없어보입니다.
   const key = [QueryKeys.USER, 'likes', queries.page.toString()];
   if (queries) key.push(queries.page.toString());
 
   return useQuery({
     queryKey: key,
     queryFn: () => getBooksLike(queries),
-    // TODO 로그인 체크, authorID 존재여부 체크 필요 => 자동로그인하면서 accessToken 받아오는 시간 필요
     enabled: isLogin && !!queries.authorId,
     onSuccess: async (res: MyFavorites) => {
       if (!queries) return;

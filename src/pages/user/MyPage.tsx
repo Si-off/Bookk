@@ -22,9 +22,7 @@ const MyPage = () => {
   } = useGetBookLikes({ authorId: authorId, take: 4, page: currentPage });
 
   const handlePageClick = (pageNum: number) => {
-    // TODO 타입 가드 잘못작성함
-    // if (status !== 'success') return;
-    if (!LikesBooks) return;
+    if (status !== 'success') return;
 
     const totalPages = Math.ceil(LikesBooks.total / 4);
 

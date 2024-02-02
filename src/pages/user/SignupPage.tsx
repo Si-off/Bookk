@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import secureLocalStorage from "react-secure-storage";
-import { useUserStore } from "store/useUserStore";
-import { signUp } from "api/auth";
-import * as S from "styles/LoginStyled";
-import { getStyledColor } from "utils";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import secureLocalStorage from 'react-secure-storage';
+import { useUserStore } from 'store/useUserStore';
+import { signUp } from 'api/auth';
+import * as S from 'styles/LoginStyled';
+import { getStyledColor } from 'utils';
 
 const SignupPage = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
-  const [code, setCode] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [code, setCode] = useState<string>('');
 
   const [isVerify, setIsVerify] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ const SignupPage = () => {
 
   useEffect(() => {
     if (isLogin) {
-      navigate("/admin/main");
+      navigate('/admin/main');
     }
   });
   const { mutate } = useMutation({
@@ -33,34 +33,31 @@ const SignupPage = () => {
     onSuccess: (data) => {
       if (!data) return;
       setIsLogin(true);
-      secureLocalStorage.setItem("refreshToken", data.refreshToken);
-      navigate("/user");
+      secureLocalStorage.setItem('refreshToken', data.refreshToken);
+      navigate('/user');
     },
   });
 
   const handleSignup = () => {
     if (password !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
+      alert('비밀번호가 일치하지 않습니다.');
       return;
     }
     if (!email || !password || !name || !nickname) {
-      alert("모든 항목을 입력해주세요.");
+      alert('모든 항목을 입력해주세요.');
       return;
     }
     mutate();
   };
 
   const handleSendToEmail = async () => {
-    const res = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/mail/send-code`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      }
-    );
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/send-code`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
     const data = await res.json();
     alert(`${data.message} \n ${data.expirationTime}`);
 
@@ -70,19 +67,16 @@ const SignupPage = () => {
 
   const handleVerifyCode = async () => {
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/mail/verify-code`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, code }),
-        }
-      );
+      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/mail/verify-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, code }),
+      });
       const data = await res.json();
       setIsVerify(false);
-      alert("인증이 완료되었습니다.");
+      alert('인증이 완료되었습니다.');
     } catch (error) {
       console.log(error);
     }
@@ -173,8 +167,8 @@ const SignupPage = () => {
 export default SignupPage;
 
 const AuthButton = styled.button`
-  color: ${getStyledColor("primary", 200)};
-  border: 2px solid ${getStyledColor("primary", 500)};
+  color: ${getStyledColor('primary', 200)};
+  border: 2px solid ${getStyledColor('primary', 500)};
   border-radius: 6px;
   background-color: inherit;
   font-weight: 500;
@@ -185,17 +179,19 @@ const AuthButton = styled.button`
   align-self: flex-end;
   padding: 6px 12px;
 
-  transition: color 0.2s ease, background-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
 
   &:hover {
-    background-color: ${getStyledColor("primary", 400)};
+    background-color: ${getStyledColor('primary', 400)};
     color: #fff;
   }
 
   &:active {
-    background-color: ${getStyledColor("primary", 700)};
+    background-color: ${getStyledColor('primary', 700)};
     color: #fff;
-    border-color: ${getStyledColor("primary", 700)};
+    border-color: ${getStyledColor('primary', 700)};
   }
 `;
 const EmailField = styled.div`

@@ -110,8 +110,6 @@ export const deleteComment = async (bookId: number, commentId: number) => {
 export const getBooksLike = async (params: LikesBooklistParams) => {
   const { authorId, take, page } = params;
 
-  // TODO MyFavorites 제네릭에 타입 전달
-  // 그러면 사용하는 쪽에서 자동완성 사용가능
   const res = await Axios(
     `/users/${authorId}/like2s?take=${take}&page=${page}&order__updatedAt=DESC`,
   ).get<MyFavorites>();
