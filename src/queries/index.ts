@@ -24,11 +24,11 @@ import {
   MyFavorites,
   UserType,
 } from 'types';
-import { QueryKeys } from 'constant';
+import { QueryKeys, StorageKeys } from 'constant';
 import { getUser, login } from 'api/auth';
+import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
-import { setToken } from 'utils/getToken';
 
 export const useGetBooks = (queries?: BooklistParams) => {
   const key = [QueryKeys.USER, 'books'];
@@ -133,7 +133,7 @@ export const useLogin = () => {
       if (!data) return;
       setIsLogin(true);
       setAccessToken(data.accessToken);
-      setToken('refreshToken', data.refreshToken);
+      secureLocalStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken);
       navigate('/user');
     },
   });
