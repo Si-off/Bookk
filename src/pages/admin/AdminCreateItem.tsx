@@ -1,8 +1,8 @@
-import { ChangeEvent as ReactChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent as ReactChangeEvent, useEffect, useRef, useState } from 'react';
 import * as S from 'styles/AdminStyledTemp';
 import { usePostBook } from 'queries';
 import useBookInfo from 'hooks/useBookInfo';
-import ImageUploader from 'components/shared/ImageUploader';
+import ImageUploader, { ImageUploaderImperativeHandle } from 'components/shared/ImageUploader';
 import Button from 'components/shared/Button';
 import { FaBook } from 'react-icons/fa6';
 
@@ -10,6 +10,8 @@ const AdminCreateItem = () => {
   const { mutate, status } = usePostBook();
   const { bookInfo, setBookInfo, resetBookInfo } = useBookInfo();
   const [isInvaild, setIsInvalid] = useState(true);
+
+  const imageRef = useRef<ImageUploaderImperativeHandle>(null);
 
   useEffect(() => {
     if (!bookInfo.images) return;
@@ -43,6 +45,9 @@ const AdminCreateItem = () => {
   const onClick = async () => {
     resetBookInfo();
     mutate({ ...bookInfo });
+    if (imageRef.current) {
+      imageRef.current.handleCancel();
+    }
   };
 
   return (
@@ -75,6 +80,7 @@ const AdminCreateItem = () => {
           <S.InputField $marginTop={20}>
             <S.Label>이미지</S.Label>
             <ImageUploader
+              ref={imageRef}
               src=""
               onChange={(fileData) =>
                 setBookInfo((prev) => ({
