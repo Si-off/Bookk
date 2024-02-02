@@ -14,7 +14,13 @@ import {
   deleteBookLike,
   getBookIsLike,
 } from 'api';
-import { BookisLikeRes, BooklistParams, LikesBooklistParams, MyFavorites } from 'types';
+import {
+  BookTakelistRes,
+  BookisLikeRes,
+  BooklistParams,
+  LikesBooklistParams,
+  MyFavorites,
+} from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
 import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
@@ -83,13 +89,30 @@ export const usePatchBook = () => {
   });
 };
 
-export const useDeleteBook = () => {
+export const useDeleteBook = (page?: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: [QueryKeys.ADMIN, 'books'],
     mutationFn: deleteBook,
-    onSuccess: () => {
+    onMutate: async (id) => {
+      if (!page) return;
+      const key = [QueryKeys.ADMIN, 'books', page.toString()];
+      await queryClient.cancelQueries({ queryKey: key });
+
+      const previousBooks = queryClient.getQueryData<BookTakelistRes>(key)?.data;
+
+      if (previousBooks) {
+        const updatedBooks = previousBooks.filter((book) => book.id !== id);
+        queryClient.setQueryData(key, { data: updatedBooks });
+      }
+      return { previousBooks };
+    },
+    onError: (err, _, context) => {
+      const key = [QueryKeys.ADMIN, 'books', page];
+      queryClient.setQueryData(key, context?.previousBooks);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries([QueryKeys.ADMIN, 'books']);
       queryClient.invalidateQueries([QueryKeys.USER, 'books']);
     },
@@ -182,6 +205,7 @@ export const useInfinityScroll = (
     queryFn: ({ pageParam = 1 }) => {
       const queryParameters: BooklistParams = {
         page: pageParam,
+        take: 8,
       };
       if (search) {
         queryParameters.where__title__i_like = search;
