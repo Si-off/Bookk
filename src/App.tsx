@@ -17,6 +17,7 @@ import {
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
 import { useGetUser } from 'queries';
+import { getToken } from 'utils/getToken';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit, setAccessToken } = useUserStore();
@@ -25,7 +26,8 @@ function App() {
   useGetUser(isLogin);
 
   useEffect(() => {
-    const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
+    const refreshToken = getToken('refreshToken');
+
     if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
       (async () => {
         const accessToken = await getAccessToken();
