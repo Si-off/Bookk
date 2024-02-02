@@ -14,6 +14,7 @@ import {
   BookisLikeRes,
   LikesBooklistParams,
   MyFavorites,
+  UserPatchReq,
 } from 'types';
 
 export const getBooks = async (queries?: BooklistParams) => {
@@ -56,6 +57,12 @@ export const patchBook = async (params: BookPatchReq & { id: number }) => {
   const { id, ...rest } = params;
 
   const res = await Axios(`/api2s/${id}`).patch(rest);
+
+  return res;
+};
+
+export const patchUser = async (params: UserPatchReq) => {
+  const res = await Axios('users/update').patch(params);
 
   return res;
 };

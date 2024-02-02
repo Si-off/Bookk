@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-const KEY = process.env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY;
+const KEY: string = process.env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY as string;
 
 export const encrypt = (value: string) => {
   return CryptoJS.AES.encrypt(value, KEY).toString();

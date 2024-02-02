@@ -13,6 +13,7 @@ import {
   postBookLike,
   deleteBookLike,
   getBookIsLike,
+  patchUser,
 } from 'api';
 import {
   BookTakelistRes,
@@ -26,6 +27,7 @@ import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
+import { query } from 'express';
 
 export const useGetBooks = (queries?: BooklistParams) => {
   const key = [QueryKeys.USER, 'books'];
@@ -85,6 +87,18 @@ export const usePatchBook = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.ADMIN, 'books']);
       queryClient.invalidateQueries([QueryKeys.USER, 'books']);
+    },
+  });
+};
+
+export const usePatchUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [QueryKeys.USER, 'userInfo'],
+    mutationFn: patchUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'userInfo']);
     },
   });
 };

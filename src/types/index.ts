@@ -55,6 +55,11 @@ export type BookReq = {
   images?: string[] | File[];
 };
 
+export type UserPatchReq = {
+  nickname?: string;
+  password?: string;
+};
+
 export type BookRes = {
   id: number;
   updatedAt: string;
