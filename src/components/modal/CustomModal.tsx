@@ -3,7 +3,7 @@ import * as S from 'styles/ModalStyled';
 import { useDeleteBookLike, useGetBookIsLike, useGetComments, usePostBookLike } from 'queries';
 
 import useOnclickOutside from 'hooks/useOnclickOutside';
-import { BookInfoType, UserType } from 'types';
+import { BookInfoType, UserType, BookisLikeRes } from 'types';
 import CommentWrite from 'components/modal/CommentWrite';
 import CommentToggle from 'components/modal/CommentToggle';
 import { IoIosClose } from 'react-icons/io';
@@ -36,8 +36,10 @@ export const CustomModal = ({
 
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
   const { data: bookIsLikeData, status, refetch } = useGetBookIsLike(bookId, user?.id || 0);
-  const { mutate: postLike, status: postLikeStatus } = usePostBookLike();
-  const { mutate: deleteLike, status: deleteLikeStatus } = useDeleteBookLike();
+  const { mutate: postLike, status: postLikeStatus } = usePostBookLike({
+    bookId: bookId,
+  });
+  const { mutate: deleteLike, status: deleteLikeStatus } = useDeleteBookLike({ bookId: bookId });
 
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
@@ -101,7 +103,12 @@ export const CustomModal = ({
                     toggleLike();
                   }}
                   $liked={bookIsLikeData?.isLike}
-                  disabled={postLikeStatus === 'loading' || deleteLikeStatus === 'loading'}
+                  $status={status}
+                  disabled={
+                    postLikeStatus === 'loading' ||
+                    deleteLikeStatus === 'loading' ||
+                    status === 'loading'
+                  }
                 >
                   <FaHeart />
                 </S.HeartButton>

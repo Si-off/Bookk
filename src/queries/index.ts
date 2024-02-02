@@ -14,7 +14,7 @@ import {
   deleteBookLike,
   getBookIsLike,
 } from 'api';
-import { BooklistParams, LikesBooklistParams, MyFavorites } from 'types';
+import { BookisLikeRes, BooklistParams, LikesBooklistParams, MyFavorites } from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
 import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
@@ -235,36 +235,76 @@ export const useGetBookLikes = (queries: LikesBooklistParams) => {
 };
 
 export const useGetBookIsLike = (bookId: number, userId: number) => {
-  const key = [QueryKeys.USER, 'islike', bookId.toString()];
+  const key = [QueryKeys.USER, 'likes', bookId.toString()];
+  const { isLogin } = useUserStore.getState();
+
   const isUserIdValid = userId !== null && userId > 0;
   return useQuery({
     queryKey: key,
-    enabled: isUserIdValid,
+    enabled: isUserIdValid && isLogin,
     queryFn: () => getBookIsLike({ bookId, userId }),
     select: (res) => res,
   });
 };
 
-export const usePostBookLike = () => {
+export const usePostBookLike = ({ bookId }: { bookId: number }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QueryKeys.USER, 'likes'],
+    mutationKey: [QueryKeys.USER, 'likes', bookId.toString()],
     mutationFn: postBookLike,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'likes']);
+      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries([QueryKeys.USER, 'likes', bookId.toString()]);
+
+      const previousLikes = queryClient.getQueryData([QueryKeys.USER, 'likes', bookId.toString()]);
+
+      queryClient.setQueryData(
+        [QueryKeys.USER, 'likes', bookId.toString()],
+        (old?: BookisLikeRes) => {
+          if (!old) return;
+          return {
+            ...old,
+            isLike: !old.isLike,
+            likeCount: old.isLike ? old.likeCount - 1 : old.likeCount + 1,
+          };
+        },
+      );
+
+      return { previousLikes };
     },
   });
 };
 
-export const useDeleteBookLike = () => {
+export const useDeleteBookLike = ({ bookId }: { bookId: number }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QueryKeys.USER, 'likes'],
+    mutationKey: [QueryKeys.USER, 'likes', bookId.toString()],
     mutationFn: deleteBookLike,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'likes']);
+      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries([QueryKeys.USER, 'likes', bookId.toString()]);
+
+      const previousLikes = queryClient.getQueryData([QueryKeys.USER, 'likes', bookId.toString()]);
+
+      queryClient.setQueryData(
+        [QueryKeys.USER, 'likes', bookId.toString()],
+        (old?: BookisLikeRes) => {
+          if (!old) return;
+          return {
+            ...old,
+            isLike: !old.isLike,
+            likeCount: old.isLike ? old.likeCount - 1 : old.likeCount + 1,
+          };
+        },
+      );
+
+      return { previousLikes };
     },
   });
 };
