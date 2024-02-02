@@ -187,15 +187,16 @@ export type CommentType = {
   author: {
     id: number;
     nickname: string;
+    role: 'ADMIN' | 'MANAGER' | 'USER';
   };
 };
 export type CommentGetRes = {
   data: Array<CommentType>;
   cursor: {
-    after: number;
+    after: number | null;
   };
   count: number;
-  next: string;
+  next: string | null;
   total: number;
 };
 

@@ -54,14 +54,12 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
               <S.CommentButtonContainer>
                 <Button
                   onClick={() => handleChangeClick(reply.id, reply.reply2)}
-                  status={patchStatus}
                   disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
                 >
                   수정
                 </Button>
                 <Button
                   onClick={() => handleDeleteClick(reply.id)}
-                  status={deleteStatus}
                   disabled={patchStatus === 'loading' || deleteStatus === 'loading'}
                 >
                   삭제

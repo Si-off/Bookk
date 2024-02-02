@@ -163,10 +163,13 @@ export const pulseAnimation = keyframes`
   }
 `;
 
-export const HeartButton = styled.button<{ $liked: boolean | undefined; $status: string }>`
+export const HeartButton = styled.button<{
+  $liked: boolean | undefined;
+  $status: string;
+}>`
   background: transparent;
   border: none;
-  cursor: pointer;
+  cursor: ${(props) => (props.$status === 'loading' ? 'not-allowed' : 'pointer')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,12 +180,10 @@ export const HeartButton = styled.button<{ $liked: boolean | undefined; $status:
   &:hover {
     color: ${(props) => (props.$liked ? 'darkred' : 'grey')};
   }
-
   &:disabled {
-    cursor: default;
-    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
   }
-
   svg {
     font-size: 24px; // Adjust the size of the FaHeart icon
     cursor: pointer;
@@ -190,6 +191,7 @@ export const HeartButton = styled.button<{ $liked: boolean | undefined; $status:
       transform: scale(1.1);
       transition: transform 0.2s;
     }
+
     animation: ${(props) =>
       props.$status === 'loading'
         ? css`
