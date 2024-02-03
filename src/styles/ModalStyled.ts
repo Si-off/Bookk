@@ -14,7 +14,7 @@ export const fadeIn = keyframes`
 export const WrapperModal = styled.div`
   position: fixed;
   inset: 0px;
-  background-color: rgb(0 0 0 / 71%);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -49,7 +49,8 @@ export const ModalClose = styled.div`
 export const Modal = styled.div`
   position: absolute;
   max-width: ${pixelToRem(800)};
-  height: 80%;
+  max-height: 80%;
+
   box-shadow:
     0px 11px 15px 0px rgba(0, 0, 0, 0.2),
     0px 9px 46px 0px rgba(0, 0, 0, 0.12),
@@ -67,9 +68,18 @@ export const Modal = styled.div`
     color: ${getStyledColor('white', 'high')};
   }
 
+  /* 스크롤바의 폭 너비 */
   &::-webkit-scrollbar {
-    display: none;
-    visibility: hidden;
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${getStyledColor('teal', 900)}; /* 스크롤바 색상 */
+    border-radius: 20px; /* 스크롤바 둥근 테두리 */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${getStyledColor('teal', 700)}; /*스크롤바 뒷 배경 색상*/
   }
 
   @media screen and (max-width: 768px) {
@@ -153,6 +163,7 @@ export const CommentSection = styled.div`
 export const pulseAnimation = keyframes`
   0% {
     transform: scale(1);
+
   }
   50% {
     transform: scale(1.1);
@@ -162,10 +173,13 @@ export const pulseAnimation = keyframes`
   }
 `;
 
-export const HeartButton = styled.button<{ $liked: boolean | undefined; $status: string }>`
+export const HeartButton = styled.button<{
+  $liked: boolean | undefined;
+  $status: string;
+}>`
   background: transparent;
   border: none;
-  cursor: pointer;
+  cursor: ${(props) => (props.$status === 'loading' ? 'not-allowed' : 'pointer')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,22 +187,25 @@ export const HeartButton = styled.button<{ $liked: boolean | undefined; $status:
   margin-top: 20px;
   transform: scale(1.2);
   color: ${(props) => (props.$liked ? 'red' : 'black')};
-
   &:hover {
     color: ${(props) => (props.$liked ? 'darkred' : 'grey')};
   }
-
   &:disabled {
-    cursor: default;
-    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
   }
-
   svg {
     font-size: 24px; // Adjust the size of the FaHeart icon
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.1);
+      transition: transform 0.2s;
+    }
+
     animation: ${(props) =>
       props.$status === 'loading'
         ? css`
-            ${pulseAnimation} 0.5s infinite
+            ${pulseAnimation} 1s 2
           `
         : 'none'};
   }

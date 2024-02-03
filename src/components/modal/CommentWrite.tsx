@@ -31,25 +31,16 @@ const CommentWrite: React.FC<CommentWriteProps> = ({ bookId }) => {
 
   return (
     <S.container>
-      {status === 'loading' ? (
-        <Loader />
-      ) : (
-        <S.textArea
-          placeholder={isLogin ? '한줄리뷰를 작성하세요!' : '로그인 후 작성 가능합니다.'}
-          name="reply5"
-          value={comment}
-          onChange={onChangeComment}
-        />
-      )}
+      <S.textArea
+        placeholder={isLogin ? '한줄리뷰를 작성하세요!' : '로그인 후 작성 가능합니다.'}
+        name="reply5"
+        value={comment}
+        onChange={onChangeComment}
+      />
       {status === 'error' && <div>{'에러가 발생했습니다.'}</div>}
       <S.buttonContainer>
         {isLogin && (
-          <Button
-            onClick={onHandleClick}
-            color={'blue'}
-            status={status}
-            disabled={status === 'loading'}
-          >
+          <Button onClick={onHandleClick} color={'blue'} disabled={status === 'loading'}>
             댓글등록
           </Button>
         )}

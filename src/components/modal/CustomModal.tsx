@@ -1,9 +1,9 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import * as S from 'styles/ModalStyled';
 import { useDeleteBookLike, useGetBookIsLike, useGetComments, usePostBookLike } from 'queries';
 
 import useOnclickOutside from 'hooks/useOnclickOutside';
-import { BookInfoType, UserType, BookisLikeRes } from 'types';
+import { BookInfoType, UserType } from 'types';
 import CommentWrite from 'components/modal/CommentWrite';
 import CommentToggle from 'components/modal/CommentToggle';
 import { IoIosClose } from 'react-icons/io';
@@ -33,13 +33,13 @@ export const CustomModal = ({
   if (!bookId) return <div>loading...</div>;
   const { isLogin } = useUserStore();
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
-
+  const [isUpdating, setIsUpdating] = useState(false);
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
-  const { data: bookIsLikeData, status, refetch } = useGetBookIsLike(bookId, user?.id || 0);
-  const { mutate: postLike, status: postLikeStatus } = usePostBookLike({
+  const { data: bookIsLikeData, status } = useGetBookIsLike(bookId, user?.id || 0);
+  const { mutate: postLike } = usePostBookLike({
     bookId: bookId,
   });
-  const { mutate: deleteLike, status: deleteLikeStatus } = useDeleteBookLike({ bookId: bookId });
+  const { mutate: deleteLike } = useDeleteBookLike({ bookId: bookId });
 
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
@@ -62,18 +62,20 @@ export const CustomModal = ({
       alert('로그인이 필요합니다.');
       return;
     }
-    const onSuccessLike = () => {
-      refetch();
-    };
+    setIsUpdating(true);
     if (bookIsLikeData?.isLike === false) {
       postLike(bookId, {
-        onSettled: onSuccessLike,
+        onSettled: () => {
+          setIsUpdating(false);
+        },
       });
     } else {
       deleteLike(
         { bookId, likeId: bookIsLikeData?.likeId },
         {
-          onSettled: onSuccessLike,
+          onSettled: () => {
+            setIsUpdating(false);
+          },
         },
       );
     }
@@ -99,16 +101,10 @@ export const CustomModal = ({
               <div>
                 <S.ModalPosterImg src={`${book.images[0].fbPath[0]}`} alt="modal-img" />
                 <S.HeartButton
-                  onClick={() => {
-                    toggleLike();
-                  }}
+                  onClick={toggleLike}
                   $liked={bookIsLikeData?.isLike}
                   $status={status}
-                  disabled={
-                    postLikeStatus === 'loading' ||
-                    deleteLikeStatus === 'loading' ||
-                    status === 'loading'
-                  }
+                  disabled={isUpdating}
                 >
                   <FaHeart />
                 </S.HeartButton>
@@ -117,7 +113,7 @@ export const CustomModal = ({
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
                 <S.ModalOverview>클릭수: {book?.clicks}</S.ModalOverview>
                 <S.ModalOverview>
-                  좋아요: {bookIsLikeData?.likeCount ? bookIsLikeData?.likeCount : book?.likeCount}
+                  좋아요: {isLogin ? bookIsLikeData?.likeCount : book?.likeCount}
                 </S.ModalOverview>
                 <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
                 <S.ModalDetails>

@@ -13,6 +13,7 @@ import {
   AdminMain,
   AdminDashboard,
   AdminManageUsers,
+  AdminManageReviews,
 } from 'pages/admin';
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
@@ -55,6 +56,7 @@ function App() {
               <Route path="books" element={<AdminManage />} />
               <Route path="books/detail/:id" element={<AdminEditItem />} />
               <Route path="users" element={<AdminManageUsers />} />
+              <Route path="reviews" element={<AdminManageReviews />} />
             </Route>
           </Route>
         </Routes>

@@ -14,6 +14,9 @@ import {
   BookisLikeRes,
   LikesBooklistParams,
   MyFavorites,
+  UserPatchReq,
+  Countlist,
+  RepliesList,
 } from 'types';
 
 export const getBooks = async (queries?: BooklistParams) => {
@@ -56,6 +59,12 @@ export const patchBook = async (params: BookPatchReq & { id: number }) => {
   const { id, ...rest } = params;
 
   const res = await Axios(`/api2s/${id}`).patch(rest);
+
+  return res;
+};
+
+export const patchUser = async (params: UserPatchReq) => {
+  const res = await Axios('users/update').patch(params);
 
   return res;
 };
@@ -118,6 +127,7 @@ export const getBooksLike = async (params: LikesBooklistParams) => {
 
 export const getBookIsLike = async ({ bookId, userId }: { bookId: number; userId: number }) => {
   const res = await Axios(`/api2s/${bookId}/${userId}/is-like`).get<BookisLikeRes>();
+  console.log(res);
   return res;
 };
 
@@ -135,5 +145,17 @@ export const deleteBookLike = async ({
 }) => {
   if (!likeId) return;
   const res = await Axios(`/api2s/${bookId}/like2s/${likeId}`).remove();
+  return res;
+};
+
+export const getCount = async () => {
+  const res = await Axios(`/api2s/count`).get<Countlist>();
+
+  return res;
+};
+
+export const getReplies = async () => {
+  const res = await Axios(`/api2s/replies`).get<RepliesList>();
+
   return res;
 };

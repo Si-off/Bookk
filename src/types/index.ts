@@ -55,6 +55,11 @@ export type BookReq = {
   images?: string[] | File[];
 };
 
+export type UserPatchReq = {
+  nickname?: string;
+  password?: string;
+};
+
 export type BookRes = {
   id: number;
   updatedAt: string;
@@ -105,7 +110,7 @@ export type UserType = {
   followeeCount: number;
   valid_email: boolean;
   role: 'ADMIN' | 'MANAGER' | 'USER';
-  profileImage: [];
+  profileImg: Array<string>;
 };
 
 export type BooklistParams = {
@@ -182,15 +187,16 @@ export type CommentType = {
   author: {
     id: number;
     nickname: string;
+    role: 'ADMIN' | 'MANAGER' | 'USER';
   };
 };
 export type CommentGetRes = {
   data: Array<CommentType>;
   cursor: {
-    after: number;
+    after: number | null;
   };
   count: number;
-  next: string;
+  next: string | null;
   total: number;
 };
 
@@ -217,3 +223,33 @@ export type MyFavorites = {
   }[];
   total: number;
 };
+
+// 통계
+export type Countlist = {
+  totalApi2s: string;
+  totalClicks: string;
+  totalLikes: string;
+  totalReplies: string;
+};
+
+// 댓글 목록
+export type Replies = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  content: string;
+  clicks: number;
+  likeCount: number;
+  reply2Count: number;
+  isSecret: boolean;
+  reply2s: {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    reply2: string;
+    likeCount: number;
+  }[];
+};
+
+export type RepliesList = Replies[];

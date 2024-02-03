@@ -13,13 +13,18 @@ import {
   postBookLike,
   deleteBookLike,
   getBookIsLike,
+  patchUser,
+  getCount,
+  getReplies,
 } from 'api';
 import {
   BookTakelistRes,
   BookisLikeRes,
   BooklistParams,
+  CommentGetRes,
   LikesBooklistParams,
   MyFavorites,
+  UserType,
 } from 'types';
 import { QueryKeys, StorageKeys } from 'constant';
 import { getUser, login } from 'api/auth';
@@ -85,6 +90,18 @@ export const usePatchBook = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.ADMIN, 'books']);
       queryClient.invalidateQueries([QueryKeys.USER, 'books']);
+    },
+  });
+};
+
+export const usePatchUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [QueryKeys.USER, 'userInfo'],
+    mutationFn: patchUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'userInfo']);
     },
   });
 };
@@ -175,10 +192,77 @@ export const usePatchComment = (bookId: number) => {
 };
 export const usePostComment = (bookId: number) => {
   const queryClient = useQueryClient();
+  const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   return useMutation({
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
-    mutationFn: (comment: string) => postComment(bookId, comment),
+    mutationFn: (comment: string) => {
+      return postComment(bookId, comment);
+    },
+    onMutate: async (comment: string) => {
+      if (!user) throw new Error('User not found');
+
+      await queryClient.cancelQueries([QueryKeys.USER, 'comments', bookId.toString()]);
+      const previousComments = queryClient.getQueryData<CommentGetRes>([
+        QueryKeys.USER,
+        'comments',
+        bookId.toString(),
+      ]);
+      queryClient.setQueryData(
+        [QueryKeys.USER, 'comments', bookId.toString()],
+        (old?: CommentGetRes) => {
+          if (!old) {
+            // 데이터가 없는 경우, 새 구조를 생성
+            return {
+              data: [
+                {
+                  // 새 댓글 객체의 구조를 정의합니다. 예시에서는 임시 ID와 기타 필요한 필드를 설정합니다.
+                  id: Date.now(), // 임시 ID
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                  reply2: comment,
+                  likeCount: 0,
+                  author: {
+                    id: user?.id, // 현재 사용자 ID
+                    nickname: user?.nickname, // 현재 사용자 닉네임
+                    role: user?.role, // 현재 사용자 역할
+                  },
+                },
+              ],
+              cursor: {
+                after: null,
+              },
+              count: 1,
+              next: null,
+              total: 1,
+            };
+          } else {
+            // 기존 데이터에 새 댓글을 추가
+            return {
+              ...old,
+              data: [
+                ...old.data,
+                {
+                  id: Date.now(), // 임시 ID
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                  reply2: comment,
+                  likeCount: 0,
+                  author: {
+                    id: user?.id, // 이 부분은 현재 로그인한 사용자의 정보를 어떻게 가져올지에 따라 달라집니다.
+                    nickname: user?.nickname,
+                    role: user?.role,
+                  },
+                },
+              ],
+              count: old.count + 1,
+              total: old.total + 1,
+            };
+          }
+        },
+      );
+      return { previousComments };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
@@ -190,6 +274,27 @@ export const useDeleteComment = (bookId: number) => {
   return useMutation({
     mutationKey: [QueryKeys.USER, 'comments', bookId.toString()],
     mutationFn: (commentId: number) => deleteComment(bookId, commentId),
+    onMutate: async (commentId: number) => {
+      await queryClient.cancelQueries([QueryKeys.USER, 'comments', bookId.toString()]);
+      const previousComments = queryClient.getQueryData<CommentGetRes>([
+        QueryKeys.USER,
+        'comments',
+        bookId.toString(),
+      ]);
+      queryClient.setQueryData(
+        [QueryKeys.USER, 'comments', bookId.toString()],
+        (old?: CommentGetRes) => {
+          if (!old) return;
+          return {
+            ...old,
+            data: old.data.filter((comment) => comment.id !== commentId),
+            count: old.count - 1,
+            total: old.total - 1,
+          };
+        },
+      );
+      return { previousComments };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.USER, 'comments', bookId.toString()]);
     },
@@ -277,9 +382,6 @@ export const usePostBookLike = ({ bookId }: { bookId: number }) => {
   return useMutation({
     mutationKey: [QueryKeys.USER, 'likes', bookId.toString()],
     mutationFn: postBookLike,
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
-    },
     onMutate: async () => {
       await queryClient.cancelQueries([QueryKeys.USER, 'likes', bookId.toString()]);
 
@@ -292,12 +394,14 @@ export const usePostBookLike = ({ bookId }: { bookId: number }) => {
           return {
             ...old,
             isLike: !old.isLike,
-            likeCount: old.isLike ? old.likeCount - 1 : old.likeCount + 1,
+            likeCount: old.likeCount + 1,
           };
         },
       );
-
       return { previousLikes };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
     },
   });
 };
@@ -308,9 +412,6 @@ export const useDeleteBookLike = ({ bookId }: { bookId: number }) => {
   return useMutation({
     mutationKey: [QueryKeys.USER, 'likes', bookId.toString()],
     mutationFn: deleteBookLike,
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
-    },
     onMutate: async () => {
       await queryClient.cancelQueries([QueryKeys.USER, 'likes', bookId.toString()]);
 
@@ -323,12 +424,40 @@ export const useDeleteBookLike = ({ bookId }: { bookId: number }) => {
           return {
             ...old,
             isLike: !old.isLike,
-            likeCount: old.isLike ? old.likeCount - 1 : old.likeCount + 1,
+            likeCount: old.likeCount - 1,
           };
         },
       );
 
       return { previousLikes };
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
+    },
+  });
+};
+
+export const useGetCount = () => {
+  return useQuery({
+    queryKey: [QueryKeys.ADMIN, 'count'],
+    queryFn: getCount,
+    placeholderData: () => ({
+      totalApi2s: '-',
+      totalClicks: '-',
+      totalLikes: '-',
+      totalReplies: '-',
+    }),
+  });
+};
+
+export const useGetReplies = () => {
+  return useQuery({
+    queryKey: [QueryKeys.ADMIN, 'replies'],
+    queryFn: getReplies,
+    select: (reviews) =>
+      reviews &&
+      Object.keys(reviews)
+        .filter((key) => key !== 'status')
+        .map((key) => reviews[parseInt(key)]),
   });
 };
