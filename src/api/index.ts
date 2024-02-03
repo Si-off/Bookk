@@ -14,6 +14,8 @@ import {
   BookisLikeRes,
   LikesBooklistParams,
   MyFavorites,
+  Countlist,
+  RepliesList,
 } from 'types';
 
 export const getBooks = async (queries?: BooklistParams) => {
@@ -135,5 +137,17 @@ export const deleteBookLike = async ({
 }) => {
   if (!likeId) return;
   const res = await Axios(`/api2s/${bookId}/like2s/${likeId}`).remove();
+  return res;
+};
+
+export const getCount = async () => {
+  const res = await Axios(`/api2s/count`).get<Countlist>();
+  console.log(res);
+  return res;
+};
+
+export const getReplies = async () => {
+  const res = await Axios(`/api2s/replies`).get<RepliesList>();
+  console.log(res);
   return res;
 };

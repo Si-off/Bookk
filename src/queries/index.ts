@@ -13,13 +13,14 @@ import {
   postBookLike,
   deleteBookLike,
   getBookIsLike,
+  getCount,
+  getReplies,
 } from 'api';
 import {
   BookTakelistRes,
   BookisLikeRes,
   BooklistParams,
   CommentGetRes,
-  CommentType,
   LikesBooklistParams,
   MyFavorites,
   UserType,
@@ -420,5 +421,19 @@ export const useDeleteBookLike = ({ bookId }: { bookId: number }) => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
     },
+  });
+};
+
+export const useGetCount = () => {
+  return useQuery({
+    queryKey: [QueryKeys.ADMIN, 'count'],
+    queryFn: getCount,
+  });
+};
+
+export const useGetReplies = () => {
+  return useQuery({
+    queryKey: [QueryKeys.ADMIN, 'replies'],
+    queryFn: getReplies,
   });
 };
