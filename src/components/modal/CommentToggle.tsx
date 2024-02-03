@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
 import { useDeleteComment, usePatchComment } from 'queries';
 import { Button } from 'components/shared';
+import { getDateStr } from 'utils';
 
 interface CommentToggleProps {
   comments: CommentGetRes | undefined;
@@ -43,8 +44,12 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
         return (
           <S.CommentItemContainer key={reply.id} $index={index}>
             <div>
-              <span style={{ fontSize: '14px' }}>{reply.author.nickname}</span>
-              <div style={{ fontSize: '10px' }}>{formatDate(reply.createdAt)}</div>
+              <S.CommentInfo>
+                <span>{reply.author.nickname}</span>
+                <span>{getDateStr(reply.createdAt)}</span>
+              </S.CommentInfo>
+
+              <S.Hr />
               <span>
                 <div style={{ marginTop: '6px' }}>{reply.reply2}</div>
               </span>
