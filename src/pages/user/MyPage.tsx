@@ -13,21 +13,21 @@ const MyPage = () => {
   const [nicknameBtn, setNicknameBtn] = useState(false);
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [pwalert, setPwalert] = useState(true);
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const authorId: number = user?.id || 0;
 
-  const { mutate, status: patchStatus } = usePatchUser();
+  const take = 4;
+
+  const { mutate, status: patchStatus, error } = usePatchUser();
 
   const {
     data: LikesBooks,
     status,
     isSuccess,
-  } = useGetBookLikes({ authorId: authorId, take: 4, page: currentPage });
-
-  useEffect(() => {
-    setNickname(user?.nickname || '');
-  }, [QueryKeys.USER_DATA]);
+  } = useGetBookLikes({ authorId: authorId, take: take, page: currentPage });
 
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
@@ -39,21 +39,26 @@ const MyPage = () => {
     setCurrentPage(pageNum);
   };
 
-  const setUserNickname = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(event?.target.value);
-    // console.log('nickname', nickname);
-  };
-
   const queryClient = useQueryClient();
-  const saveUserNickname = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const saveUserNickname = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     mutate({ nickname: nickname });
+    queryClient.invalidateQueries([QueryKeys.USER_DATA]);
     setNickname('');
   };
 
-  const setUserPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event?.target.value);
-    // console.log('nickname', nickname);
+  const patchPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setPwalert(false);
+    }
+    if (password == confirmPassword) {
+      setPwalert(true);
+      mutate({ password: password });
+    }
+    if (error) {
+      alert(error);
+    }
   };
 
   console.log('LikesBooks', LikesBooks);
@@ -75,22 +80,18 @@ const MyPage = () => {
                   <td>
                     <div>
                       <span>{user?.nickname ? user.nickname : nickname}</span>
-                      <button
-                        // btnState={nicknameBtn}
-                        type="button"
-                        onClick={() => setNicknameBtn(!nicknameBtn)}
-                      >
+                      <button type="button" onClick={() => setNicknameBtn(!nicknameBtn)}>
                         {nicknameBtn ? '닉네임 변경 취소' : '닉네임 변경'}
                       </button>
-                      <form style={{ display: nicknameBtn ? 'block' : 'none' }}>
+                      <div style={{ display: nicknameBtn ? 'block' : 'none' }}>
                         <div className="changeNickname">
                           <input
                             placeholder="변경할 닉네임 입력"
-                            onChange={setUserNickname}
+                            onChange={(e) => setNickname(e.target.value)}
                           ></input>
                           <button onClick={saveUserNickname}>닉네임 변경</button>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -102,32 +103,58 @@ const MyPage = () => {
                       <table>
                         <tbody>
                           <tr>
-                            <th>현재 비밀번호</th>
-                            <td>
-                              <input type="password"></input>
-                            </td>
-                          </tr>
-                          <tr>
                             <th>새 비밀번호</th>
                             <td>
-                              <input type="password"></input>
+                              <input
+                                onChange={(e) => setPassword(e.target.value)}
+                                type="password"
+                              ></input>
                             </td>
                           </tr>
                           <tr>
                             <th>비밀번호 다시 입력</th>
                             <td>
-                              <input type="password"></input>
+                              <input
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                type="password"
+                              ></input>
                             </td>
                           </tr>
-                          <button>비밀번호 변경</button>
                         </tbody>
                       </table>
+                      <p style={{ color: 'red', padding: '8px' }}>
+                        {pwalert ? null : '비밀번호가 일치하지 않습니다'}
+                      </p>
+                      <button onClick={patchPassword}>비밀번호 변경</button>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
           </form>
+          <div className="likesbook">
+            <h1>내가 좋아한 책</h1>
+            {LikesBooks && LikesBooks.data.length > 0 ? (
+              <Layout>
+                <ArrowButton>
+                  <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
+                </ArrowButton>
+                <BookWrapper $isSuccess={isSuccess}>
+                  {status === 'success' &&
+                    LikesBooks.data.map((index) => {
+                      const { id, title, images, ...spread } = index.api2;
+
+                      return <Book key={id} id={id} images={images} title={title} {...spread} />;
+                    })}
+                </BookWrapper>
+                <ArrowButton>
+                  <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
+                </ArrowButton>
+              </Layout>
+            ) : (
+              <p>내가 좋아요한 책이 없습니다</p>
+            )}
+          </div>
         </div>
       </section>
     </Container>
@@ -149,6 +176,9 @@ const Container = styled.div`
     border: 1px solid #ccc;
     border-collapse: collapse;
     color: black;
+  }
+  .editNickname {
+    background-color: transparent;
   }
 
   .userTable table {
@@ -198,6 +228,7 @@ const Container = styled.div`
       height: 22px;
       padding: 2px 5px;
       line-height: 22px;
+      border: 1px solid #dadde4;
     }
   }
 
@@ -220,6 +251,9 @@ const Container = styled.div`
 
   h1 {
     color: black;
+  }
+  .likesbook h1 {
+    margin-top: 80px;
   }
 `;
 
