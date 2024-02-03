@@ -441,6 +441,12 @@ export const useGetCount = () => {
   return useQuery({
     queryKey: [QueryKeys.ADMIN, 'count'],
     queryFn: getCount,
+    placeholderData: () => ({
+      totalApi2s: '-',
+      totalClicks: '-',
+      totalLikes: '-',
+      totalReplies: '-',
+    }),
   });
 };
 
