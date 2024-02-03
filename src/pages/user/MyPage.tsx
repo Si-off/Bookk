@@ -10,6 +10,7 @@ import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 import * as S from 'styles/SearchStyled';
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [nicknameBtn, setNicknameBtn] = useState(false);
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
@@ -75,7 +76,19 @@ const MyPage = () => {
                   <td>
                     <div>
                       <span>{user?.nickname}</span>
-                      <button type="button">닉네임 변경</button>
+                      <button
+                        // btnState={nicknameBtn}
+                        type="button"
+                        onClick={() => setNicknameBtn(!nicknameBtn)}
+                      >
+                        {nicknameBtn ? '닉네임 변경 취소' : '닉네임 변경'}
+                      </button>
+                      <form style={{ display: nicknameBtn ? 'block' : 'none' }}>
+                        <div className="changeNickname">
+                          <input></input>
+                          <button>닉네임 변경</button>
+                        </div>
+                      </form>
                     </div>
                   </td>
                 </tr>
@@ -183,8 +196,32 @@ const Container = styled.div`
     color: #777;
     background-color: #fafbf6;
     background-image: linear-gradient(#fff, #f1f1f1);
+    font-size: 11px;
+  }
+
+  .changeNickname {
+    margin: 10px 0px;
+    padding: 10px;
+    border: 1px solid #dadde4;
+    background-color: #f0f0f0;
+    color: #555;
+    font-size: 11px;
+    width: 70%;
+
+    input {
+      height: 22px;
+      padding: 2px 5px;
+      line-height: 22px;
+    }
   }
 `;
+
+// const NicknameBtn = styled.button`
+//   background-image: linear-gradient(
+//     to right,
+//     ${(props) => (props.btnState ? '#a8abba, #8c8f98' : '#fff, #f1f1f1')}
+//   );
+// `;
 
 const Wrapper = styled.div`
   display: grid;
