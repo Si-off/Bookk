@@ -179,6 +179,7 @@ export const Tcolumn = styled.th`
   font-size: ${pixelToRem(16)};
   text-align: center;
   padding: 10px 15px;
+  white-space: nowrap;
 `;
 export const Trow = styled.tr`
   height: 45px;
