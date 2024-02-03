@@ -46,6 +46,7 @@ export const Button = styled.button<{ $variant?: Variant; color?: string }>`
   padding: 0px 12px;
   border-radius: 4px;
   font-weight: 500;
+  white-space: nowrap;
 
   ${({ $variant }) => {
     switch ($variant) {
