@@ -29,15 +29,19 @@ export const SearchInput = styled.input`
 export const SearchButton = styled.button`
   width: 100px;
   height: 40px;
-  border: 1px solid ${getStyledColor('cool_gray', 400)};
   border-radius: 4px;
-  background-color: ${getStyledColor('orange', 300)};
+  color: ${getStyledColor('black', 500)};
+  background-color: ${getStyledColor('green', 300)};
   font-size: ${pixelToRem(14)};
   font-weight: 700;
   margin-right: 10px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+
   &:hover {
-    background-color: ${getStyledColor('orange', 600)};
-    color: ${getStyledColor('orange', 400)};
+    background-color: ${getStyledColor('green', 600)};
+    color: ${getStyledColor('white', 'high')};
   }
   &:disabled {
     background-color: ${getStyledColor('cool_gray', 400)};
@@ -49,14 +53,19 @@ export const SearchButton = styled.button`
 export const ResetButton = styled.button`
   width: 100px;
   height: 40px;
-  border: 1px solid ${getStyledColor('cool_gray', 400)};
   border-radius: 4px;
+  color: ${getStyledColor('black', 500)};
   background-color: ${getStyledColor('red', 500)};
   font-size: ${pixelToRem(14)};
   font-weight: 700;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+
   &:hover {
-    background-color: ${getStyledColor('red', 600)};
-    color: ${getStyledColor('red', 400)};
+    background-color: ${getStyledColor('red', 700)};
+    color: ${getStyledColor('white', 'high')};
   }
   &:disabled {
     background-color: ${getStyledColor('cool_gray', 400)};
