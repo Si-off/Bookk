@@ -343,19 +343,18 @@ export const useGetBookLikes = (queries: LikesBooklistParams) => {
   const { isLogin } = useUserStore.getState();
 
   const key = [QueryKeys.USER, 'likes', queries.page.toString()];
-  if (queries) key.push(queries.page.toString());
 
   return useQuery({
     queryKey: key,
     queryFn: () => getBooksLike(queries),
     enabled: isLogin && !!queries.authorId,
     onSuccess: async (res: MyFavorites) => {
-      if (!queries) return;
-      if (res.total < queries.take * queries.page) return;
+      if (!isLogin || !queries.authorId) return;
+      if (res.total <= queries.take * queries.page) return;
 
       await queryClient.prefetchQuery({
         queryKey: [QueryKeys.USER, 'likes', (queries.page + 1).toString()],
-        queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
+        queryFn: () => getBooksLike({ ...queries, page: queries.page + 1 }),
         staleTime: 1000 * 60 * 3,
         cacheTime: 1000 * 60 * 5,
       });

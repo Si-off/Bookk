@@ -271,6 +271,8 @@ const Layout = styled.div`
 
 const BookWrapper = styled.div<{ $isSuccess?: boolean }>`
   display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
   width: 70%;
   transition: opacity 1s ease;
   opacity: ${({ $isSuccess }) => ($isSuccess ? 1 : 0)};
@@ -281,7 +283,7 @@ const ArrowButton = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
+  color: black;
   cursor: pointer;
   margin: 0 50px;
 `;
