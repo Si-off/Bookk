@@ -101,7 +101,7 @@ export const usePatchUser = () => {
     mutationKey: [QueryKeys.USER, 'userInfo'],
     mutationFn: patchUser,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'userInfo']);
+      queryClient.invalidateQueries([QueryKeys.USER_DATA]);
     },
   });
 };

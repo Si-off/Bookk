@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
 import { useGetBookLikes, usePatchUser } from 'queries';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { UserType } from 'types';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
@@ -25,6 +25,10 @@ const MyPage = () => {
     isSuccess,
   } = useGetBookLikes({ authorId: authorId, take: 4, page: currentPage });
 
+  useEffect(() => {
+    setNickname(user?.nickname || '');
+  }, [QueryKeys.USER_DATA]);
+
   const handlePageClick = (pageNum: number) => {
     if (status !== 'success') return;
 
@@ -40,21 +44,16 @@ const MyPage = () => {
     // console.log('nickname', nickname);
   };
 
-  const saveUserNickname = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      mutate({ nickname: nickname });
-    }
+  const queryClient = useQueryClient();
+  const saveUserNickname = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    mutate({ nickname: nickname });
+    setNickname('');
   };
 
   const setUserPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event?.target.value);
     // console.log('nickname', nickname);
-  };
-
-  const saveUserPassword = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      mutate({ password: password });
-    }
   };
 
   console.log('LikesBooks', LikesBooks);
@@ -75,7 +74,7 @@ const MyPage = () => {
                   <th>닉네임</th>
                   <td>
                     <div>
-                      <span>{user?.nickname}</span>
+                      <span>{user?.nickname ? user.nickname : nickname}</span>
                       <button
                         // btnState={nicknameBtn}
                         type="button"
@@ -85,10 +84,44 @@ const MyPage = () => {
                       </button>
                       <form style={{ display: nicknameBtn ? 'block' : 'none' }}>
                         <div className="changeNickname">
-                          <input></input>
-                          <button>닉네임 변경</button>
+                          <input
+                            placeholder="변경할 닉네임 입력"
+                            onChange={setUserNickname}
+                          ></input>
+                          <button onClick={saveUserNickname}>닉네임 변경</button>
                         </div>
                       </form>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>비밀번호 변경</th>
+                  <td>
+                    <div className="passwordtable">
+                      <table>
+                        <tbody>
+                          <tr>
+                            <th>현재 비밀번호</th>
+                            <td>
+                              <input type="password"></input>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>새 비밀번호</th>
+                            <td>
+                              <input type="password"></input>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>비밀번호 다시 입력</th>
+                            <td>
+                              <input type="password"></input>
+                            </td>
+                          </tr>
+                          <button>비밀번호 변경</button>
+                        </tbody>
+                      </table>
                     </div>
                   </td>
                 </tr>
@@ -97,58 +130,6 @@ const MyPage = () => {
           </form>
         </div>
       </section>
-      <Wrapper>
-        <Stars />
-        <Stars2 />
-        <Stars3 />
-
-        <div className="one">
-          <h1 className="1">내정보</h1>
-
-          <div>이메일:{user?.email}</div>
-          <div style={{ marginBottom: '20px' }}>닉네임:{user?.nickname}</div>
-        </div>
-
-        <div className="two">
-          <div>
-            <h1 className="1">내정보 수정</h1>
-            <input
-              placeholder="변경할 닉네임 입력"
-              onChange={setUserNickname}
-              onKeyDown={(e) => saveUserNickname(e)}
-            ></input>
-            <S.SearchButton>닉네임 변경</S.SearchButton>
-          </div>
-          <div>
-            <input
-              placeholder="변경할 패스워드 입력"
-              onChange={setUserNickname}
-              onKeyDown={(e) => saveUserNickname(e)}
-            ></input>
-            <S.SearchButton style={{ marginRight: '20px' }}>비밀번호 변경</S.SearchButton>
-          </div>
-        </div>
-
-        <div className="three">
-          <h2>내가 좋아요 한 책</h2>
-          <Layout>
-            <ArrowButton>
-              <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
-            </ArrowButton>
-            <BookWrapper $isSuccess={isSuccess}>
-              {status === 'success' &&
-                LikesBooks.data.map((index) => {
-                  const { id, title, images, ...spread } = index.api2;
-
-                  return <Book key={id} id={id} images={images} title={title} {...spread} />;
-                })}
-            </BookWrapper>
-            <ArrowButton>
-              <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
-            </ArrowButton>
-          </Layout>
-        </div>
-      </Wrapper>
     </Container>
   );
 };
@@ -167,6 +148,7 @@ const Container = styled.div`
     background-color: #fff;
     border: 1px solid #ccc;
     border-collapse: collapse;
+    color: black;
   }
 
   .userTable table {
@@ -183,6 +165,10 @@ const Container = styled.div`
     border: 1px solid #ddd; /* 테이블의 경계 선 스타일 및 색상 설정 */
     padding: 8px;
     text-align: left;
+  }
+
+  .userTable .likesbook {
+    align-items: center;
   }
 
   .userTable th {
@@ -214,6 +200,27 @@ const Container = styled.div`
       line-height: 22px;
     }
   }
+
+  .passwordtable {
+    font-size: 12px;
+    width: 270px;
+  }
+  .passwordtable th {
+    border: none;
+    background-color: transparent;
+  }
+
+  .passwordtable table {
+    border-collapse: separate;
+  }
+
+  .passwordtable button {
+    margin: 15px 8px;
+  }
+
+  h1 {
+    color: black;
+  }
 `;
 
 // const NicknameBtn = styled.button`
@@ -224,47 +231,15 @@ const Container = styled.div`
 // `;
 
 const Wrapper = styled.div`
-  display: grid;
   grid-template-columns: repeat(12, 1fr);
   color: rgba(31, 31, 31, 0.7);
   font-weight: 900;
   padding-top: 80px;
-  .one {
-    grid-column: 2 / 6;
-    border-radius: 8.889px;
-    border: 1.778px solid #ebebee;
-    background: #fff;
-    box-shadow: 0px 3.556px 5.333px 0px rgba(0, 0, 0, 0.15);
-    line-height: 2.1;
-    padding: 20px;
-    h1 {
-      color: black;
-    }
-  }
-
-  .two {
-    grid-column: 8 / -2;
-    border-radius: 8.889px;
-    border: 1.778px solid #ebebee;
-    background: #fff;
-    box-shadow: 0px 3.556px 5.333px 0px rgba(0, 0, 0, 0.15);
-    line-height: 2.1;
-    padding: 20px;
-    h1 {
-      color: black;
-    }
-  }
-
-  .three {
-    grid-column: 2 / -2;
-    margin-top: 20px;
-    color: white;
-  }
 `;
 
 const Layout = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin: 40px 0;
 `;
@@ -278,10 +253,11 @@ const BookWrapper = styled.div<{ $isSuccess?: boolean }>`
 
 const ArrowButton = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
+  color: black;
   cursor: pointer;
   margin: 0 50px;
 `;
