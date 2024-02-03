@@ -2,6 +2,7 @@ import { useGetCount } from 'queries';
 import { useNavigate } from 'react-router-dom';
 import * as S from 'styles/AdminStyledTemp';
 import { styled } from 'styled-components';
+import { getStyledColor } from 'utils';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -10,25 +11,25 @@ const AdminDashboard = () => {
   return (
     <S.Layout style={{ flexWrap: 'wrap' }}>
       <Wrap>
-        <S.Container>
+        <S.Container onClick={() => navigate('books')}>
           <S.ContainerHeader>
             <S.ContainerTitle>등록된 책 권수</S.ContainerTitle>
           </S.ContainerHeader>
           <Text>{count?.totalApi2s}권</Text>
         </S.Container>
-        <S.Container>
+        <S.Container onClick={() => navigate('books')}>
           <S.ContainerHeader>
             <S.ContainerTitle>총 조회수</S.ContainerTitle>
           </S.ContainerHeader>
           <Text>{count?.totalClicks}회</Text>
         </S.Container>
-        <S.Container>
+        <S.Container onClick={() => navigate('books')}>
           <S.ContainerHeader>
             <S.ContainerTitle>총 좋아요 수</S.ContainerTitle>
           </S.ContainerHeader>
           <Text>{count?.totalLikes}개</Text>
         </S.Container>
-        <S.Container>
+        <S.Container onClick={() => navigate('reviews')}>
           <S.ContainerHeader>
             <S.ContainerTitle>총 댓글 수</S.ContainerTitle>
           </S.ContainerHeader>
@@ -84,8 +85,18 @@ const Wrap = styled.div`
   gap: 50px;
   white-space: nowrap;
 
+  & ${S.Container} {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: ${getStyledColor('teal', 400)};
+    }
+  }
+
   & ${S.ContainerTitle} {
-    font-size: 16px;
+    color: ${getStyledColor('teal', 900)};
+    font-size: 18px;
   }
 
   & ${S.ContainerHeader} {

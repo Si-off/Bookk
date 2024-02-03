@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { FaHome, FaBook, FaListAlt, FaAddressBook, FaCommentDots } from 'react-icons/fa';
+import { FaChalkboardUser, FaCircleUser } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { pixelToRem, getStyledColor } from 'utils';
@@ -9,6 +10,21 @@ const tabs = [
     to: '',
     name: '메인',
     icon: <FaHome />,
+  },
+  {
+    to: '/',
+    name: '유저 페이지',
+    icon: <FaChalkboardUser />,
+  },
+  {
+    to: '/mypage',
+    name: '내 프로필',
+    icon: <FaCircleUser />,
+  },
+  {
+    to: '',
+    name: 'divider',
+    icon: null,
   },
   {
     to: 'create',
@@ -27,7 +43,7 @@ const tabs = [
   },
   {
     to: 'reviews',
-    name: '리뷰 관리',
+    name: '댓글 관리',
     icon: <FaCommentDots />,
   },
 ] as const;
@@ -36,20 +52,23 @@ const AdminNav = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   return (
     <Nav>
-      <Title>BOOKK</Title>
+      <Title>Bookk</Title>
       <ul>
-        {tabs.map((tab, index) => (
-          <Item key={index} $selected={index === selectedTab}>
-            <StyledLink
-              to={tab.to}
-              $selected={index === selectedTab}
-              onClick={() => setSelectedTab(index)}
-            >
-              {tab.icon}
-              {tab.name}
-            </StyledLink>
-          </Item>
-        ))}
+        {tabs.map((tab, index) => {
+          if (tab.name === 'divider') return <Divider />;
+          return (
+            <Item key={index} $selected={index === selectedTab}>
+              <StyledLink
+                to={tab.to}
+                $selected={index === selectedTab}
+                onClick={() => setSelectedTab(index)}
+              >
+                {tab.icon}
+                {tab.name}
+              </StyledLink>
+            </Item>
+          );
+        })}
       </ul>
     </Nav>
   );
@@ -141,4 +160,10 @@ const StyledLink = styled(Link)<{ $selected: boolean }>`
             background-color: ${getStyledColor('cool_gray', 300)};
           }
         `};
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background-color: ${getStyledColor('cool_gray', 400)};
+  margin: 12px 0;
 `;
