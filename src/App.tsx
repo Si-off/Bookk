@@ -10,6 +10,8 @@ import { getAccessToken } from 'api/auth';
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
 import { useGetUser } from 'queries';
+import { Loader } from 'components/shared';
+import { styled } from 'styled-components';
 
 const AdminManage = React.lazy(() => import('../src/pages/admin/AdminManage'));
 const AdminCreateItem = React.lazy(() => import('../src/pages/admin/AdminCreateItem'));
@@ -38,8 +40,8 @@ function App() {
   }, [queryClient, setIsLogin, setIsInit, setAccessToken]);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <Suspense>
+    <AppWrapper>
+      <Suspense fallback={<Loader />}>
         <BrowserRouter>
           <Routes>
             <Route element={<Navigation />}>
@@ -63,8 +65,13 @@ function App() {
           </Routes>
         </BrowserRouter>
       </Suspense>
-    </div>
+    </AppWrapper>
   );
 }
 
 export default App;
+
+const AppWrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+`;
