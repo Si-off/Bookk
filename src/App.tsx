@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react';
 import { useEffect } from 'react';
 import Navigation from './components/layout/Navigation';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
@@ -6,18 +7,17 @@ import { StorageKeys } from 'constant';
 import { useUserStore } from 'store/useUserStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { getAccessToken } from 'api/auth';
-import {
-  AdminManage,
-  AdminCreateItem,
-  AdminEditItem,
-  AdminMain,
-  AdminDashboard,
-  AdminManageUsers,
-  AdminManageReviews,
-} from 'pages/admin';
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
 import { useGetUser } from 'queries';
+
+const AdminManage = React.lazy(() => import('../src/pages/admin/AdminManage'));
+const AdminCreateItem = React.lazy(() => import('../src/pages/admin/AdminCreateItem'));
+const AdminEditItem = React.lazy(() => import('../src/pages/admin/AdminEditItem'));
+const AdminMain = React.lazy(() => import('../src/pages/admin/AdminMain'));
+const AdminDashboard = React.lazy(() => import('../src/pages/admin/AdminDashboard'));
+const AdminManageUsers = React.lazy(() => import('../src/pages/admin/AdminManageUsers'));
+const AdminManageReviews = React.lazy(() => import('../src/pages/admin/AdminManageReviews'));
 
 function App() {
   const { isLogin, setIsLogin, setIsInit, setAccessToken } = useUserStore();
@@ -39,28 +39,30 @@ function App() {
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Navigation />}>
-            <Route path="/" element={<UserPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Route>
-
-          <Route element={<PrivateRoutes />}>
-            <Route path="/admin" element={<AdminMain />}>
-              <Route path="" element={<AdminDashboard />} />
-              <Route path="create" element={<AdminCreateItem />} />
-              <Route path="books" element={<AdminManage />} />
-              <Route path="books/detail/:id" element={<AdminEditItem />} />
-              <Route path="users" element={<AdminManageUsers />} />
-              <Route path="reviews" element={<AdminManageReviews />} />
+      <Suspense>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Navigation />}>
+              <Route path="/" element={<UserPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="*" element={<Navigate to="/" />} />
             </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+
+            <Route element={<PrivateRoutes />}>
+              <Route path="/admin" element={<AdminMain />}>
+                <Route path="" element={<AdminDashboard />} />
+                <Route path="create" element={<AdminCreateItem />} />
+                <Route path="books" element={<AdminManage />} />
+                <Route path="books/detail/:id" element={<AdminEditItem />} />
+                <Route path="users" element={<AdminManageUsers />} />
+                <Route path="reviews" element={<AdminManageReviews />} />
+              </Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Suspense>
     </div>
   );
 }
