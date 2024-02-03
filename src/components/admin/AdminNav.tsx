@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { FaHome, FaBook, FaListAlt, FaAddressBook } from 'react-icons/fa';
+import { FaHome, FaBook, FaListAlt, FaAddressBook, FaCommentDots } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { pixelToRem, getStyledColor } from 'utils';
@@ -24,6 +24,11 @@ const tabs = [
     to: 'users',
     name: '사용자 관리',
     icon: <FaAddressBook />,
+  },
+  {
+    to: 'reviews',
+    name: '리뷰 관리',
+    icon: <FaCommentDots />,
   },
 ] as const;
 

@@ -13,11 +13,11 @@ import {
   AdminMain,
   AdminDashboard,
   AdminManageUsers,
+  AdminManageReviews,
 } from 'pages/admin';
 import { PrivateRoutes } from 'pages';
 import { UserPage, LoginPage, SignupPage, MyPage } from 'pages/user';
 import { useGetUser } from 'queries';
-import { getToken } from 'utils/getToken';
 
 function App() {
   const { isLogin, setIsLogin, setIsInit, setAccessToken } = useUserStore();
@@ -26,8 +26,7 @@ function App() {
   useGetUser(isLogin);
 
   useEffect(() => {
-    const refreshToken = getToken('refreshToken');
-
+    const refreshToken = secureLocalStorage.getItem(StorageKeys.REFRESH_TOKEN);
     if (refreshToken && typeof refreshToken === 'string' && !isLogin) {
       (async () => {
         const accessToken = await getAccessToken();
@@ -57,6 +56,7 @@ function App() {
               <Route path="books" element={<AdminManage />} />
               <Route path="books/detail/:id" element={<AdminEditItem />} />
               <Route path="users" element={<AdminManageUsers />} />
+              <Route path="reviews" element={<AdminManageReviews />} />
             </Route>
           </Route>
         </Routes>

@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type AllowDataType = {
-  UserType: 'UserType';
   BookTakelistRes: 'BookTakelistRes';
 };
 
@@ -14,11 +13,8 @@ const useAdminManage = () => {
     setCurrentPage(pageNum);
   }, []);
 
-  const handleEdit = useCallback((type: keyof AllowDataType, id: number | string) => {
+  const handleNavigate = useCallback((type: keyof AllowDataType, id: number | string) => {
     switch (type) {
-      case 'UserType':
-        navigate(`/admin/users/detail/${id}`);
-        break;
       case 'BookTakelistRes':
         navigate(`/admin/books/detail/${id}`);
         break;
@@ -28,7 +24,7 @@ const useAdminManage = () => {
     }
   }, []);
 
-  return { currentPage, setCurrentPage, handleNextPage, handleEdit };
+  return { currentPage, setCurrentPage, handleNextPage, handleNavigate };
 };
 
 export default useAdminManage;
