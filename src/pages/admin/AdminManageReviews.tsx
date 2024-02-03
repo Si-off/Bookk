@@ -11,7 +11,7 @@ import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { getDateStr } from 'utils';
 
 const AdminManageReviews = () => {
-  const { currentPage, setCurrentPage, handleNextPage } = useAdminManage();
+  const { currentPage, handleNextPage } = useAdminManage();
   const { data: reviews, status, isLoading } = useGetReplies();
   const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null); // 단일 ID로 변경
   useEffect(() => {
@@ -24,6 +24,10 @@ const AdminManageReviews = () => {
       setSelectedReviewId(id); // 다른 항목을 클릭하면 해당 항목의 상세 정보 표시
     }
   };
+  const reviewsPerPage = 10;
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = reviews?.slice(indexOfFirstReview, indexOfLastReview);
 
   if (!reviews || isLoading) {
     return <Loader />;
@@ -46,11 +50,11 @@ const AdminManageReviews = () => {
           </S.Theader>
           <S.Tbody>
             {status === 'success' &&
-              reviews?.map((review: Replies, index: number) => {
+              currentReviews?.map((review: Replies, index: number) => {
                 return (
                   <Fragment key={review.id}>
                     <S.Trow>
-                      <S.Tcell width={30}>{(currentPage - 1) * 10 + index + 1}</S.Tcell>
+                      <S.Tcell width={30}>{indexOfFirstReview + index + 1}</S.Tcell>
                       <S.Tcell width={50}>{review.id}</S.Tcell>
                       <S.Tcell width={100}>{review.title}</S.Tcell>
                       <S.Tcell>{review.reply2Count}</S.Tcell>
@@ -95,7 +99,7 @@ const AdminManageReviews = () => {
           }}
         >
           <S.Pagination>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage === 1}>
               <FaAngleLeft onClick={() => handleNextPage(currentPage - 1)} />
             </S.PaginationButton>
             <div>
@@ -105,7 +109,9 @@ const AdminManageReviews = () => {
                 </S.PaginationNumber>
               ))}
             </div>
-            <S.PaginationButton>
+            <S.PaginationButton
+              disabled={currentPage >= Math.ceil(reviews.length) / reviewsPerPage}
+            >
               <FaAngleRight onClick={() => handleNextPage(currentPage + 1)} />
             </S.PaginationButton>
           </S.Pagination>

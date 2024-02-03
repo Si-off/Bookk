@@ -258,4 +258,8 @@ export const PaginationButton = styled.button`
   display: inline-flex;
   align-items: center;
   background-color: #fff;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
