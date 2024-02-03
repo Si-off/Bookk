@@ -448,5 +448,10 @@ export const useGetReplies = () => {
   return useQuery({
     queryKey: [QueryKeys.ADMIN, 'replies'],
     queryFn: getReplies,
+    select: (reviews) =>
+      reviews &&
+      Object.keys(reviews)
+        .filter((key) => key !== 'status')
+        .map((key) => reviews[parseInt(key)]),
   });
 };

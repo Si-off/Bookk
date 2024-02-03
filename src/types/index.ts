@@ -233,7 +233,7 @@ export type Countlist = {
 };
 
 // 댓글 목록
-type Replies = {
+export type Replies = {
   id: number;
   createdAt: string;
   updatedAt: string;
@@ -252,6 +252,4 @@ type Replies = {
   }[];
 };
 
-export type RepliesList = {
-  [index: number]: Replies;
-};
+export type RepliesList = Replies[];

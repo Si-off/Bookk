@@ -127,6 +127,7 @@ export const getBooksLike = async (params: LikesBooklistParams) => {
 
 export const getBookIsLike = async ({ bookId, userId }: { bookId: number; userId: number }) => {
   const res = await Axios(`/api2s/${bookId}/${userId}/is-like`).get<BookisLikeRes>();
+  console.log(res);
   return res;
 };
 
@@ -155,6 +156,5 @@ export const getCount = async () => {
 
 export const getReplies = async () => {
   const res = await Axios(`/api2s/replies`).get<RepliesList>();
-  console.log(res);
   return res;
 };
