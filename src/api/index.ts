@@ -149,12 +149,12 @@ export const deleteBookLike = async ({
 
 export const getCount = async () => {
   const res = await Axios(`/api2s/count`).get<Countlist>();
-  console.log(res);
+
   return res;
 };
 
 export const getReplies = async () => {
   const res = await Axios(`/api2s/replies`).get<RepliesList>();
-  console.log(res);
+
   return res;
 };
