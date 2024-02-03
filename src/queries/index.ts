@@ -14,13 +14,14 @@ import {
   deleteBookLike,
   getBookIsLike,
   patchUser,
+  getCount,
+  getReplies,
 } from 'api';
 import {
   BookTakelistRes,
   BookisLikeRes,
   BooklistParams,
   CommentGetRes,
-  CommentType,
   LikesBooklistParams,
   MyFavorites,
   UserType,
@@ -30,7 +31,6 @@ import { getUser, login } from 'api/auth';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from 'store/useUserStore';
-import { query } from 'express';
 
 export const useGetBooks = (queries?: BooklistParams) => {
   const key = [QueryKeys.USER, 'books'];
@@ -343,19 +343,18 @@ export const useGetBookLikes = (queries: LikesBooklistParams) => {
   const { isLogin } = useUserStore.getState();
 
   const key = [QueryKeys.USER, 'likes', queries.page.toString()];
-  if (queries) key.push(queries.page.toString());
 
   return useQuery({
     queryKey: key,
     queryFn: () => getBooksLike(queries),
     enabled: isLogin && !!queries.authorId,
     onSuccess: async (res: MyFavorites) => {
-      if (!queries) return;
-      if (res.total < queries.take * queries.page) return;
+      if (!isLogin || !queries.authorId) return;
+      if (res.total <= queries.take * queries.page) return;
 
       await queryClient.prefetchQuery({
         queryKey: [QueryKeys.USER, 'likes', (queries.page + 1).toString()],
-        queryFn: () => getBooks({ ...queries, page: queries.page + 1 }),
+        queryFn: () => getBooksLike({ ...queries, page: queries.page + 1 }),
         staleTime: 1000 * 60 * 3,
         cacheTime: 1000 * 60 * 5,
       });
@@ -434,5 +433,30 @@ export const useDeleteBookLike = ({ bookId }: { bookId: number }) => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.USER, 'likes', bookId.toString()]);
     },
+  });
+};
+
+export const useGetCount = () => {
+  return useQuery({
+    queryKey: [QueryKeys.ADMIN, 'count'],
+    queryFn: getCount,
+    placeholderData: () => ({
+      totalApi2s: '-',
+      totalClicks: '-',
+      totalLikes: '-',
+      totalReplies: '-',
+    }),
+  });
+};
+
+export const useGetReplies = () => {
+  return useQuery({
+    queryKey: [QueryKeys.ADMIN, 'replies'],
+    queryFn: getReplies,
+    select: (reviews) =>
+      reviews &&
+      Object.keys(reviews)
+        .filter((key) => key !== 'status')
+        .map((key) => reviews[parseInt(key)]),
   });
 };

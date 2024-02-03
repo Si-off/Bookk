@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 type AllowDataType = {
   BookTakelistRes: 'BookTakelistRes';
+  CommentTakelistRes: 'CommentTakelistRes';
 };
 
 const useAdminManage = () => {

@@ -246,6 +246,8 @@ const Layout = styled.div`
 
 const BookWrapper = styled.div<{ $isSuccess?: boolean }>`
   display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
   width: 70%;
   transition: opacity 1s ease;
   opacity: ${({ $isSuccess }) => ($isSuccess ? 1 : 0)};

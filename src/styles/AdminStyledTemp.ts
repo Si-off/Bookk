@@ -46,6 +46,7 @@ export const Button = styled.button<{ $variant?: Variant; color?: string }>`
   padding: 0px 12px;
   border-radius: 4px;
   font-weight: 500;
+  white-space: nowrap;
 
   ${({ $variant }) => {
     switch ($variant) {
@@ -178,6 +179,7 @@ export const Tcolumn = styled.th`
   font-size: ${pixelToRem(16)};
   text-align: center;
   padding: 10px 15px;
+  white-space: nowrap;
 `;
 export const Trow = styled.tr`
   height: 45px;
@@ -256,4 +258,8 @@ export const PaginationButton = styled.button`
   display: inline-flex;
   align-items: center;
   background-color: #fff;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;

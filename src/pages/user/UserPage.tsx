@@ -139,10 +139,12 @@ export default UserPage;
 
 const Main = styled.main`
   width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   padding-top: 10%;
   position: relative;
+  background-color: #121212;
 `;
 const LayoutContainer = styled.div`
   display: flex;
@@ -181,9 +183,14 @@ const TotheTop = styled.button`
   border-radius: 50%;
   outline: none;
   cursor: pointer;
+  transition:
+    color 0.2s,
+    border 0.2s,
+    background-color 0.2s;
 
   &:hover {
-    color: #017374;
-    border: 2px solid #017374;
+    color: ${getStyledColor('white', 'high')};
+    border: 2px solid ${getStyledColor('teal', 600)};
+    background-color: ${getStyledColor('teal', 600)};
   }
 `;

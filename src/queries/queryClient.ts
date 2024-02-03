@@ -4,8 +4,8 @@ const getQueryClient = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: Infinity,
-        cacheTime: Infinity,
+        staleTime: 1000 * 60 * 3,
+        cacheTime: 1000 * 60 * 5,
         retry: 0,
       },
     },

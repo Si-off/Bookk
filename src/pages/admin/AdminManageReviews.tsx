@@ -1,11 +1,37 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import useAdminManage from 'hooks/useAdminManage';
 import * as S from 'styles/AdminStyledTemp';
+import { useGetReplies } from 'queries';
+import styled from 'styled-components';
+import { Loader } from 'components/shared';
+import { Replies } from 'types';
+import { IoIosArrowDropupCircle } from 'react-icons/io';
+import { IoIosArrowDropdownCircle } from 'react-icons/io';
+import { getDateStr } from 'utils';
 
 const AdminManageReviews = () => {
-  const { currentPage, setCurrentPage, handleNextPage, handleNavigate } = useAdminManage();
+  const { currentPage, handleNextPage } = useAdminManage();
+  const { data: reviews, status, isLoading } = useGetReplies();
+  const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null); // 단일 ID로 변경
+  useEffect(() => {
+    console.log('reviews', reviews);
+  }, [reviews]);
+  const toggleDetail = (id: number) => {
+    if (selectedReviewId === id) {
+      setSelectedReviewId(null); // 이미 열린 항목을 다시 클릭하면 닫음
+    } else {
+      setSelectedReviewId(id); // 다른 항목을 클릭하면 해당 항목의 상세 정보 표시
+    }
+  };
+  const reviewsPerPage = 10;
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = reviews?.slice(indexOfFirstReview, indexOfLastReview);
 
+  if (!reviews || isLoading) {
+    return <Loader />;
+  }
   return (
     <S.Layout>
       <S.Container>
@@ -17,38 +43,52 @@ const AdminManageReviews = () => {
             <S.Trow>
               <S.Tcolumn>No.</S.Tcolumn>
               <S.Tcolumn>ID</S.Tcolumn>
-              <S.Tcolumn>이름</S.Tcolumn>
-              <S.Tcolumn>닉네임</S.Tcolumn>
-              <S.Tcolumn>이메일</S.Tcolumn>
-              <S.Tcolumn>권한</S.Tcolumn>
-              <S.Tcolumn>회원 탈퇴</S.Tcolumn>
+              <S.Tcolumn>책이름</S.Tcolumn>
+              <S.Tcolumn>댓글수</S.Tcolumn>
+              <S.Tcolumn>상세보기</S.Tcolumn>
             </S.Trow>
           </S.Theader>
           <S.Tbody>
-            {/* {status === 'success' &&
-              users.map((user, index) => {
+            {status === 'success' &&
+              currentReviews?.map((review: Replies, index: number) => {
                 return (
-                  <Fragment key={user.id}>
+                  <Fragment key={review.id}>
                     <S.Trow>
-                      <S.Tcell width={30}>{(currentPage - 1) * 10 + index + 1}</S.Tcell>
-                      <S.Tcell width={50}>{user.id}</S.Tcell>
-                      <S.Tcell width={100}>{user.name}</S.Tcell>
-                      <S.Tcell width={250}>{user.nickname}</S.Tcell>
-                      <S.Tcell>{user.email}</S.Tcell>
-                      <S.Tcell>{user.role}</S.Tcell>
+                      <S.Tcell width={30}>{indexOfFirstReview + index + 1}</S.Tcell>
+                      <S.Tcell width={50}>{review.id}</S.Tcell>
+                      <S.Tcell width={100}>{review.title}</S.Tcell>
+                      <S.Tcell>{review.reply2Count}</S.Tcell>
                       <S.Tcell>
-                        {userRole !== 'ADMIN' && userRole !== 'MANAGER' ? (
-                          <S.TrashIcon
-                            onClick={() => handleRemove(user.id, user.name, user.role)}
+                        {selectedReviewId === review.id ? (
+                          <IoIosArrowDropupCircle
+                            size={24}
+                            onClick={() => toggleDetail(review.id)}
                           />
                         ) : (
-                          '-'
+                          <IoIosArrowDropdownCircle
+                            size={24}
+                            onClick={() => toggleDetail(review.id)}
+                          />
                         )}
                       </S.Tcell>
                     </S.Trow>
+                    {selectedReviewId === review.id && (
+                      <S.Trow>
+                        <S.Tcell colSpan={5}>
+                          {/* 상세 댓글 정보 렌더링 */}
+                          {review.reply2s.map((reply2) => (
+                            <Wrapper key={reply2.id}>
+                              <p>ID:{reply2.id}</p>
+                              <p>내용:{reply2.reply2}</p>
+                              <p>작성일:{getDateStr(reply2.createdAt)}</p>
+                            </Wrapper>
+                          ))}
+                        </S.Tcell>
+                      </S.Trow>
+                    )}
                   </Fragment>
                 );
-              })} */}
+              })}
           </S.Tbody>
         </S.Table>
         <div
@@ -59,17 +99,19 @@ const AdminManageReviews = () => {
           }}
         >
           <S.Pagination>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage === 1}>
               <FaAngleLeft onClick={() => handleNextPage(currentPage - 1)} />
             </S.PaginationButton>
             <div>
-              {/* {Array.from({ length: Math.ceil(users?.length / 10) }, (_, index) => (
+              {Array.from({ length: Math.ceil(reviews?.length / 10) }, (_, index) => (
                 <S.PaginationNumber key={index} onClick={() => handleNextPage(index + 1)}>
                   {index + 1}
                 </S.PaginationNumber>
-              ))} */}
+              ))}
             </div>
-            <S.PaginationButton>
+            <S.PaginationButton
+              disabled={currentPage >= Math.ceil(reviews.length) / reviewsPerPage}
+            >
               <FaAngleRight onClick={() => handleNextPage(currentPage + 1)} />
             </S.PaginationButton>
           </S.Pagination>
@@ -80,3 +122,12 @@ const AdminManageReviews = () => {
 };
 
 export default AdminManageReviews;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #e9e9e9;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+`;
