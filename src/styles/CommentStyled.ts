@@ -44,7 +44,7 @@ export const CommentItemContainer = styled.div<CommentItemContainerProps>`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  padding: 5px 5px;
+  padding: 15px 15px;
   margin: 5px 0;
   border-radius: 5px;
   background-color: #24262b;
@@ -75,7 +75,13 @@ export const CommentButton = styled.button<{ onClick: (commentId: number) => voi
   }
 `;
 
-// background-color: ${(props) =>
-//   props.$index % 2 === 0
-//     ? 'linear-gradient(247deg, #FFF 51.78%, #00BFFF 181.14%)'
-//     : 'linear-gradient(247deg, #FFF 51.78%, #00BFFF 181.14%)'};
+export const CommentInfo = styled.div`
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+`;
+export const Hr = styled.hr`
+  border: 1px solid #666;
+  margin: 10px 0;
+`;
