@@ -13,6 +13,7 @@ import {
   postBookLike,
   deleteBookLike,
   getBookIsLike,
+  patchUser,
   getCount,
   getReplies,
 } from 'api';
@@ -89,6 +90,18 @@ export const usePatchBook = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.ADMIN, 'books']);
       queryClient.invalidateQueries([QueryKeys.USER, 'books']);
+    },
+  });
+};
+
+export const usePatchUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [QueryKeys.USER, 'userInfo'],
+    mutationFn: patchUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.USER, 'userInfo']);
     },
   });
 };
