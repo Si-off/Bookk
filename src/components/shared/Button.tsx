@@ -6,11 +6,9 @@ import * as S from 'styles/AdminStyledTemp';
 interface Props extends React.ComponentPropsWithoutRef<'button'> {
   onClick?: () => void;
   status?: 'idle' | 'loading' | 'success' | 'error';
-  $color?: string;
 }
 interface CssProps {
   $status?: 'idle' | 'loading' | 'success' | 'error';
-  $color?: string;
 }
 const Button = (props: Props) => {
   const { onClick, status = 'idle', ...rest } = props;
@@ -37,22 +35,28 @@ const spinAnimation = keyframes`
 `;
 
 const StyledButton = styled(S.Button)<CssProps>`
+  background-color: ${getStyledColor('primary', 900)};
+  cursor: ${({ $status }) => ($status === 'loading' ? 'none' : 'pointer')};
+
   ${({ $status }) =>
     $status === 'loading' &&
     css<CssProps>`
-      background-color: ${({ $color }) => $color || getStyledColor('green', 800)};
+      background-color: ${getStyledColor('green', 800)};
       cursor: none;
       &:hover,
       &:active {
-        background-color: ${({ $color }) => $color || getStyledColor('green', 800)};
+        background-color: ${getStyledColor('green', 800)};
       }
     `}
 
   &:disabled {
     cursor: not-allowed;
+    background-color: ${({ $status }) =>
+      $status === 'loading' ? getStyledColor('green', 800) : getStyledColor('gray', 900)};
   }
 `;
 
 const Spinner = styled(FaSpinner)`
   animation: ${spinAnimation} 1s infinite linear;
+  margin-right: 12px;
 `;
