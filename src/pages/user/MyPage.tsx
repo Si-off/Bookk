@@ -8,6 +8,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Book } from 'components/user';
 import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 import * as S from 'styles/SearchStyled';
+import CustomModal from 'components/modal/CustomModal';
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [nicknameBtn, setNicknameBtn] = useState(false);
@@ -15,6 +16,9 @@ const MyPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [pwalert, setPwalert] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
+
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
 
   const authorId: number = user?.id || 0;
@@ -61,7 +65,27 @@ const MyPage = () => {
     }
   };
 
-  console.log('LikesBooks', LikesBooks);
+  const handleClick = (id: number) => {
+    setModalOpen(true);
+    unshowScroll();
+    setSelectedBookId(id); // 선택된 책의 ID를 상태에 저장
+  };
+
+  const unshowScroll = () => {
+    document.body.style.overflow = 'hidden';
+  };
+  const showScroll = () => {
+    document.body.style.overflow = 'unset';
+  };
+
+  const findSelectedBook = () => {
+    return LikesBooks?.data
+      .flatMap((data) => data?.api2)
+      .find((api2) => api2?.id === selectedBookId);
+  };
+  const selectedBook = findSelectedBook();
+
+  console.log('SelectedBookId', selectedBookId);
 
   return (
     <Container>
@@ -144,7 +168,26 @@ const MyPage = () => {
                     LikesBooks.data.map((index) => {
                       const { id, title, images, ...spread } = index.api2;
 
-                      return <Book key={id} id={id} images={images} title={title} {...spread} />;
+                      return (
+                        <div key={id}>
+                          <Book
+                            key={id}
+                            id={id}
+                            images={images}
+                            title={title}
+                            {...spread}
+                            onClick={() => handleClick(id)}
+                          />
+                          {modalOpen && (
+                            <CustomModal
+                              bookId={selectedBookId}
+                              book={selectedBook}
+                              setModalOpen={setModalOpen}
+                              showScroll={showScroll}
+                            ></CustomModal>
+                          )}
+                        </div>
+                      );
                     })}
                 </BookWrapper>
                 <ArrowButton>
