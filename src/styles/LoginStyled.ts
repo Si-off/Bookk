@@ -46,7 +46,9 @@ const Layout = styled.div`
   background-color: ${getStyledColor('gray', 1000)};
   padding: 40px 48px;
   border-radius: 4px;
-  box-shadow: 0px 11px 15px 0px rgba(0, 0, 0, 0.2), 0px 9px 46px 0px rgba(0, 0, 0, 0.12),
+  box-shadow:
+    0px 11px 15px 0px rgba(0, 0, 0, 0.2),
+    0px 9px 46px 0px rgba(0, 0, 0, 0.12),
     0px 24px 38px 0px rgba(0, 0, 0, 0.14);
   overflow: auto; /* 스크롤 가능하게 설정 */
 
@@ -187,12 +189,13 @@ export {
   Title,
 };
 
-export const StyledLoader = styled.div`
-  border: 8px solid #f3f3f3;
-  border-top: 8px solid #3498db;
+export const StyledLoader = styled.div<{ $size: string }>`
+  display: inline-block;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: ${({ $size }) => $size};
+  height: ${({ $size }) => $size};
   animation: spin 1s linear infinite;
 
   @keyframes spin {
