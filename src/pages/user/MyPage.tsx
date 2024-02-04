@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 import { UserType } from 'types';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Book } from 'components/user';
-import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
+import { Loader } from 'components/shared';
 import * as S from 'styles/SearchStyled';
 import CustomModal from 'components/modal/CustomModal';
 const MyPage = () => {
@@ -158,7 +158,9 @@ const MyPage = () => {
           </form>
           <div className="likesbook">
             <h1>내가 좋아한 책</h1>
-            {LikesBooks && LikesBooks.data.length > 0 ? (
+            {status === 'loading' ? (
+              <Loader custom={true} />
+            ) : LikesBooks && LikesBooks.data.length > 0 ? (
               <Layout>
                 <ArrowButton>
                   <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
@@ -208,7 +210,8 @@ export default MyPage;
 
 const Container = styled.div`
   position: relative;
-  min-width: 980px;
+  min-width: 1400px;
+  min-height: 100vh;
   overflow: hidden;
 
   .userTable {
