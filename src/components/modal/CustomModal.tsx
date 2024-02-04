@@ -68,7 +68,10 @@ export const CustomModal = ({
   const toggleLike = () => {
     if (!isLogin) {
       alert('로그인이 필요합니다.');
+      setModalOpen(false);
+      showScroll();
       navigate('/login');
+
       return;
     }
     setIsUpdating(true);
