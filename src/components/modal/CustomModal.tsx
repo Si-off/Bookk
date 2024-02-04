@@ -7,7 +7,7 @@ import {
   useGetComments,
   usePostBookLike,
 } from 'queries';
-
+import { useNavigate } from 'react-router-dom';
 import useOnclickOutside from 'hooks/useOnclickOutside';
 import { BookInfoType, UserType } from 'types';
 import CommentWrite from 'components/modal/CommentWrite';
@@ -38,6 +38,7 @@ export const CustomModal = ({
   });
   if (!bookId) return <div>loading...</div>;
   const { isLogin } = useUserStore();
+  const navigate = useNavigate();
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
   const [isUpdating, setIsUpdating] = useState(false);
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
@@ -67,6 +68,7 @@ export const CustomModal = ({
   const toggleLike = () => {
     if (!isLogin) {
       alert('로그인이 필요합니다.');
+      navigate('/login');
       return;
     }
     setIsUpdating(true);
