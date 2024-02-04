@@ -81,17 +81,21 @@ const AdminManageUsers = () => {
           }}
         >
           <S.Pagination>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage === 1}>
               <FaAngleLeft onClick={() => handleNextPage(currentPage - 1)} />
             </S.PaginationButton>
             <div>
               {Array.from({ length: Math.ceil(users?.length / 10) }, (_, index) => (
-                <S.PaginationNumber key={index} onClick={() => handleNextPage(index + 1)}>
+                <S.PaginationNumber
+                  key={index}
+                  onClick={() => handleNextPage(index + 1)}
+                  $isCurrentPage={currentPage === index + 1}
+                >
                   {index + 1}
                 </S.PaginationNumber>
               ))}
             </div>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage >= Math.ceil(users.length) / 10}>
               <FaAngleRight onClick={() => handleNextPage(currentPage + 1)} />
             </S.PaginationButton>
           </S.Pagination>
