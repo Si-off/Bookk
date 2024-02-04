@@ -102,7 +102,11 @@ const AdminManageReviews = () => {
             </S.PaginationButton>
             <div>
               {Array.from({ length: Math.ceil(reviews?.length / 10) }, (_, index) => (
-                <S.PaginationNumber key={index} onClick={() => handleNextPage(index + 1)}>
+                <S.PaginationNumber
+                  key={index}
+                  onClick={() => handleNextPage(index + 1)}
+                  $isCurrentPage={currentPage === index + 1}
+                >
                   {index + 1}
                 </S.PaginationNumber>
               ))}
