@@ -14,7 +14,6 @@ interface CommentToggleProps {
 
 const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
-  // const [comment, setComment] = useState<string>();
   const { mutate: deleteComment, status: deleteStatus } = useDeleteComment(bookId);
   const { mutate: patchComment, status: patchStatus } = usePatchComment(bookId);
   const handleChangeClick = (commentId: number, oldComment: string) => {
@@ -29,14 +28,6 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
       return;
     }
   };
-  function formatDate(timestamp: string) {
-    const dateObject = new Date(timestamp);
-    const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObject.getDate().toString().padStart(2, '0');
-    const formattedDate = `${year}${month}${day}`;
-    return formattedDate;
-  }
 
   return (
     <S.CommentContainer>

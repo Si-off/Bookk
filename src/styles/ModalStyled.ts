@@ -115,11 +115,13 @@ export const ModalTitle = styled.h2`
   padding: 0;
   font-size: 34px;
   margin: 16px 0 24px 0;
+  white-space: nowrap;
 `;
 
-export const ModalDetails = styled.p`
+export const ModalDetails = styled.div`
   font-weight: 300;
   font-size: 14px;
+  white-space: nowrap;
 
   @media screen and (max-width: 768px) {
     font-size: 16px;
@@ -135,11 +137,11 @@ export const ModalSubject = styled.div`
   font-weight: 500;
 `;
 
-export const ModalIntroduce = styled.p`
+export const ModalIntroduce = styled.div`
   line-height: 140%;
 `;
 
-export const ModalOverview = styled.p`
+export const ModalOverview = styled.div`
   font-size: 14px;
   line-height: 1.5;
   font-weight: 300;
@@ -179,7 +181,7 @@ export const HeartButton = styled.button<{
 }>`
   background: transparent;
   border: none;
-  cursor: ${(props) => (props.$status === 'loading' ? 'not-allowed' : 'pointer')};
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -192,11 +194,9 @@ export const HeartButton = styled.button<{
   }
   &:disabled {
     cursor: not-allowed;
-    pointer-events: none;
   }
   svg {
     font-size: 24px; // Adjust the size of the FaHeart icon
-    cursor: pointer;
     &:hover {
       transform: scale(1.1);
       transition: transform 0.2s;

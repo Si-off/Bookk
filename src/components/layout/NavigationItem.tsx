@@ -72,6 +72,7 @@ const Text = styled.div`
   font-size: ${pixelToRem(16)};
   transition: color 0.2s ease;
   font-weight: 500;
+  white-space: nowrap;
 
   &:hover {
     color: ${getStyledColor('primary', 200)};
@@ -88,6 +89,7 @@ const Logout = styled.button`
   background-color: inherit;
   transition: color 0.2s ease;
   font-weight: 500;
+  white-space: nowrap;
 
   &:hover {
     color: ${getStyledColor('primary', 200)};

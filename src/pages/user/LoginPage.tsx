@@ -47,6 +47,12 @@ const LoginPage = () => {
     mutate({ email, password });
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isEmpty && e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   if (isLoading) {
     return (
       <S.Body>
@@ -69,6 +75,7 @@ const LoginPage = () => {
               name="email"
               value={email}
               onChange={handleChange}
+              onKeyDown={handleKeyPress}
             />
           </S.InputField>
           <S.InputField>
@@ -80,6 +87,7 @@ const LoginPage = () => {
               name="password"
               value={password}
               onChange={handleChange}
+              onKeyDown={handleKeyPress}
             />
           </S.InputField>
         </S.Wrapper>

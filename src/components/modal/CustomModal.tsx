@@ -1,6 +1,12 @@
 import { useRef, useState } from 'react';
 import * as S from 'styles/ModalStyled';
-import { useDeleteBookLike, useGetBookIsLike, useGetComments, usePostBookLike } from 'queries';
+import {
+  useDeleteBookLike,
+  useGetBook,
+  useGetBookIsLike,
+  useGetComments,
+  usePostBookLike,
+} from 'queries';
 
 import useOnclickOutside from 'hooks/useOnclickOutside';
 import { BookInfoType, UserType } from 'types';
@@ -13,7 +19,7 @@ import { QueryKeys } from 'constant';
 import { useQueryClient } from '@tanstack/react-query';
 import NotFoundComment from 'components/shared/NotFoundComment';
 import { Loader } from 'components/shared';
-
+import { StyledLoader } from 'styles/LoginStyled';
 export const CustomModal = ({
   bookId,
   book,
@@ -35,11 +41,14 @@ export const CustomModal = ({
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
   const [isUpdating, setIsUpdating] = useState(false);
   const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
+  useGetBook(bookId);
   const { data: bookIsLikeData, status } = useGetBookIsLike(bookId, user?.id || 0);
   const { mutate: postLike } = usePostBookLike({
     bookId: bookId,
   });
-  const { mutate: deleteLike } = useDeleteBookLike({ bookId: bookId });
+  const { mutate: deleteLike } = useDeleteBookLike({
+    bookId: bookId,
+  });
 
   function formatDate(timestamp: string) {
     const dateObject = new Date(timestamp);
@@ -50,13 +59,11 @@ export const CustomModal = ({
     return formattedDate;
   }
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // 모달 바깥을 클릭하면 모달을 닫음
     if (e.target === e.currentTarget) {
       setModalOpen(false);
-      showScroll(); // 필요에 따라 모달이 닫힐 때 실행할 추가 작업을 수행할 수 있습니다.
+      showScroll();
     }
   };
-
   const toggleLike = () => {
     if (!isLogin) {
       alert('로그인이 필요합니다.');
@@ -113,9 +120,18 @@ export const CustomModal = ({
                 <S.ModalTitle>{book?.title}</S.ModalTitle>
                 <S.ModalOverview>클릭수: {book?.clicks}</S.ModalOverview>
                 <S.ModalOverview>
-                  좋아요: {isLogin ? bookIsLikeData?.likeCount : book?.likeCount}
+                  좋아요:{' '}
+                  {status === 'loading' && isLogin ? (
+                    <StyledLoader $size={'10px'} />
+                  ) : isLogin ? (
+                    bookIsLikeData?.likeCount
+                  ) : (
+                    book?.likeCount
+                  )}
                 </S.ModalOverview>
-                <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
+                <S.ModalOverview>
+                  {book?.author?.name ? `작성자: ${book?.author.name}` : ''}
+                </S.ModalOverview>
                 <S.ModalDetails>
                   등록날짜: {'  '}
                   {book && formatDate(book.createdAt)}

@@ -14,9 +14,7 @@ const AdminManageReviews = () => {
   const { currentPage, handleNextPage } = useAdminManage();
   const { data: reviews, status, isLoading } = useGetReplies();
   const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null); // 단일 ID로 변경
-  useEffect(() => {
-    console.log('reviews', reviews);
-  }, [reviews]);
+
   const toggleDetail = (id: number) => {
     if (selectedReviewId === id) {
       setSelectedReviewId(null); // 이미 열린 항목을 다시 클릭하면 닫음
@@ -104,7 +102,11 @@ const AdminManageReviews = () => {
             </S.PaginationButton>
             <div>
               {Array.from({ length: Math.ceil(reviews?.length / 10) }, (_, index) => (
-                <S.PaginationNumber key={index} onClick={() => handleNextPage(index + 1)}>
+                <S.PaginationNumber
+                  key={index}
+                  onClick={() => handleNextPage(index + 1)}
+                  $isCurrentPage={currentPage === index + 1}
+                >
                   {index + 1}
                 </S.PaginationNumber>
               ))}
