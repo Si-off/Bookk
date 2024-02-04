@@ -38,7 +38,6 @@ const AdminManageUsers = () => {
           <S.Theader>
             <S.Trow>
               <S.Tcolumn>No.</S.Tcolumn>
-              <S.Tcolumn>ID</S.Tcolumn>
               <S.Tcolumn>이름</S.Tcolumn>
               <S.Tcolumn>닉네임</S.Tcolumn>
               <S.Tcolumn>이메일</S.Tcolumn>
@@ -53,7 +52,6 @@ const AdminManageUsers = () => {
                   <Fragment key={user.id}>
                     <S.Trow>
                       <S.Tcell width={30}>{(currentPage - 1) * 10 + index + 1}</S.Tcell>
-                      <S.Tcell width={50}>{user.id}</S.Tcell>
                       <S.Tcell width={100}>{user.name}</S.Tcell>
                       <S.Tcell width={250}>{user.nickname}</S.Tcell>
                       <S.Tcell>{user.email}</S.Tcell>

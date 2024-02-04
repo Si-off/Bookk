@@ -115,11 +115,13 @@ export const ModalTitle = styled.h2`
   padding: 0;
   font-size: 34px;
   margin: 16px 0 24px 0;
+  white-space: nowrap;
 `;
 
 export const ModalDetails = styled.div`
   font-weight: 300;
   font-size: 14px;
+  white-space: nowrap;
 
   @media screen and (max-width: 768px) {
     font-size: 16px;
