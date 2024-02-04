@@ -14,9 +14,7 @@ const AdminManageReviews = () => {
   const { currentPage, handleNextPage } = useAdminManage();
   const { data: reviews, status, isLoading } = useGetReplies();
   const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null); // 단일 ID로 변경
-  useEffect(() => {
-    console.log('reviews', reviews);
-  }, [reviews]);
+
   const toggleDetail = (id: number) => {
     if (selectedReviewId === id) {
       setSelectedReviewId(null); // 이미 열린 항목을 다시 클릭하면 닫음
@@ -42,7 +40,6 @@ const AdminManageReviews = () => {
           <S.Theader>
             <S.Trow>
               <S.Tcolumn>No.</S.Tcolumn>
-              <S.Tcolumn>ID</S.Tcolumn>
               <S.Tcolumn>책이름</S.Tcolumn>
               <S.Tcolumn>댓글수</S.Tcolumn>
               <S.Tcolumn>상세보기</S.Tcolumn>
@@ -55,7 +52,6 @@ const AdminManageReviews = () => {
                   <Fragment key={review.id}>
                     <S.Trow>
                       <S.Tcell width={30}>{indexOfFirstReview + index + 1}</S.Tcell>
-                      <S.Tcell width={50}>{review.id}</S.Tcell>
                       <S.Tcell width={100}>{review.title}</S.Tcell>
                       <S.Tcell>{review.reply2Count}</S.Tcell>
                       <S.Tcell>
@@ -104,7 +100,11 @@ const AdminManageReviews = () => {
             </S.PaginationButton>
             <div>
               {Array.from({ length: Math.ceil(reviews?.length / 10) }, (_, index) => (
-                <S.PaginationNumber key={index} onClick={() => handleNextPage(index + 1)}>
+                <S.PaginationNumber
+                  key={index}
+                  onClick={() => handleNextPage(index + 1)}
+                  $isCurrentPage={currentPage === index + 1}
+                >
                   {index + 1}
                 </S.PaginationNumber>
               ))}

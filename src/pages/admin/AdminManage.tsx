@@ -102,7 +102,6 @@ const AdminManage = () => {
           <S.Theader>
             <S.Trow>
               <S.Tcolumn>No.</S.Tcolumn>
-              <S.Tcolumn>ID</S.Tcolumn>
               <S.Tcolumn>제목</S.Tcolumn>
               <S.Tcolumn>생성자</S.Tcolumn>
               <S.Tcolumn>조회수</S.Tcolumn>
@@ -119,7 +118,6 @@ const AdminManage = () => {
                   <Fragment key={book.id}>
                     <S.Trow>
                       <S.Tcell width={30}>{(currentPage - 1) * 10 + index + 1}</S.Tcell>
-                      <S.Tcell width={50}>{book.id}</S.Tcell>
                       <S.Tcell width={300}>
                         <button onClick={() => handleClick(book.id)}>{book.title}</button>
                       </S.Tcell>
@@ -154,17 +152,21 @@ const AdminManage = () => {
           }}
         >
           <S.Pagination>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage === 1}>
               <FaAngleLeft onClick={() => handlePageClick(currentPage - 1)} />
             </S.PaginationButton>
             <div>
               {Array.from({ length: Math.ceil(books?.total / 10) }, (_, index) => (
-                <S.PaginationNumber key={index} onClick={() => handlePageClick(index + 1)}>
+                <S.PaginationNumber
+                  key={index}
+                  onClick={() => handlePageClick(index + 1)}
+                  $isCurrentPage={currentPage === index + 1}
+                >
                   {index + 1}
                 </S.PaginationNumber>
               ))}
             </div>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage >= Math.ceil(books.total / 10)}>
               <FaAngleRight onClick={() => handlePageClick(currentPage + 1)} />
             </S.PaginationButton>
           </S.Pagination>

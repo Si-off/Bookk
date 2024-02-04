@@ -237,12 +237,12 @@ export const Pagination = styled.nav`
   gap: 30px;
 `;
 
-export const PaginationNumber = styled.button`
+export const PaginationNumber = styled.button<{ $isCurrentPage?: boolean }>`
   padding: 8px 12px;
-  background-color: #fff;
+  background-color: ${(props) => (props.$isCurrentPage ? getStyledColor('teal', 1000) : '#fff')};
   border-radius: 4px;
   transition: background-color 0.2s ease;
-
+  color: ${(props) => (props.$isCurrentPage ? getStyledColor('white', 'high') : 'black')};
   &:hover {
     color: ${getStyledColor('white', 'high')};
     background-color: ${getStyledColor('teal', 900)};

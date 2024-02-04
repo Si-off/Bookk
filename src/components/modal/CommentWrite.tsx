@@ -4,7 +4,6 @@ import Button from 'components/shared/Button';
 import { getStyledColor } from 'utils';
 
 import { usePostComment } from 'queries';
-import Loader from '../shared/Loader';
 import { useUserStore } from 'store/useUserStore';
 
 interface CommentWriteProps {

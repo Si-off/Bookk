@@ -101,7 +101,7 @@ export const usePatchUser = () => {
     mutationKey: [QueryKeys.USER, 'userInfo'],
     mutationFn: patchUser,
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.USER, 'userInfo']);
+      queryClient.invalidateQueries([QueryKeys.USER_DATA]);
     },
   });
 };
@@ -349,7 +349,6 @@ export const useGetBookLikes = (queries: LikesBooklistParams) => {
     queryFn: () => getBooksLike(queries),
     enabled: isLogin && !!queries.authorId,
     onSuccess: async (res: MyFavorites) => {
-      if (!isLogin || !queries.authorId) return;
       if (res.total <= queries.take * queries.page) return;
 
       await queryClient.prefetchQuery({
@@ -365,8 +364,8 @@ export const useGetBookLikes = (queries: LikesBooklistParams) => {
 export const useGetBookIsLike = (bookId: number, userId: number) => {
   const key = [QueryKeys.USER, 'likes', bookId.toString()];
   const { isLogin } = useUserStore.getState();
-
   const isUserIdValid = userId !== null && userId > 0;
+
   return useQuery({
     queryKey: key,
     enabled: isUserIdValid && isLogin,

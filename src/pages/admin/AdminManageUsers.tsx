@@ -38,7 +38,6 @@ const AdminManageUsers = () => {
           <S.Theader>
             <S.Trow>
               <S.Tcolumn>No.</S.Tcolumn>
-              <S.Tcolumn>ID</S.Tcolumn>
               <S.Tcolumn>이름</S.Tcolumn>
               <S.Tcolumn>닉네임</S.Tcolumn>
               <S.Tcolumn>이메일</S.Tcolumn>
@@ -53,7 +52,6 @@ const AdminManageUsers = () => {
                   <Fragment key={user.id}>
                     <S.Trow>
                       <S.Tcell width={30}>{(currentPage - 1) * 10 + index + 1}</S.Tcell>
-                      <S.Tcell width={50}>{user.id}</S.Tcell>
                       <S.Tcell width={100}>{user.name}</S.Tcell>
                       <S.Tcell width={250}>{user.nickname}</S.Tcell>
                       <S.Tcell>{user.email}</S.Tcell>
@@ -81,17 +79,21 @@ const AdminManageUsers = () => {
           }}
         >
           <S.Pagination>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage === 1}>
               <FaAngleLeft onClick={() => handleNextPage(currentPage - 1)} />
             </S.PaginationButton>
             <div>
               {Array.from({ length: Math.ceil(users?.length / 10) }, (_, index) => (
-                <S.PaginationNumber key={index} onClick={() => handleNextPage(index + 1)}>
+                <S.PaginationNumber
+                  key={index}
+                  onClick={() => handleNextPage(index + 1)}
+                  $isCurrentPage={currentPage === index + 1}
+                >
                   {index + 1}
                 </S.PaginationNumber>
               ))}
             </div>
-            <S.PaginationButton>
+            <S.PaginationButton disabled={currentPage >= Math.ceil(users.length) / 10}>
               <FaAngleRight onClick={() => handleNextPage(currentPage + 1)} />
             </S.PaginationButton>
           </S.Pagination>
