@@ -162,39 +162,48 @@ const MyPage = () => {
               <Loader custom={true} />
             ) : LikesBooks && LikesBooks.data.length > 0 ? (
               <Layout>
-                <ArrowButton>
-                  <IoIosArrowBack size={60} onClick={() => handlePageClick(currentPage - 1)} />
-                </ArrowButton>
                 <BookWrapper $isSuccess={isSuccess}>
-                  {status === 'success' &&
-                    LikesBooks.data.map((index) => {
-                      const { id, title, images, ...spread } = index.api2;
+                  {status === 'success' && (
+                    <>
+                      <ArrowButton>
+                        <IoIosArrowBack
+                          size={60}
+                          onClick={() => handlePageClick(currentPage - 1)}
+                        />
+                      </ArrowButton>
+                      {LikesBooks.data.map((index) => {
+                        const { id, title, images, ...spread } = index.api2;
 
-                      return (
-                        <div key={id}>
-                          <Book
-                            key={id}
-                            id={id}
-                            images={images}
-                            title={title}
-                            {...spread}
-                            onClick={() => handleClick(id)}
-                          />
-                          {modalOpen && (
-                            <CustomModal
-                              bookId={selectedBookId}
-                              book={selectedBook}
-                              setModalOpen={setModalOpen}
-                              showScroll={showScroll}
-                            ></CustomModal>
-                          )}
-                        </div>
-                      );
-                    })}
+                        return (
+                          <div key={id}>
+                            <Book
+                              key={id}
+                              id={id}
+                              images={images}
+                              title={title}
+                              {...spread}
+                              onClick={() => handleClick(id)}
+                            />
+                            {modalOpen && (
+                              <CustomModal
+                                bookId={selectedBookId}
+                                book={selectedBook}
+                                setModalOpen={setModalOpen}
+                                showScroll={showScroll}
+                              ></CustomModal>
+                            )}
+                          </div>
+                        );
+                      })}
+                      <ArrowButton>
+                        <IoIosArrowForward
+                          size={60}
+                          onClick={() => handlePageClick(currentPage + 1)}
+                        />
+                      </ArrowButton>{' '}
+                    </>
+                  )}
                 </BookWrapper>
-                <ArrowButton>
-                  <IoIosArrowForward size={60} onClick={() => handlePageClick(currentPage + 1)} />
-                </ArrowButton>
               </Layout>
             ) : (
               <p>내가 좋아요한 책이 없습니다</p>
@@ -210,7 +219,7 @@ export default MyPage;
 
 const Container = styled.div`
   position: relative;
-  min-width: 1400px;
+  min-width: 1300px;
   min-height: 100vh;
   overflow: hidden;
 
@@ -326,9 +335,9 @@ const Layout = styled.div`
 
 const BookWrapper = styled.div<{ $isSuccess?: boolean }>`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   gap: 20px;
-  width: 70%;
+  width: 100%;
   transition: opacity 1s ease;
   opacity: ${({ $isSuccess }) => ($isSuccess ? 1 : 0)};
 `;
