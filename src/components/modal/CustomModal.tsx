@@ -131,7 +131,9 @@ export const CustomModal = ({
                     book?.likeCount
                   )}
                 </S.ModalOverview>
-                <S.ModalOverview>작성자: {book?.author.name}</S.ModalOverview>
+                <S.ModalOverview>
+                  {book?.author?.name ? `작성자: ${book?.author.name}` : ''}
+                </S.ModalOverview>
                 <S.ModalDetails>
                   등록날짜: {'  '}
                   {book && formatDate(book.createdAt)}
