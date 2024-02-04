@@ -1,47 +1,55 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { FaHome, FaBook, FaListAlt, FaAddressBook, FaCommentDots } from 'react-icons/fa';
 import { FaChalkboardUser, FaCircleUser } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { pixelToRem, getStyledColor } from 'utils';
 
 const tabs = [
   {
+    id: 1,
     to: '',
     name: '메인',
     icon: <FaHome />,
   },
   {
+    id: 2,
     to: '/',
     name: '유저 페이지',
     icon: <FaChalkboardUser />,
   },
   {
+    id: 3,
     to: '/mypage',
     name: '내 프로필',
     icon: <FaCircleUser />,
   },
   {
+    id: 4,
     to: '',
     name: 'divider',
     icon: null,
   },
   {
+    id: 5,
     to: 'create',
     name: '책 등록',
     icon: <FaBook />,
   },
   {
+    id: 6,
     to: 'books',
     name: '책 관리',
     icon: <FaListAlt />,
   },
   {
+    id: 7,
     to: 'users',
     name: '사용자 관리',
     icon: <FaAddressBook />,
   },
   {
+    id: 8,
     to: 'reviews',
     name: '댓글 관리',
     icon: <FaCommentDots />,
@@ -49,20 +57,18 @@ const tabs = [
 ] as const;
 
 const AdminNav = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const location = useLocation();
+  const path = location.pathname.split('/')[2] || '';
+
   return (
     <Nav>
       <Title>Bookk</Title>
       <ul>
-        {tabs.map((tab, index) => {
-          if (tab.name === 'divider') return <Divider />;
+        {tabs.map((tab) => {
+          if (tab.name === 'divider') return <Divider key={4} />;
           return (
-            <Item key={index} $selected={index === selectedTab}>
-              <StyledLink
-                to={tab.to}
-                $selected={index === selectedTab}
-                onClick={() => setSelectedTab(index)}
-              >
+            <Item key={tab.id} $selected={tab.to === path}>
+              <StyledLink to={tab.to} $selected={tab.to === path}>
                 {tab.icon}
                 {tab.name}
               </StyledLink>
