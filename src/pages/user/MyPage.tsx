@@ -57,8 +57,6 @@ const MyPage = () => {
     }
   };
 
-  console.log('LikesBooks', LikesBooks);
-
   return (
     <Container>
       <section>
