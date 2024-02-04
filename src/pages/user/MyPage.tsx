@@ -85,7 +85,7 @@ const MyPage = () => {
   };
   const selectedBook = findSelectedBook();
 
-  console.log('SelectedBookId', selectedBookId);
+  console.log('LikesBooks', LikesBooks);
 
   return (
     <Container>
