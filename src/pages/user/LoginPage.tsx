@@ -6,8 +6,8 @@ import { useLogin } from 'queries';
 import Loader from 'components/shared/Loader';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('Admin@tester.com');
+  const [password, setPassword] = useState<string>('Admin12345!');
 
   const [isEmpty, setIsEmpty] = useState(true);
   const { isLogin } = useUserStore();
