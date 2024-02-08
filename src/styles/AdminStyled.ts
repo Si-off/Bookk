@@ -64,7 +64,6 @@ export const Tcell = styled.td`
     background-color: inherit;
   }
 `;
-//
 
 export const Label = styled.label`
   font-weight: 300;
