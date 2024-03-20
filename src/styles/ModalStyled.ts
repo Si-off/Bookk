@@ -42,7 +42,6 @@ export const ModalClose = styled.div`
   top: 20px;
   cursor: pointer;
   z-index: 1000;
-  color: ${getStyledColor('white', 'high')};
   font-size: 30px;
 `;
 
@@ -62,11 +61,7 @@ export const Modal = styled.div`
   animation: ${fadeIn} 0.2s ease;
   overflow-y: scroll;
   align-items: center;
-  background-color: ${getStyledColor('black', 100)};
-
-  & p {
-    color: ${getStyledColor('white', 'high')};
-  }
+  background-color: #fff;
 
   /* 스크롤바의 폭 너비 */
   &::-webkit-scrollbar {
@@ -108,7 +103,6 @@ export const ModalPosterImg = styled.img`
 export const ModalContent = styled.div`
   padding-right: 40px;
   padding-top: 40px;
-  color: white;
 `;
 
 export const ModalTitle = styled.h2`
@@ -156,7 +150,6 @@ export const CommentContainer = styled.div`
   flex-direction: column;
 `;
 export const CommentSection = styled.div`
-  background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;

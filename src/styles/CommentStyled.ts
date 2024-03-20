@@ -39,7 +39,6 @@ interface CommentItemContainerProps {
 }
 
 export const CommentItemContainer = styled.div<CommentItemContainerProps>`
-  color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -47,7 +46,7 @@ export const CommentItemContainer = styled.div<CommentItemContainerProps>`
   padding: 15px 15px;
   margin: 5px 0;
   border-radius: 5px;
-  background-color: #24262b;
+  border: 1px solid ${getStyledColor('cool_gray', 500)};
 `;
 
 export const CommentItemRight = styled.div`
@@ -67,7 +66,6 @@ export const CommentButton = styled.button<{ onClick: (commentId: number) => voi
   padding: 5px 10px;
   border-radius: 5px;
   background-color: ${getStyledColor('purple', 300)};
-  color: white;
   border: none;
   cursor: pointer;
   &:hover {
@@ -76,12 +74,11 @@ export const CommentButton = styled.button<{ onClick: (commentId: number) => voi
 `;
 
 export const CommentInfo = styled.div`
-  font-size: 12px;
+  font-size: 16px;
   color: #666;
   display: flex;
   justify-content: space-between;
 `;
 export const Hr = styled.hr`
-  border: 1px solid #666;
   margin: 10px 0;
 `;

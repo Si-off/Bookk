@@ -1,5 +1,4 @@
 import { CommentGetRes, CommentType, UserType } from 'types';
-import styled from 'styled-components';
 import * as S from 'styles/CommentStyled';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
@@ -70,10 +69,3 @@ const CommentToggle = ({ comments, bookId }: CommentToggleProps) => {
 };
 
 export default CommentToggle;
-
-const Toggle = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-`;

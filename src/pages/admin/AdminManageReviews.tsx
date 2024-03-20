@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import useAdminManage from 'hooks/useAdminManage';
 import * as S from 'styles/AdminStyledTemp';

@@ -310,20 +310,6 @@ const Container = styled.div`
   }
 `;
 
-// const NicknameBtn = styled.button`
-//   background-image: linear-gradient(
-//     to right,
-//     ${(props) => (props.btnState ? '#a8abba, #8c8f98' : '#fff, #f1f1f1')}
-//   );
-// `;
-
-const Wrapper = styled.div`
-  grid-template-columns: repeat(12, 1fr);
-  color: rgba(31, 31, 31, 0.7);
-  font-weight: 900;
-  padding-top: 80px;
-`;
-
 const Layout = styled.div`
   display: flex;
   justify-content: space-between;

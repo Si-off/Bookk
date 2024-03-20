@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent as ReactChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as S from 'styles/AdminStyledTemp';
-import { usePatchBook, useDeleteBook, useGetBook, useGetComments } from 'queries';
+import { usePatchBook, useDeleteBook, useGetBook } from 'queries';
 import ImageUploader from 'components/shared/ImageUploader';
 import { ImagePatchReq } from 'types';
 import { postImage, deleteImage, addImage } from 'api';
