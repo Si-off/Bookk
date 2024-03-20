@@ -52,17 +52,19 @@ const NavigationWrapper = styled.div<{ $isVisible: boolean; $height: number }>`
   height: ${({ $height }) => $height && `${$height}px`};
   padding-left: 30px;
   padding-right: 10%;
-  transition: top 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition:
+    top 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
   top: ${({ $isVisible, $height }) => ($isVisible ? '0' : `-${$height}px`)};
   opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
-  background-color: ${getStyledColor('primary', 900)};
+  border-bottom: 1px solid ${getStyledColor('gray', 500)};
+  background-color: #fff;
   z-index: 2;
 `;
 
 const Logo = styled.div`
   font-size: 24px;
   font-weight: bold;
-  color: white;
   cursor: pointer;
 
   img {

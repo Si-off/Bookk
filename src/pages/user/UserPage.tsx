@@ -3,7 +3,6 @@ import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
 import Book from '../../components/user/Book';
 import { useInfinityScroll } from 'queries';
-import { Stars, Stars2, Stars3 } from 'styles/StarParticles';
 import { CustomModal } from 'components/modal/CustomModal';
 import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import Dropdown from 'components/shared/Dropdown';
@@ -68,16 +67,8 @@ const UserPage = () => {
     });
   };
 
-  // if (status === 'loading')
-  //   return (
-
-  //   );
-
   return (
     <Main>
-      <Stars />
-      <Stars2 />
-      <Stars3 />
       <S.WrapperSearch>
         <S.Search>
           <S.SearchInput
@@ -107,7 +98,7 @@ const UserPage = () => {
             {data?.pages.some((page) => (page?.data ?? []).length > 0) ? (
               data?.pages.map((page) =>
                 page?.data.map((book, index) => {
-                  if (page.data.length - 1 === index) {
+                  if (page.data.length - 5 === index) {
                     return (
                       <Fragment key={book.id}>
                         <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
@@ -144,7 +135,6 @@ const Main = styled.main`
   flex-direction: column;
   padding-top: 10%;
   position: relative;
-  background-color: #121212;
 `;
 const LayoutContainer = styled.div`
   display: flex;
@@ -153,7 +143,6 @@ const LayoutContainer = styled.div`
 const Layout = styled.div`
   width: 1200px;
   margin: 0 auto;
-  background-color: ${getStyledColor('background', 'dark')};
   display: grid;
   grid-gap: 5px;
   grid-auto-flow: dense;

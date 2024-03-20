@@ -11,14 +11,12 @@ interface InputFieldProps {
 }
 
 const Body = styled.div`
-  background-color: #282828;
   width: 100%;
   height: 100vh;
 `;
 
 const Title = styled.h2`
   font-size: 24px;
-  color: ${getStyledColor('white', 'high')};
   margin-bottom: 12px;
 `;
 

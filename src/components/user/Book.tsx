@@ -63,7 +63,6 @@ const Container = styled.div<{ $isShow: boolean }>`
   justify-content: center;
   display: inline-flex;
   flex-direction: column;
-  color: ${getStyledColor('white', 'high')};
   opacity: 0;
   ${({ $isShow }) =>
     $isShow &&

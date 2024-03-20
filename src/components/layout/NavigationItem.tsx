@@ -68,7 +68,7 @@ const LinkStyle = styled(Link)`
 
 const Text = styled.div`
   height: 100%;
-  color: ${getStyledColor('white', 'high')};
+  color: #000;
   font-size: ${pixelToRem(16)};
   transition: color 0.2s ease;
   font-weight: 500;

@@ -1,14 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'constant';
 import { useGetBookLikes, usePatchUser } from 'queries';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { UserType } from 'types';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Book } from 'components/user';
 import { Loader } from 'components/shared';
-import * as S from 'styles/SearchStyled';
 import CustomModal from 'components/modal/CustomModal';
+
 const MyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [nicknameBtn, setNicknameBtn] = useState(false);
@@ -25,7 +25,7 @@ const MyPage = () => {
 
   const take = 4;
 
-  const { mutate, status: patchStatus, error } = usePatchUser();
+  const { mutate, error } = usePatchUser();
 
   const {
     data: LikesBooks,
@@ -84,8 +84,6 @@ const MyPage = () => {
       .find((api2) => api2?.id === selectedBookId);
   };
   const selectedBook = findSelectedBook();
-
-  console.log('LikesBooks', LikesBooks);
 
   return (
     <Container>

@@ -76,7 +76,8 @@ const S = {
     width: ${pixelToRem(100)};
     padding: 14px 20px;
     border-radius: 4px;
-    background-color: ${getStyledColor('white', 'high')};
+    border: 2px solid ${getStyledColor('primary', 600)};
+    background-color: inherit;
     font-weight: 700;
 
     transition:
