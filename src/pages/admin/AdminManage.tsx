@@ -8,7 +8,7 @@ import { getDateStr } from 'utils';
 import { BookInfoType } from 'types';
 import { useQueryClient } from '@tanstack/react-query';
 import { getNextBooks } from 'api';
-import { CustomModal } from 'components/modal/CustomModal';
+import CustomModal from 'components/modal/CustomModal';
 import Loader from 'components/shared/Loader';
 import { QueryKeys } from 'constant';
 

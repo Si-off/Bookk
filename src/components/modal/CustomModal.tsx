@@ -20,7 +20,16 @@ import { useQueryClient } from '@tanstack/react-query';
 import NotFoundComment from 'components/shared/NotFoundComment';
 import { Loader } from 'components/shared';
 import { StyledLoader } from 'styles/LoginStyled';
-export const CustomModal = ({
+
+const formatDate = (timestamp: string): string => {
+  const dateObject = new Date(timestamp);
+  const year = dateObject.getFullYear();
+  const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+  const day = dateObject.getDate().toString().padStart(2, '0');
+  return `${year}${month}${day}`;
+};
+
+const CustomModal = ({
   bookId,
   book,
   setModalOpen,
@@ -36,64 +45,54 @@ export const CustomModal = ({
     setModalOpen(false);
     showScroll();
   });
-  if (!bookId) return <div>loading...</div>;
+
+  if (!bookId || !book) return <div>loading...</div>;
+
   const { isLogin } = useUserStore();
   const navigate = useNavigate();
   const user = useQueryClient().getQueryData<UserType>([QueryKeys.USER_DATA]);
   const [isUpdating, setIsUpdating] = useState(false);
-  const { data: comments, status: commentStatus } = useGetComments(bookId || 0);
+
+  const { data: comments, status: commentStatus } = useGetComments(bookId);
   useGetBook(bookId);
   const { data: bookIsLikeData, status } = useGetBookIsLike(bookId, user?.id || 0);
-  const { mutate: postLike } = usePostBookLike({
-    bookId: bookId,
-  });
-  const { mutate: deleteLike } = useDeleteBookLike({
-    bookId: bookId,
-  });
+  const { mutate: postLike } = usePostBookLike({ bookId });
+  const { mutate: deleteLike } = useDeleteBookLike({ bookId });
 
-  function formatDate(timestamp: string) {
-    const dateObject = new Date(timestamp);
-    const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObject.getDate().toString().padStart(2, '0');
-    const formattedDate = `${year}${month}${day}`;
-    return formattedDate;
-  }
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       setModalOpen(false);
       showScroll();
     }
   };
+
   const toggleLike = () => {
     if (!isLogin) {
       alert('로그인이 필요합니다.');
       setModalOpen(false);
       showScroll();
       navigate('/login');
-
       return;
     }
+
     setIsUpdating(true);
-    if (bookIsLikeData?.isLike === false) {
+
+    const { isLike, likeId } = bookIsLikeData || {};
+
+    if (!isLike) {
       postLike(bookId, {
-        onSettled: () => {
-          setIsUpdating(false);
-        },
+        onSettled: () => setIsUpdating(false),
       });
     } else {
       deleteLike(
-        { bookId, likeId: bookIsLikeData?.likeId },
+        { bookId, likeId },
         {
-          onSettled: () => {
-            setIsUpdating(false);
-          },
+          onSettled: () => setIsUpdating(false),
         },
       );
     }
   };
 
-  if (status === 'error') return <div>error...</div>;
   return (
     <S.Presentation>
       <S.WrapperModal onClick={handleOutsideClick}>
@@ -107,9 +106,8 @@ export const CustomModal = ({
             <IoIosClose />
           </S.ModalClose>
 
-          {book?.images[0] && (
+          {book.images[0] && (
             <S.ModalPosterContainer>
-              {' '}
               <div>
                 <S.ModalPosterImg src={`${book.images[0].fbPath[0]}`} alt="modal-img" />
                 <S.HeartButton
@@ -122,8 +120,8 @@ export const CustomModal = ({
                 </S.HeartButton>
               </div>
               <S.ModalContent>
-                <S.ModalTitle>{book?.title}</S.ModalTitle>
-                <S.ModalOverview>클릭수: {book?.clicks}</S.ModalOverview>
+                <S.ModalTitle>{book.title}</S.ModalTitle>
+                <S.ModalOverview>클릭수: {book.clicks}</S.ModalOverview>
                 <S.ModalOverview>
                   좋아요:{' '}
                   {status === 'loading' && isLogin ? (
@@ -131,28 +129,28 @@ export const CustomModal = ({
                   ) : isLogin ? (
                     bookIsLikeData?.likeCount
                   ) : (
-                    book?.likeCount
+                    book.likeCount
                   )}
                 </S.ModalOverview>
                 <S.ModalOverview>
-                  {book?.author?.name ? `작성자: ${book?.author.name}` : ''}
+                  {book.author?.name ? `작성자: ${book.author.name}` : ''}
                 </S.ModalOverview>
                 <S.ModalDetails>
                   등록날짜: {'  '}
-                  {book && formatDate(book.createdAt)}
+                  {formatDate(book.createdAt)}
                 </S.ModalDetails>
                 <S.ModalSubject>책 소개</S.ModalSubject>
-                <S.ModalIntroduce>{book?.content}</S.ModalIntroduce>
+                <S.ModalIntroduce>{book.content}</S.ModalIntroduce>
                 <S.CommentContainer>
                   <S.ModalSubject>한줄리뷰</S.ModalSubject>
                   {commentStatus === 'loading' ? (
                     <Loader custom={true} />
                   ) : (comments?.data ?? []).length > 0 ? (
-                    <CommentToggle comments={comments} bookId={book?.id} />
+                    <CommentToggle comments={comments} bookId={book.id} />
                   ) : (
                     <NotFoundComment />
                   )}
-                  <CommentWrite bookId={book?.id} />
+                  <CommentWrite bookId={book.id} />
                 </S.CommentContainer>
               </S.ModalContent>
             </S.ModalPosterContainer>

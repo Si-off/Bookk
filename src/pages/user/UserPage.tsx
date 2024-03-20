@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { getStyledColor } from 'utils';
 import Book from '../../components/user/Book';
 import { useInfinityScroll } from 'queries';
-import { CustomModal } from 'components/modal/CustomModal';
+import CustomModal from 'components/modal/CustomModal';
 import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import Dropdown from 'components/shared/Dropdown';
 import Loader from 'components/shared/Loader';
@@ -16,7 +16,6 @@ const UserPage = () => {
   const [searchState, setSearchState] = useState('');
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [order, setOrder] = useState<'DESC' | 'ASC' | 'CLICKS' | 'LIKECOUNT'>('DESC');
-
   const { search, setSearch } = useSearchStore();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfinityScroll(
     order,
@@ -35,10 +34,12 @@ const UserPage = () => {
       setSearch(searchState);
     }
   };
+
   const onClickSearch = () => {
     if (!searchState) return alert('검색어를 입력해주세요');
     setSearch(searchState);
   };
+
   const onClickReset = () => {
     setSearch('');
     setSearchState('');
@@ -47,17 +48,15 @@ const UserPage = () => {
   const unshowScroll = () => {
     document.body.style.overflow = 'hidden';
   };
+
   const showScroll = () => {
     document.body.style.overflow = 'unset';
   };
-  const findSelectedBook = () => {
-    return data?.pages.flatMap((page) => page?.data).find((book) => book?.id === selectedBookId);
-  };
-  const selectedBook = findSelectedBook();
+
   const handleClick = (id: number) => {
     setModalOpen(true);
     unshowScroll();
-    setSelectedBookId(id); // 선택된 책의 ID를 상태에 저장
+    setSelectedBookId(id);
   };
 
   const scrollToTop = () => {
@@ -66,6 +65,10 @@ const UserPage = () => {
       behavior: 'smooth',
     });
   };
+
+  const selectedBook = data?.pages
+    .flatMap((page) => page?.data)
+    .find((book) => book?.id === selectedBookId);
 
   return (
     <Main>
@@ -102,14 +105,6 @@ const UserPage = () => {
                     return (
                       <Fragment key={book.id}>
                         <Book ref={targetRef} {...book} onClick={() => handleClick(book.id)} />
-                        {modalOpen && (
-                          <CustomModal
-                            bookId={selectedBookId}
-                            book={selectedBook}
-                            setModalOpen={setModalOpen}
-                            showScroll={showScroll}
-                          ></CustomModal>
-                        )}
                       </Fragment>
                     );
                   }
@@ -122,6 +117,15 @@ const UserPage = () => {
           </Layout>
         )}
       </LayoutContainer>
+
+      {modalOpen && selectedBook && (
+        <CustomModal
+          bookId={selectedBookId}
+          book={selectedBook}
+          setModalOpen={setModalOpen}
+          showScroll={showScroll}
+        />
+      )}
     </Main>
   );
 };
@@ -136,6 +140,7 @@ const Main = styled.main`
   padding-top: 10%;
   position: relative;
 `;
+
 const LayoutContainer = styled.div`
   display: flex;
 `;
